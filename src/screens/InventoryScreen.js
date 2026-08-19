@@ -18,9 +18,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 const INVENTORY_KEY = 'bar_inventory_v3';
 const GLASSES_PER_BOTTLE = 5; // 75cl / 15cl
+const GLASS_CATEGORIES = new Set(['Vin', 'Skumpa']);
 
 // unit: 'cl' per cl, 'l' per liter, 'st' per bottle/piece
-// isBottle: true = can toggle between flaska and glas mode
+// Vin och skumpa prissätts per flaska men inventeras alltid per glas.
 const DEFAULT_ITEMS = [
   // Sprit
   { id: 's1', name: 'Gin',             category: 'Sprit',    price: 3.1,  unit: 'cl',  isBottle: false, glassMode: false, qty: '' },
@@ -44,26 +45,26 @@ const DEFAULT_ITEMS = [
   { id: 'b8', name: 'Suntrip bruk', category: 'Öl flaska', price: 12, unit: 'st', isBottle: false, glassMode: false, qty: '' },
   { id: 'b9', name: 'Ship full of Ipa', category: 'Öl flaska', price: 12, unit: 'st', isBottle: false, glassMode: false, qty: '' },
   { id: 'b10', name: 'Briska cider', category: 'Öl flaska', price: 12, unit: 'st', isBottle: false, glassMode: false, qty: '' },
-  // Vin (pris per flaska, kan räknas per glas)
-  { id: 'v1', name: 'Husrött',        category: 'Vin',      price: 0,    unit: 'st',  isBottle: true,  glassMode: false, qty: '' },
-  { id: 'v2', name: 'Malbec',        category: 'Vin',      price: 0,    unit: 'st',  isBottle: true,  glassMode: false, qty: '' },
-  { id: 'v3', name: 'Pinot Noir',      category: 'Vin',      price: 0,    unit: 'st',  isBottle: true,  glassMode: false, qty: '' },
-  { id: 'v4', name: 'Husvit',      category: 'Vin',      price: 0,    unit: 'st',  isBottle: true,  glassMode: false, qty: '' },
-  { id: 'v5', name: 'Riesling',            category: 'Vin',      price: 0,    unit: 'st',  isBottle: true,  glassMode: false, qty: '' },
-  { id: 'v5', name: 'Chablis',            category: 'Vin',      price: 0,    unit: 'st',  isBottle: true,  glassMode: false, qty: '' },
-  { id: 'v5', name: 'Côtes du Rhône',            category: 'Vin',      price: 0,    unit: 'st',  isBottle: true,  glassMode: false, qty: '' },
-  { id: 'v5', name: 'Langhe Nebbiolo',            category: 'Vin',      price: 0,    unit: 'st',  isBottle: true,  glassMode: false, qty: '' },
-  { id: 'v5', name: 'Gaia Cab',            category: 'Vin',      price: 0,    unit: 'st',  isBottle: true,  glassMode: false, qty: '' },
-  { id: 'v5', name: 'Whispering Angel',            category: 'Vin',      price: 0,    unit: 'st',  isBottle: true,  glassMode: false, qty: '' },
-  { id: 'v5', name: 'Galoupet Provence',            category: 'Vin',      price: 0,    unit: 'st',  isBottle: true,  glassMode: false, qty: '' },
-  { id: 'v5', name: 'Santiago',            category: 'Vin',      price: 0,    unit: 'st',  isBottle: true,  glassMode: false, qty: '' },
-  { id: 'v5', name: 'Kuentz-Bas Alsace',            category: 'Vin',      price: 0,    unit: 'st',  isBottle: true,  glassMode: false, qty: '' },
-  { id: 'v5', name: 'Sancerre',            category: 'Vin',      price: 0,    unit: 'st',  isBottle: true,  glassMode: false, qty: '' },
-  // Skumpa (pris per flaska, kan räknas per glas)
-  { id: 'k1', name: 'Moet Chandon',       category: 'Skumpa',   price: 350,    unit: 'st',  isBottle: true,  glassMode: false, qty: '' },
-  { id: 'k2', name: 'Ruinart',        category: 'Skumpa',   price: 441,    unit: 'st',  isBottle: true,  glassMode: false, qty: '' },
-  { id: 'k2', name: 'Mont-Ferrant cava',        category: 'Skumpa',   price: 70,    unit: 'st',  isBottle: true,  glassMode: false, qty: '' },
-  { id: 'k2', name: 'Crémant Brut',        category: 'Skumpa',   price: 120,    unit: 'st',  isBottle: true,  glassMode: false, qty: '' },
+  // Vin (pris per flaska, inventeras per glas)
+  { id: 'v1',  name: 'Husrött',             category: 'Vin', price: 0, unit: 'st', isBottle: true, glassMode: true, qty: '' },
+  { id: 'v2',  name: 'Malbec',              category: 'Vin', price: 0, unit: 'st', isBottle: true, glassMode: true, qty: '' },
+  { id: 'v3',  name: 'Pinot Noir',          category: 'Vin', price: 0, unit: 'st', isBottle: true, glassMode: true, qty: '' },
+  { id: 'v4',  name: 'Husvit',              category: 'Vin', price: 0, unit: 'st', isBottle: true, glassMode: true, qty: '' },
+  { id: 'v5',  name: 'Riesling',            category: 'Vin', price: 0, unit: 'st', isBottle: true, glassMode: true, qty: '' },
+  { id: 'v6',  name: 'Chablis',             category: 'Vin', price: 0, unit: 'st', isBottle: true, glassMode: true, qty: '' },
+  { id: 'v7',  name: 'Côtes du Rhône',      category: 'Vin', price: 0, unit: 'st', isBottle: true, glassMode: true, qty: '' },
+  { id: 'v8',  name: 'Langhe Nebbiolo',     category: 'Vin', price: 0, unit: 'st', isBottle: true, glassMode: true, qty: '' },
+  { id: 'v9',  name: 'Gaia Cab',            category: 'Vin', price: 0, unit: 'st', isBottle: true, glassMode: true, qty: '' },
+  { id: 'v10', name: 'Whispering Angel',    category: 'Vin', price: 0, unit: 'st', isBottle: true, glassMode: true, qty: '' },
+  { id: 'v11', name: 'Galoupet Provence',   category: 'Vin', price: 0, unit: 'st', isBottle: true, glassMode: true, qty: '' },
+  { id: 'v12', name: 'Santiago',            category: 'Vin', price: 0, unit: 'st', isBottle: true, glassMode: true, qty: '' },
+  { id: 'v13', name: 'Kuentz-Bas Alsace',   category: 'Vin', price: 0, unit: 'st', isBottle: true, glassMode: true, qty: '' },
+  { id: 'v14', name: 'Sancerre',            category: 'Vin', price: 0, unit: 'st', isBottle: true, glassMode: true, qty: '' },
+  // Skumpa (pris per flaska, inventeras per glas)
+  { id: 'k1', name: 'Moet Chandon',       category: 'Skumpa', price: 350, unit: 'st', isBottle: true, glassMode: true, qty: '' },
+  { id: 'k2', name: 'Ruinart',            category: 'Skumpa', price: 441, unit: 'st', isBottle: true, glassMode: true, qty: '' },
+  { id: 'k3', name: 'Mont-Ferrant cava',  category: 'Skumpa', price: 70,  unit: 'st', isBottle: true, glassMode: true, qty: '' },
+  { id: 'k4', name: 'Crémant Brut',       category: 'Skumpa', price: 120, unit: 'st', isBottle: true, glassMode: true, qty: '' },
 
 ];
 
@@ -77,13 +78,41 @@ const CAT_COLORS = {
 
 const UNIT_LABEL = { cl: 'cl', l: 'liter', st: 'st' };
 
+function isGlassItem(item) {
+  return GLASS_CATEGORIES.has(item.category);
+}
+
+function itemKey(item) {
+  return `${item.category}::${item.name.trim().toLocaleLowerCase('sv')}`;
+}
+
+const DEFAULT_ID_BY_KEY = new Map(DEFAULT_ITEMS.map((item) => [itemKey(item), item.id]));
+
+function normalizeItem(item) {
+  const glassItem = isGlassItem(item);
+  return {
+    ...item,
+    id: DEFAULT_ID_BY_KEY.get(itemKey(item)) || item.id,
+    ...(glassItem ? { unit: 'st', isBottle: true, glassMode: true } : {}),
+  };
+}
+
 async function loadItems() {
   const json = await AsyncStorage.getItem(INVENTORY_KEY);
   if (!json) return DEFAULT_ITEMS;
   const saved = JSON.parse(json);
-  // Merge: keep saved, add any new defaults not yet in saved
-  const savedIds = new Set(saved.map((i) => i.id));
-  return [...saved, ...DEFAULT_ITEMS.filter((i) => !savedIds.has(i.id))];
+  if (!Array.isArray(saved)) return DEFAULT_ITEMS;
+
+  // Reparera äldre dublett-id:n, tvinga vin/skumpa till glas och lägg till nya varor.
+  const normalizedSaved = saved.map(normalizeItem);
+  const savedKeys = new Set(normalizedSaved.map(itemKey));
+  const merged = [
+    ...normalizedSaved,
+    ...DEFAULT_ITEMS.filter((item) => !savedKeys.has(itemKey(item))),
+  ];
+
+  await persistItems(merged);
+  return merged;
 }
 
 async function persistItems(items) {
@@ -92,7 +121,7 @@ async function persistItems(items) {
 
 function itemCost(item) {
   const qty = parseFloat(item.qty) || 0;
-  if (item.isBottle && item.glassMode) {
+  if (isGlassItem(item)) {
     return qty * (item.price / GLASSES_PER_BOTTLE);
   }
   return qty * item.price;
@@ -131,14 +160,15 @@ export default function InventoryScreen() {
   async function addItem() {
     if (!form.name.trim()) { Alert.alert('Fyll i ett namn'); return; }
     if (!form.isBottle && !form.price) { Alert.alert('Fyll i ett pris'); return; }
+    const glassItem = GLASS_CATEGORIES.has(form.category);
     const newItem = {
       id: Date.now().toString(),
       name: form.name.trim(),
       category: form.category,
       price: parseFloat(form.price) || 0,
-      unit: form.unit,
-      isBottle: form.isBottle,
-      glassMode: false,
+      unit: glassItem ? 'st' : form.unit,
+      isBottle: glassItem,
+      glassMode: glassItem,
       qty: '',
     };
     const updated = [...items, newItem];
@@ -227,12 +257,12 @@ export default function InventoryScreen() {
             {/* Category picker */}
             <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 10 }}>
               {Object.keys(CAT_COLORS).map((cat) => {
-                const isBottleCat = cat === 'Vin' || cat === 'Skumpa';
+                const isGlassCat = GLASS_CATEGORIES.has(cat);
                 return (
                   <Pressable
                     key={cat}
                     style={[styles.catChip, { backgroundColor: CAT_COLORS[cat] + (form.category === cat ? 'FF' : '55') }]}
-                    onPress={() => setForm((f) => ({ ...f, category: cat, unit: isBottleCat ? 'st' : f.unit, isBottle: isBottleCat }))}
+                    onPress={() => setForm((f) => ({ ...f, category: cat, unit: isGlassCat ? 'st' : f.unit, isBottle: isGlassCat }))}
                   >
                     <Text style={styles.catChipText}>{cat}</Text>
                   </Pressable>
@@ -326,28 +356,6 @@ export default function InventoryScreen() {
                   </View>
 
                   <View style={styles.rowRight}>
-                    {/* Flaska/Glas toggle for bottle items */}
-                    {item.isBottle && (
-                      <View style={styles.toggleRow}>
-                        <Pressable
-                          style={[styles.toggleBtn, !item.glassMode && { backgroundColor: color }]}
-                          onPress={() => update(item.id, { glassMode: false })}
-                        >
-                          <Text style={[styles.toggleText, !item.glassMode && styles.toggleTextActive]}>
-                            🍾
-                          </Text>
-                        </Pressable>
-                        <Pressable
-                          style={[styles.toggleBtn, item.glassMode && { backgroundColor: color }]}
-                          onPress={() => update(item.id, { glassMode: true })}
-                        >
-                          <Text style={[styles.toggleText, item.glassMode && styles.toggleTextActive]}>
-                            🥂
-                          </Text>
-                        </Pressable>
-                      </View>
-                    )}
-
                     <View style={styles.qtyWrapper}>
                       <TextInput
                         style={styles.qtyInput}
@@ -359,7 +367,7 @@ export default function InventoryScreen() {
                         selectTextOnFocus
                       />
                       <Text style={styles.qtyUnit}>
-                        {item.isBottle ? (item.glassMode ? 'glas' : 'fl.') : UNIT_LABEL[item.unit]}
+                        {isGlassItem(item) ? 'glas' : UNIT_LABEL[item.unit]}
                       </Text>
                     </View>
 
@@ -561,16 +569,6 @@ const styles = StyleSheet.create({
   priceInputUnit: { fontSize: 12, color: '#7F8C8D' },
 
   rowRight: { padding: 12, alignItems: 'flex-end', justifyContent: 'center', minWidth: 110 },
-  toggleRow: { flexDirection: 'row', gap: 4, marginBottom: 8 },
-  toggleBtn: {
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 10,
-    backgroundColor: '#ECF0F1',
-  },
-  toggleText: { fontSize: 14 },
-  toggleTextActive: {},
-
   qtyWrapper: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   qtyInput: {
     width: 60,
