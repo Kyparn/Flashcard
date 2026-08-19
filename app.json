@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "FlashCard",
-    "slug": "FlashCard",
-    "version": "1.0.0",
+    "name": "Bar Flashcard",
+    "slug": "bar-flashcard-svin",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -10,20 +10,31 @@
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#0F1923"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false,
+      "bundleIdentifier": "com.simon.barflashcard"
     },
     "android": {
+      "package": "com.simon.barflashcard",
+      "versionCode": 3,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#0F1923"
       },
       "edgeToEdgeEnabled": true
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "6d9f4614-339a-4861-9a1b-edc804930f67"
+      }
+    },
+    "plugins": [
+      "expo-font"
+    ]
   }
 }
