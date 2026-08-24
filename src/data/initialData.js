@@ -493,11 +493,6 @@ export const initialCards = [
     answer: 'Tequila i chili crisp oli, triple sec, lime, gurka, socker, tajin kant.',
   },
   {
-    id: '405', categoryId: '4',
-    question: 'Vad innehåller Cut the Mango?',
-    answer: 'Plantery Cut & Dry, Plantery sealander, agave, citron och mango.',
-  },
-  {
     id: '406', categoryId: '4',
     question: 'Vad innehåller en Nordic GT?',
     answer: 'Havsbris gin, rårörda lingon, rosmarin & tonic perfect served.',
@@ -507,16 +502,7 @@ export const initialCards = [
     question: 'Vad innehåller en Kaffe Klara?',
     answer: 'Dubbel espresso, Baileys och triple sec.',
   },
-  {
-    id: '408', categoryId: '4',
-    question: 'Vad innehåller en Ruby Rush?',
-    answer: 'J skärgårdssnaps, blodapelsin, agave och citron, toppa med pink soda.',
-  },
-  {
-    id: '409', categoryId: '4',
-    question: 'Vad innehåller en Framboise Royal?',
-    answer: 'Moët skumpa & Mathilde Framboise (hallonlikör).',
-  },
+
 
   // ── SPRIT ──────────────────────────────────────────────────────────
   {
