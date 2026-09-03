@@ -8,7 +8,7 @@ export default function IntroScreen({ onDone }) {
   return (
     <Pressable style={styles.container} onPress={onDone}>
       <View>
-        <Text>Hugo</Text>
+        <Text style={styles.text}>Hugo</Text>
       </View>
     </Pressable>
   );
@@ -17,4 +17,5 @@ export default function IntroScreen({ onDone }) {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#000000" },
   video: { flex: 1 },
+  text: { color: white },
 });
