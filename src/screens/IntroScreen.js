@@ -1,4 +1,3 @@
-import { Video, ResizeMode } from "expo-av";
 import { useRef } from "react";
 import { Pressable, StyleSheet, View, Text } from "react-native";
 
@@ -16,6 +15,5 @@ export default function IntroScreen({ onDone }) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#000000" },
-  video: { flex: 1 },
-  text: { color: white },
+  text: { color: "white" },
 });
