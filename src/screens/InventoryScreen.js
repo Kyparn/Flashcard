@@ -639,11 +639,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "700",
   },
-
   tabScroll: {
     paddingHorizontal: 12,
     paddingVertical: 10,
+    height: 56,
+    minHeight: 56,
     maxHeight: 56,
+    flexGrow: 0,
+    flexShrink: 0,
     backgroundColor: "#fff",
     borderBottomWidth: 1,
     borderBottomColor: "#ECF0F1",
