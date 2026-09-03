@@ -7,7 +7,9 @@ export default function IntroScreen({ onDone }) {
 
   return (
     <Pressable style={styles.container} onPress={onDone}>
-      <Text>Hugo</Text>
+      <View>
+        <Text>Hugo</Text>
+      </View>
     </Pressable>
   );
 }
