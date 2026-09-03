@@ -12,7 +12,7 @@ import HomeScreen from "./src/screens/HomeScreen";
 import ManageScreen from "./src/screens/ManageScreen";
 import StudyScreen from "./src/screens/StudyScreen";
 import InventoryScreen from "./src/screens/InventoryScreen";
-
+import IntroScreen from "./src/screens/IntroScreen";
 import { migrateIfNeeded, clearProgress } from "./src/utils/storage";
 
 const Stack = createNativeStackNavigator();
@@ -72,6 +72,7 @@ const App = () => {
     return (
       <SafeAreaProvider>
         <StatusBar style="light" />
+        <IntroScreen onDone={() => setShowIntro(false)} />
       </SafeAreaProvider>
     );
   }
