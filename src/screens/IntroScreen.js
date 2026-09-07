@@ -14,6 +14,14 @@ export default function IntroScreen({ onDone }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#000000" },
-  text: { color: "white" },
+  container: {
+    flex: 1,
+    backgroundColor: "#000000",
+    justifyContent: "center",
+  },
+  text: {
+    color: "white",
+    margin: "auto",
+    textAlign: "center",
+  },
 });
