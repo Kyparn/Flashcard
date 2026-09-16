@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Alert,
   FlatList,
@@ -15,9 +15,22 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { colors, serif, ui } from "../theme";
 import inventoryProducts from "../data/inventering-produkter.json";
 
 const INVENTORY_KEY = "bar_inventory_v5";
+const DELETED_KEY = "bar_inventory_deleted";
+const number = (value) =>
+  Math.max(0, parseFloat(String(value).replace(",", ".")) || 0);
+function confirmAction(title, message, action) {
+  if (Platform.OS === "web") {
+    if (window.confirm(`${title}\n${message}`)) action();
+  } else
+    Alert.alert(title, message, [
+      { text: "Avbryt", style: "cancel" },
+      { text: "Bekräfta", style: "destructive", onPress: action },
+    ]);
+}
 const DEFAULT_GLASSES_PER_BOTTLE = 5;
 const GLASS_CATEGORIES = new Set(["Vin", "Skumpa"]);
 const FORM_CATEGORIES = [
@@ -37,8 +50,8 @@ const CAT_COLORS = {
   Sprit: "#E74C3C",
   "Öl fat": "#F39C12",
   "Öl flaska": "#E67E22",
-  Cider: "#27AE60",
-  Gas: "#7F8C8D",
+  Cider: "#254D3E",
+  Gas: "#70796F",
   Vin: "#9B59B6",
   "Vitt vin": "#D4AC0D",
   "Rött vin": "#922B21",
@@ -98,9 +111,14 @@ async function loadItems() {
   // Reparera äldre dublett-id:n, tvinga vin/skumpa till glas och lägg till nya varor.
   const normalizedSaved = saved.map(normalizeItem);
   const savedKeys = new Set(normalizedSaved.map(itemKey));
+  const deleted = new Set(
+    JSON.parse((await AsyncStorage.getItem(DELETED_KEY)) || "[]"),
+  );
   const merged = [
     ...normalizedSaved,
-    ...DEFAULT_ITEMS.filter((item) => !savedKeys.has(itemKey(item))),
+    ...DEFAULT_ITEMS.filter(
+      (item) => !savedKeys.has(itemKey(item)) && !deleted.has(item.id),
+    ),
   ];
 
   await persistItems(merged);
@@ -108,11 +126,22 @@ async function loadItems() {
 }
 
 async function persistItems(items) {
-  await AsyncStorage.setItem(INVENTORY_KEY, JSON.stringify(items));
+  const ids = new Set(items.map((item) => item.id));
+  await AsyncStorage.multiSet([
+    [INVENTORY_KEY, JSON.stringify(items)],
+    [
+      DELETED_KEY,
+      JSON.stringify(
+        DEFAULT_ITEMS.filter((item) => !ids.has(item.id)).map(
+          (item) => item.id,
+        ),
+      ),
+    ],
+  ]);
 }
 
 function itemCost(item) {
-  const qty = parseFloat(item.qty) || 0;
+  const qty = number(item.qty);
   if (isGlassItem(item)) {
     return qty * (item.price / getGlassesPerBottle(item));
   }
@@ -121,9 +150,15 @@ function itemCost(item) {
 
 export default function InventoryScreen() {
   const [items, setItems] = useState([]);
-  const [selectedCat, setSelectedCat] = useState("Sprit");
+  const [selectedCat, setSelectedCat] = useState("Alla");
+  const [search, setSearch] = useState("");
+  const [onlyCounted, setOnlyCounted] = useState(false);
+  const [error, setError] = useState("");
+  const itemsRef = useRef([]);
+  const writes = useRef(Promise.resolve());
   const [showForm, setShowForm] = useState(false);
   const [showSummary, setShowSummary] = useState(false);
+  const [priceDraft, setPriceDraft] = useState("");
   const [editingPrice, setEditingPrice] = useState(null); // id of item being price-edited
   const [form, setForm] = useState({
     name: "",
@@ -134,36 +169,52 @@ export default function InventoryScreen() {
   });
 
   useEffect(() => {
-    loadItems().then(setItems);
+    loadItems()
+      .then((loaded) => {
+        itemsRef.current = loaded;
+        setItems(loaded);
+      })
+      .catch(() =>
+        setError(
+          "Kunde inte läsa inventeringen. Öppna appen igen för att försöka på nytt.",
+        ),
+      );
   }, []);
 
-  async function update(id, patch) {
-    const updated = items.map((i) => (i.id === id ? { ...i, ...patch } : i));
+  async function commit(updated) {
+    itemsRef.current = updated;
     setItems(updated);
-    await persistItems(updated);
+    const task = writes.current
+      .catch(() => {})
+      .then(() => persistItems(updated));
+    writes.current = task;
+    try {
+      await task;
+      setError("");
+      return true;
+    } catch {
+      setError("Ändringarna kunde inte sparas. Försök igen.");
+      return false;
+    }
   }
-
-  async function resetAll() {
-    Alert.alert("Rensa räkning", "Nollställa alla antal?", [
-      { text: "Avbryt", style: "cancel" },
-      {
-        text: "Nollställ",
-        onPress: async () => {
-          const updated = items.map((i) => ({ ...i, qty: "" }));
-          setItems(updated);
-          await persistItems(updated);
-        },
-      },
-    ]);
+  function update(id, patch) {
+    return commit(
+      itemsRef.current.map((i) => (i.id === id ? { ...i, ...patch } : i)),
+    );
+  }
+  function resetAll() {
+    confirmAction("Rensa räkning", "Nollställa alla antal?", () =>
+      commit(itemsRef.current.map((i) => ({ ...i, qty: "" }))),
+    );
   }
 
   async function addItem() {
     if (!form.name.trim()) {
-      Alert.alert("Fyll i ett namn");
+      setError("Fyll i ett namn.");
       return;
     }
     if (!form.isBottle && !form.price) {
-      Alert.alert("Fyll i ett pris");
+      setError("Fyll i ett pris.");
       return;
     }
     const glassItem = GLASS_CATEGORIES.has(form.category);
@@ -171,7 +222,7 @@ export default function InventoryScreen() {
       id: Date.now().toString(),
       name: form.name.trim(),
       category: form.category,
-      price: parseFloat(form.price) || 0,
+      price: number(form.price),
       unit: glassItem ? "st" : form.unit,
       isBottle: glassItem,
       glassMode: glassItem,
@@ -181,14 +232,13 @@ export default function InventoryScreen() {
           : DEFAULT_GLASSES_PER_BOTTLE
         : undefined,
       inventoryUnit: glassItem ? "glas" : form.unit,
-      sourcePrice: parseFloat(form.price) || 0,
+      sourcePrice: number(form.price),
       sourceUnit: glassItem ? "flaska" : form.unit,
       priceStatus: form.price ? "confirmed" : "missing",
       qty: "",
     };
-    const updated = [...items, newItem];
-    setItems(updated);
-    await persistItems(updated);
+    const updated = [...itemsRef.current, newItem];
+    if (!(await commit(updated))) return;
     setForm({
       name: "",
       category: "Vin",
@@ -199,49 +249,60 @@ export default function InventoryScreen() {
     setShowForm(false);
   }
 
-  async function deleteItem(id) {
-    Alert.alert("Ta bort vara", "Är du säker?", [
-      { text: "Avbryt", style: "cancel" },
-      {
-        text: "Ta bort",
-        style: "destructive",
-        onPress: async () => {
-          const updated = items.filter((i) => i.id !== id);
-          setItems(updated);
-          await persistItems(updated);
-        },
-      },
-    ]);
+  function deleteItem(id) {
+    confirmAction(
+      "Ta bort vara",
+      "Vill du ta bort varan från inventeringen?",
+      () => commit(itemsRef.current.filter((i) => i.id !== id)),
+    );
   }
 
   const categories = Array.from(new Set(items.map(displayCategory)));
-  const filtered = items.filter((i) => displayCategory(i) === selectedCat);
+  const filtered = items.filter(
+    (i) =>
+      (selectedCat === "Alla" || displayCategory(i) === selectedCat) &&
+      i.name
+        .toLocaleLowerCase("sv")
+        .includes(search.trim().toLocaleLowerCase("sv")) &&
+      (!onlyCounted || number(i.qty) > 0),
+  );
   const total = items.reduce((sum, i) => sum + itemCost(i), 0);
   const filteredTotal = filtered.reduce((sum, i) => sum + itemCost(i), 0);
-  const hasAnyQty = items.some((i) => parseFloat(i.qty) > 0);
+  const hasAnyQty = items.some((i) => number(i.qty) > 0);
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
       <KeyboardAvoidingView
-        style={{ flex: 1 }}
+        style={{ flex: 1, width: "100%", maxWidth: 1040, alignSelf: "center" }}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
         {/* Header */}
         <View style={styles.header}>
-          <View>
-            <Text style={styles.title}>Bar-inventering</Text>
-            <Text style={styles.subtitle}>
-              Fyll i antal — totalen räknas ut automatiskt
+          <View style={{ flex: 1 }}>
+            <Text style={[ui.eyebrow, { marginBottom: 7 }]}>
+              ORDNING BAKOM BAREN
             </Text>
+            <Text style={styles.title}>Inventering</Text>
+            <Text style={styles.subtitle}>Fyll i antal. Vi räknar resten.</Text>
           </View>
           <View style={styles.headerActions}>
             <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Visa svinnrapport"
               onPress={() => setShowSummary(true)}
               style={styles.summaryBtn}
             >
-              <Ionicons name="bar-chart-outline" size={22} color="#fff" />
+              <Ionicons
+                name="bar-chart-outline"
+                size={22}
+                color={colors.primary}
+              />
             </Pressable>
             <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={
+                showForm ? "Stäng formulär" : "Lägg till vara"
+              }
               onPress={() => setShowForm(!showForm)}
               style={styles.addBtn}
             >
@@ -257,7 +318,13 @@ export default function InventoryScreen() {
         {/* Total banner */}
         <View style={styles.totalBanner}>
           <View>
-            <Text style={styles.totalLabel}>{selectedCat.toUpperCase()}</Text>
+            <Text style={styles.totalLabel}>
+              {search || onlyCounted
+                ? "VISAT URVAL"
+                : selectedCat === "Alla"
+                  ? "TOTALT REGISTRERAT"
+                  : selectedCat.toUpperCase()}
+            </Text>
             <Text style={styles.totalAmount}>
               {filteredTotal.toFixed(2)} kr
             </Text>
@@ -268,14 +335,38 @@ export default function InventoryScreen() {
           </View>
         </View>
 
+        <View style={{ paddingHorizontal: 24, paddingTop: 18 }}>
+          <View style={ui.search}>
+            <Ionicons name="search-outline" size={20} color={colors.muted} />
+            <TextInput
+              accessibilityLabel="Sök vara"
+              placeholder="Sök en vara…"
+              placeholderTextColor={colors.muted}
+              style={ui.searchInput}
+              value={search}
+              onChangeText={setSearch}
+            />
+            {!!search && (
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel="Rensa sökning"
+                onPress={() => setSearch("")}
+                hitSlop={10}
+              >
+                <Ionicons name="close-circle" size={20} color={colors.muted} />
+              </Pressable>
+            )}
+          </View>
+        </View>
         {/* Category tabs */}
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
           style={styles.tabScroll}
         >
-          {categories.map((cat) => (
+          {["Alla", ...categories].map((cat) => (
             <Pressable
+              accessibilityRole="button"
               key={cat}
               style={[styles.tab, selectedCat === cat && styles.tabActive]}
               onPress={() => setSelectedCat(cat)}
@@ -292,115 +383,201 @@ export default function InventoryScreen() {
           ))}
         </ScrollView>
 
-        {/* Add form */}
-        {showForm && (
-          <View style={styles.form}>
-            <TextInput
-              style={styles.input}
-              placeholder="Namn (t.ex. Barolo 2019)"
-              value={form.name}
-              onChangeText={(v) => setForm((f) => ({ ...f, name: v }))}
-              autoFocus
+        <View style={styles.listTools}>
+          <Text style={ui.eyebrow}>{filtered.length} VAROR</Text>
+          <Pressable
+            accessibilityRole="checkbox"
+            accessibilityState={{ checked: onlyCounted }}
+            onPress={() => setOnlyCounted((v) => !v)}
+            style={ui.row}
+          >
+            <Ionicons
+              name={onlyCounted ? "checkbox" : "square-outline"}
+              size={19}
+              color={colors.primary}
             />
-
-            {/* Category picker */}
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              style={{ marginBottom: 10 }}
+            <Text style={ui.body}>Bara räknade</Text>
+          </Pressable>
+          {hasAnyQty && (
+            <Pressable
+              accessibilityRole="button"
+              onPress={resetAll}
+              style={{ paddingVertical: 12 }}
             >
-              {FORM_CATEGORIES.map((cat) => {
-                const isGlassCat = GLASS_CATEGORIES.has(cat);
-                return (
-                  <Pressable
-                    key={cat}
-                    style={[
-                      styles.catChip,
-                      {
-                        backgroundColor:
-                          CAT_COLORS[cat] +
-                          (form.category === cat ? "FF" : "55"),
-                      },
-                    ]}
-                    onPress={() =>
-                      setForm((f) => ({
-                        ...f,
-                        category: cat,
-                        unit: isGlassCat ? "st" : f.unit,
-                        isBottle: isGlassCat,
-                      }))
-                    }
-                  >
-                    <Text style={styles.catChipText}>{cat}</Text>
-                  </Pressable>
-                );
-              })}
-            </ScrollView>
-
-            {/* Price + unit (hidden for wine/skumpa if isBottle — price set inline) */}
-            <View style={styles.formRow}>
-              <TextInput
-                style={[styles.input, { flex: 1, marginBottom: 0 }]}
-                placeholder={form.isBottle ? "Pris per flaska (kr)" : "Pris"}
-                value={form.price}
-                onChangeText={(v) => setForm((f) => ({ ...f, price: v }))}
-                keyboardType="decimal-pad"
-              />
-              {!form.isBottle && (
-                <View style={styles.unitPicker}>
-                  {["cl", "l", "st"].map((u) => (
-                    <Pressable
-                      key={u}
-                      style={[
-                        styles.unitBtn,
-                        form.unit === u && styles.unitBtnActive,
-                      ]}
-                      onPress={() => setForm((f) => ({ ...f, unit: u }))}
-                    >
-                      <Text
-                        style={[
-                          styles.unitBtnText,
-                          form.unit === u && styles.unitBtnTextActive,
-                        ]}
-                      >
-                        {u}
-                      </Text>
-                    </Pressable>
-                  ))}
-                </View>
-              )}
-              {form.isBottle && (
+              <Text style={{ color: colors.danger, fontSize: 12 }}>
+                Nollställ
+              </Text>
+            </Pressable>
+          )}
+        </View>
+        {!!error && (
+          <Text
+            accessibilityRole="alert"
+            style={[ui.error, { paddingHorizontal: 24 }]}
+          >
+            {error}
+          </Text>
+        )}
+        {/* Add form */}
+        <Modal
+          visible={showForm}
+          transparent
+          animationType="fade"
+          onRequestClose={() => setShowForm(false)}
+        >
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : undefined}
+            style={styles.modalBackdrop}
+          >
+            <View style={styles.modalCard}>
+              <ScrollView keyboardShouldPersistTaps="handled">
                 <View
                   style={[
-                    styles.unitBtn,
-                    styles.unitBtnActive,
-                    { marginLeft: 8 },
+                    ui.row,
+                    { justifyContent: "space-between", marginBottom: 20 },
                   ]}
                 >
-                  <Text style={styles.unitBtnTextActive}>kr/flaska</Text>
+                  <Text style={styles.modalTitle}>Ny vara</Text>
+                  <Pressable
+                    accessibilityRole="button"
+                    accessibilityLabel="Stäng"
+                    style={ui.iconButton}
+                    onPress={() => setShowForm(false)}
+                  >
+                    <Ionicons name="close" size={20} color={colors.ink} />
+                  </Pressable>
                 </View>
-              )}
-            </View>
+                {!!error && <Text style={ui.error}>{error}</Text>}
+                <TextInput
+                  style={styles.input}
+                  placeholder="Namn (t.ex. Barolo 2019)"
+                  value={form.name}
+                  onChangeText={(v) => setForm((f) => ({ ...f, name: v }))}
+                  autoFocus
+                />
 
-            <Pressable
-              style={[styles.saveBtn, { marginTop: 12 }]}
-              onPress={addItem}
-            >
-              <Text style={styles.saveBtnText}>Lägg till</Text>
-            </Pressable>
-          </View>
-        )}
+                {/* Category picker */}
+                <ScrollView
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  style={{ marginBottom: 10 }}
+                >
+                  {FORM_CATEGORIES.map((cat) => {
+                    const isGlassCat = GLASS_CATEGORIES.has(cat);
+                    return (
+                      <Pressable
+                        accessibilityRole="button"
+                        key={cat}
+                        style={[
+                          styles.catChip,
+                          {
+                            backgroundColor:
+                              form.category === cat
+                                ? colors.primary
+                                : colors.soft,
+                          },
+                        ]}
+                        onPress={() =>
+                          setForm((f) => ({
+                            ...f,
+                            category: cat,
+                            unit: isGlassCat ? "st" : f.unit,
+                            isBottle: isGlassCat,
+                          }))
+                        }
+                      >
+                        <Text
+                          style={[
+                            styles.catChipText,
+                            {
+                              color:
+                                form.category === cat ? "#fff" : colors.ink,
+                            },
+                          ]}
+                        >
+                          {cat}
+                        </Text>
+                      </Pressable>
+                    );
+                  })}
+                </ScrollView>
+
+                {/* Price + unit (hidden for wine/skumpa if isBottle — price set inline) */}
+                <View style={styles.formRow}>
+                  <TextInput
+                    style={[styles.input, { flex: 1, marginBottom: 0 }]}
+                    placeholder={
+                      form.isBottle ? "Pris per flaska (kr)" : "Pris"
+                    }
+                    value={form.price}
+                    onChangeText={(v) => setForm((f) => ({ ...f, price: v }))}
+                    keyboardType="decimal-pad"
+                  />
+                  {!form.isBottle && (
+                    <View style={styles.unitPicker}>
+                      {["cl", "l", "st"].map((u) => (
+                        <Pressable
+                          key={u}
+                          style={[
+                            styles.unitBtn,
+                            form.unit === u && styles.unitBtnActive,
+                          ]}
+                          onPress={() => setForm((f) => ({ ...f, unit: u }))}
+                        >
+                          <Text
+                            style={[
+                              styles.unitBtnText,
+                              form.unit === u && styles.unitBtnTextActive,
+                            ]}
+                          >
+                            {u}
+                          </Text>
+                        </Pressable>
+                      ))}
+                    </View>
+                  )}
+                  {form.isBottle && (
+                    <View
+                      style={[
+                        styles.unitBtn,
+                        styles.unitBtnActive,
+                        { marginLeft: 8 },
+                      ]}
+                    >
+                      <Text style={styles.unitBtnTextActive}>kr/flaska</Text>
+                    </View>
+                  )}
+                </View>
+
+                <Pressable
+                  accessibilityRole="button"
+                  style={[styles.saveBtn, { marginTop: 12 }]}
+                  onPress={addItem}
+                >
+                  <Text style={styles.saveBtnText}>Lägg till</Text>
+                </Pressable>
+              </ScrollView>
+            </View>
+          </KeyboardAvoidingView>
+        </Modal>
 
         {/* Items list */}
         <FlatList
           data={filtered}
+          ListEmptyComponent={
+            <Text
+              style={{ color: colors.muted, textAlign: "center", padding: 30 }}
+            >
+              Inga varor att visa. Prova en annan sökning eller kategori.
+            </Text>
+          }
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.list}
           keyboardShouldPersistTaps="handled"
           renderItem={({ item }) => {
-            const qty = parseFloat(item.qty) || 0;
+            const qty = number(item.qty);
             const cost = itemCost(item);
-            const color = CAT_COLORS[displayCategory(item)] || "#95A5A6";
+            const color = CAT_COLORS[displayCategory(item)] || "#70796F";
             const pricePerGlass =
               item.price > 0
                 ? (item.price / getGlassesPerBottle(item)).toFixed(2)
@@ -413,7 +590,29 @@ export default function InventoryScreen() {
                   <View style={[styles.colorBar, { backgroundColor: color }]} />
 
                   <View style={styles.rowLeft}>
-                    <Text style={styles.itemName}>{item.name}</Text>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        gap: 8,
+                      }}
+                    >
+                      <Text style={[styles.itemName, { flex: 1 }]}>
+                        {item.name}
+                      </Text>
+                      <Pressable
+                        accessibilityRole="button"
+                        accessibilityLabel={`Ta bort ${item.name}`}
+                        onPress={() => deleteItem(item.id)}
+                        style={{ padding: 8 }}
+                      >
+                        <Ionicons
+                          name="trash-outline"
+                          size={16}
+                          color={colors.muted}
+                        />
+                      </Pressable>
+                    </View>
 
                     {/* Price display / edit for bottle items */}
                     {item.isBottle ? (
@@ -421,19 +620,29 @@ export default function InventoryScreen() {
                         <View style={styles.priceEditRow}>
                           <TextInput
                             style={styles.priceInput}
-                            value={item.price > 0 ? String(item.price) : ""}
-                            onChangeText={(v) =>
-                              update(item.id, { price: parseFloat(v) || 0 })
-                            }
+                            value={priceDraft}
+                            onChangeText={setPriceDraft}
                             keyboardType="decimal-pad"
+                            accessibilityLabel={`Pris per flaska för ${item.name}`}
                             placeholder="Pris/flaska"
                             autoFocus
-                            onBlur={() => setEditingPrice(null)}
+                            onBlur={() => {
+                              update(item.id, { price: number(priceDraft) });
+                              setEditingPrice(null);
+                            }}
                           />
                           <Text style={styles.priceInputUnit}>kr/flaska</Text>
                         </View>
                       ) : (
-                        <Pressable onPress={() => setEditingPrice(item.id)}>
+                        <Pressable
+                          accessibilityRole="button"
+                          onPress={() => {
+                            setPriceDraft(
+                              item.price > 0 ? String(item.price) : "",
+                            );
+                            setEditingPrice(item.id);
+                          }}
+                        >
                           <Text style={styles.itemPrice}>
                             {item.price > 0
                               ? `${item.price} kr/flaska  •  ${pricePerGlass} kr/glas`
@@ -452,7 +661,8 @@ export default function InventoryScreen() {
                     <View style={styles.qtyWrapper}>
                       <TextInput
                         style={styles.qtyInput}
-                        value={item.qty}
+                        accessibilityLabel={`Antal ${item.name}`}
+                        value={item.qty || ""}
                         onChangeText={(v) => update(item.id, { qty: v })}
                         keyboardType="decimal-pad"
                         placeholder="0"
@@ -489,55 +699,57 @@ export default function InventoryScreen() {
             onPress={() => setShowSummary(false)}
           >
             <Pressable style={styles.modalCard} onPress={() => {}}>
-              <Text style={styles.modalTitle}>Svinnrapport</Text>
-              <Text style={styles.modalSubtitle}>Kostnad per kategori</Text>
+              <ScrollView>
+                <Text style={styles.modalTitle}>Svinnrapport</Text>
+                <Text style={styles.modalSubtitle}>Kostnad per kategori</Text>
 
-              {categories.map((cat) => {
-                const catTotal = items
-                  .filter((i) => displayCategory(i) === cat)
-                  .reduce((sum, i) => sum + itemCost(i), 0);
-                const color = CAT_COLORS[cat] || "#95A5A6";
-                return (
-                  <View key={cat} style={styles.summaryRow}>
-                    <View
-                      style={[styles.summaryDot, { backgroundColor: color }]}
-                    />
-                    <Text style={styles.summaryCat}>{cat}</Text>
-                    <Text
-                      style={[styles.summaryAmt, catTotal > 0 && { color }]}
-                    >
-                      {catTotal.toFixed(2)} kr
-                    </Text>
-                  </View>
-                );
-              })}
+                {categories.map((cat) => {
+                  const catTotal = items
+                    .filter((i) => displayCategory(i) === cat)
+                    .reduce((sum, i) => sum + itemCost(i), 0);
+                  const color = CAT_COLORS[cat] || "#70796F";
+                  return (
+                    <View key={cat} style={styles.summaryRow}>
+                      <View
+                        style={[styles.summaryDot, { backgroundColor: color }]}
+                      />
+                      <Text style={styles.summaryCat}>{cat}</Text>
+                      <Text
+                        style={[styles.summaryAmt, catTotal > 0 && { color }]}
+                      >
+                        {catTotal.toFixed(2)} kr
+                      </Text>
+                    </View>
+                  );
+                })}
 
-              <View style={styles.summaryDivider} />
-              <View style={styles.summaryRow}>
-                <Text
-                  style={[
-                    styles.summaryCat,
-                    { fontWeight: "800", color: "#2C3E50" },
-                  ]}
+                <View style={styles.summaryDivider} />
+                <View style={styles.summaryRow}>
+                  <Text
+                    style={[
+                      styles.summaryCat,
+                      { fontWeight: "800", color: "#203B32" },
+                    ]}
+                  >
+                    TOTALT SVINN
+                  </Text>
+                  <Text
+                    style={[
+                      styles.summaryAmt,
+                      { fontWeight: "800", color: "#254D3E", fontSize: 18 },
+                    ]}
+                  >
+                    {total.toFixed(2)} kr
+                  </Text>
+                </View>
+
+                <Pressable
+                  style={styles.modalClose}
+                  onPress={() => setShowSummary(false)}
                 >
-                  TOTALT SVINN
-                </Text>
-                <Text
-                  style={[
-                    styles.summaryAmt,
-                    { fontWeight: "800", color: "#27AE60", fontSize: 18 },
-                  ]}
-                >
-                  {total.toFixed(2)} kr
-                </Text>
-              </View>
-
-              <Pressable
-                style={styles.modalClose}
-                onPress={() => setShowSummary(false)}
-              >
-                <Text style={styles.modalCloseText}>Stäng</Text>
-              </Pressable>
+                  <Text style={styles.modalCloseText}>Stäng</Text>
+                </Pressable>
+              </ScrollView>
             </Pressable>
           </Pressable>
         </Modal>
@@ -547,19 +759,19 @@ export default function InventoryScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#F5F6FA" },
+  container: { flex: 1, backgroundColor: "#F6F5F0" },
 
   header: {
-    backgroundColor: "#0F1923",
+    backgroundColor: colors.background,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 24,
-    paddingTop: 8,
+    paddingTop: 24,
     paddingBottom: 16,
   },
-  title: { color: "#fff", fontSize: 24, fontWeight: "800" },
-  subtitle: { color: "rgba(255,255,255,0.45)", fontSize: 12, marginTop: 2 },
+  title: { color: colors.ink, fontSize: 32, fontFamily: serif },
+  subtitle: { color: colors.muted, fontSize: 12, marginTop: 5 },
   headerActions: { flexDirection: "row", gap: 8 },
   resetBtn: {
     backgroundColor: "rgba(255,255,255,0.12)",
@@ -567,11 +779,11 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   summaryBtn: {
-    backgroundColor: "rgba(255,255,255,0.15)",
+    backgroundColor: colors.soft,
     borderRadius: 12,
     padding: 10,
   },
-  addBtn: { backgroundColor: "#27AE60", borderRadius: 12, padding: 10 },
+  addBtn: { backgroundColor: "#254D3E", borderRadius: 12, padding: 10 },
 
   modalBackdrop: {
     flex: 1,
@@ -585,6 +797,8 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 24,
     width: "100%",
+    maxWidth: 580,
+    maxHeight: "90%",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.2,
@@ -594,26 +808,37 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 22,
     fontWeight: "800",
-    color: "#0F1923",
+    color: "#203B32",
     marginBottom: 4,
   },
-  modalSubtitle: { fontSize: 13, color: "#95A5A6", marginBottom: 20 },
+  modalSubtitle: { fontSize: 13, color: "#70796F", marginBottom: 20 },
   summaryRow: { flexDirection: "row", alignItems: "center", marginBottom: 14 },
   summaryDot: { width: 10, height: 10, borderRadius: 5, marginRight: 10 },
-  summaryCat: { flex: 1, fontSize: 15, fontWeight: "600", color: "#2C3E50" },
+  summaryCat: { flex: 1, fontSize: 15, fontWeight: "600", color: "#203B32" },
   summaryAmt: { fontSize: 15, fontWeight: "700", color: "#BDC3C7" },
-  summaryDivider: { height: 1, backgroundColor: "#ECF0F1", marginVertical: 14 },
+  summaryDivider: { height: 1, backgroundColor: "#E2E5DC", marginVertical: 14 },
   modalClose: {
     marginTop: 20,
-    backgroundColor: "#0F1923",
+    backgroundColor: "#203B32",
     borderRadius: 12,
     padding: 14,
     alignItems: "center",
   },
   modalCloseText: { color: "#fff", fontWeight: "700", fontSize: 15 },
 
+  listTools: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 10,
+    paddingHorizontal: 24,
+    paddingVertical: 8,
+    flexWrap: "wrap",
+  },
   totalBanner: {
-    backgroundColor: "#1A252F",
+    marginHorizontal: 24,
+    borderRadius: 20,
+    backgroundColor: "#254D3E",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -621,45 +846,45 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
   },
   totalLabel: {
-    color: "rgba(255,255,255,0.5)",
+    color: "#CFD9CC",
     fontSize: 11,
     fontWeight: "700",
     letterSpacing: 1,
   },
   totalAmount: {
-    color: "#27AE60",
+    color: "#F2EDDF",
     fontSize: 28,
     fontWeight: "800",
     marginTop: 2,
   },
   totalSub: { alignItems: "flex-end" },
-  totalSubLabel: { color: "rgba(255,255,255,0.4)", fontSize: 11 },
+  totalSubLabel: { color: "#CFD9CC", fontSize: 11 },
   totalSubAmount: {
     color: "rgba(255,255,255,0.7)",
     fontSize: 16,
     fontWeight: "700",
   },
   tabScroll: {
-    paddingHorizontal: 12,
+    paddingHorizontal: 24,
     paddingVertical: 10,
     height: 56,
     minHeight: 56,
     maxHeight: 56,
     flexGrow: 0,
     flexShrink: 0,
-    backgroundColor: "#fff",
+    backgroundColor: colors.background,
     borderBottomWidth: 1,
-    borderBottomColor: "#ECF0F1",
+    borderBottomColor: "#E2E5DC",
   },
   tab: {
     paddingHorizontal: 16,
     paddingVertical: 7,
     borderRadius: 20,
     marginRight: 6,
-    backgroundColor: "#F5F6FA",
+    backgroundColor: "#F6F5F0",
   },
-  tabActive: { backgroundColor: "#0F1923" },
-  tabText: { fontWeight: "600", color: "#7F8C8D", fontSize: 14 },
+  tabActive: { backgroundColor: "#203B32" },
+  tabText: { fontWeight: "600", color: "#70796F", fontSize: 14 },
   tabTextActive: { color: "#fff" },
 
   form: {
@@ -674,13 +899,14 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
   },
   input: {
+    minWidth: 0,
     borderWidth: 1,
-    borderColor: "#ECF0F1",
+    borderColor: "#E2E5DC",
     borderRadius: 10,
     padding: 12,
     fontSize: 15,
     marginBottom: 10,
-    backgroundColor: "#F9F9F9",
+    backgroundColor: "#F6F5F0",
   },
   formRow: { flexDirection: "row", alignItems: "center", gap: 8 },
   unitPicker: { flexDirection: "row", gap: 6 },
@@ -688,10 +914,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 10,
     borderRadius: 10,
-    backgroundColor: "#ECF0F1",
+    backgroundColor: "#E2E5DC",
   },
-  unitBtnActive: { backgroundColor: "#0F1923" },
-  unitBtnText: { fontWeight: "700", color: "#7F8C8D", fontSize: 13 },
+  unitBtnActive: { backgroundColor: "#203B32" },
+  unitBtnText: { fontWeight: "700", color: "#70796F", fontSize: 13 },
   unitBtnTextActive: { color: "#fff", fontWeight: "700", fontSize: 13 },
   catChip: {
     paddingHorizontal: 14,
@@ -701,31 +927,33 @@ const styles = StyleSheet.create({
   },
   catChipText: { color: "#fff", fontWeight: "700", fontSize: 13 },
   saveBtn: {
-    backgroundColor: "#27AE60",
+    backgroundColor: "#254D3E",
     borderRadius: 12,
     padding: 14,
     alignItems: "center",
   },
   saveBtnText: { color: "#fff", fontWeight: "700", fontSize: 15 },
 
-  list: { padding: 14, paddingBottom: 40 },
+  list: { paddingHorizontal: 24, paddingTop: 10, paddingBottom: 40 },
   row: {
     flexDirection: "row",
     backgroundColor: "#fff",
-    borderRadius: 14,
-    marginBottom: 8,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: colors.border,
+    marginBottom: 10,
     overflow: "hidden",
-    elevation: 1,
+    elevation: 0,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.07,
+    shadowOpacity: 0,
     shadowRadius: 3,
   },
   rowActive: { elevation: 3, shadowOpacity: 0.12 },
-  colorBar: { width: 5 },
+  colorBar: { width: 3, opacity: 0.65 },
   rowLeft: { flex: 1, padding: 14 },
-  itemName: { fontSize: 15, fontWeight: "700", color: "#2C3E50" },
-  itemPrice: { fontSize: 12, color: "#95A5A6", marginTop: 3 },
+  itemName: { fontSize: 15, fontWeight: "700", color: "#203B32" },
+  itemPrice: { fontSize: 12, color: "#70796F", marginTop: 3 },
   priceEditRow: {
     flexDirection: "row",
     alignItems: "center",
@@ -740,10 +968,10 @@ const styles = StyleSheet.create({
     padding: 6,
     fontSize: 14,
     fontWeight: "700",
-    color: "#2C3E50",
+    color: "#203B32",
     backgroundColor: "#EBF5FB",
   },
-  priceInputUnit: { fontSize: 12, color: "#7F8C8D" },
+  priceInputUnit: { fontSize: 12, color: "#70796F" },
 
   rowRight: {
     padding: 12,
@@ -755,16 +983,16 @@ const styles = StyleSheet.create({
   qtyInput: {
     width: 60,
     borderWidth: 1.5,
-    borderColor: "#ECF0F1",
+    borderColor: "#E2E5DC",
     borderRadius: 10,
     padding: 8,
     textAlign: "center",
     fontSize: 18,
     fontWeight: "700",
-    color: "#2C3E50",
-    backgroundColor: "#F9F9F9",
+    color: "#203B32",
+    backgroundColor: "#F6F5F0",
   },
-  qtyUnit: { fontSize: 12, color: "#95A5A6", fontWeight: "600" },
+  qtyUnit: { fontSize: 12, color: "#70796F", fontWeight: "600" },
   costText: { fontSize: 15, fontWeight: "800", marginTop: 6 },
   costPlaceholder: { fontSize: 14, color: "#BDC3C7", marginTop: 6 },
 });

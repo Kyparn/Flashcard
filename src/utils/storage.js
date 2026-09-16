@@ -1,11 +1,14 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { initialCategories, initialCards } from '../data/initialData';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { initialCategories, initialCards } from "../data/initialData";
+import legacyCards from "../data/legacyCardFingerprints.json";
+import { fingerprint } from "../../shared/catalog.cjs";
 
-const DATA_VERSION = 'v10_icon_fix';
-const VERSION_KEY = 'flashcard_data_version';
-const CATEGORIES_KEY = 'flashcard_categories';
-const CARDS_KEY = 'flashcard_cards';
-const PROGRESS_KEY = 'flashcard_progress';
+const DATA_VERSION = "v10_icon_fix";
+const VERSION_KEY = "flashcard_data_version";
+const CATEGORIES_KEY = "flashcard_categories";
+const CARDS_KEY = "flashcard_cards";
+const PROGRESS_KEY = "flashcard_progress";
+const DELETED_CARDS_KEY = "flashcard_deleted_cards";
 
 // Wipe and reseed if data version doesn't match (e.g. after removing food category)
 export async function migrateIfNeeded() {
@@ -30,9 +33,24 @@ export async function saveCategories(categories) {
 export async function loadCards() {
   const json = await AsyncStorage.getItem(CARDS_KEY);
   if (json) {
-    const saved = JSON.parse(json);
+    const defaults = new Map(initialCards.map((card) => [card.id, card]));
+    // Convert untouched old question cards, retaining personal edits and IDs.
+    const saved = JSON.parse(json).map((card) => {
+      const legacy = legacyCards[card.id];
+      return legacy &&
+        card.question === legacy.question &&
+        fingerprint(card.answer) === legacy.answerHash
+        ? { ...card, ...defaults.get(card.id) }
+        : card;
+    });
+    const deleted = new Set(
+      JSON.parse((await AsyncStorage.getItem(DELETED_CARDS_KEY)) || "[]"),
+    );
     const savedIds = new Set(saved.map((c) => c.id));
-    const merged = [...saved, ...initialCards.filter((c) => !savedIds.has(c.id))];
+    const merged = [
+      ...saved,
+      ...initialCards.filter((c) => !savedIds.has(c.id) && !deleted.has(c.id)),
+    ];
     await AsyncStorage.setItem(CARDS_KEY, JSON.stringify(merged));
     return merged;
   }
@@ -41,7 +59,12 @@ export async function loadCards() {
 }
 
 export async function saveCards(cards) {
-  await AsyncStorage.setItem(CARDS_KEY, JSON.stringify(cards));
+  const ids = new Set(cards.map((c) => c.id));
+  const deleted = initialCards.filter((c) => !ids.has(c.id)).map((c) => c.id);
+  await AsyncStorage.multiSet([
+    [CARDS_KEY, JSON.stringify(cards)],
+    [DELETED_CARDS_KEY, JSON.stringify(deleted)],
+  ]);
 }
 
 export async function loadProgress() {

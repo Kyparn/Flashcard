@@ -1,128 +1,93 @@
-import React, { useRef, useState } from 'react';
-import { Animated, Pressable, StyleSheet, Text, View } from 'react-native';
-
-const FlipCard =({ question, answer, color }) => {
-  const [flipped, setFlipped] = useState(false);
-  const anim = useRef(new Animated.Value(0)).current;
-
-  const frontRotate = anim.interpolate({ inputRange: [0, 180], outputRange: ['0deg', '180deg'] });
-  const backRotate = anim.interpolate({ inputRange: [0, 180], outputRange: ['180deg', '360deg'] });
-
-  function flip() {
-    Animated.spring(anim, {
-      toValue: flipped ? 0 : 180,
-      friction: 8,
-      tension: 10,
-      useNativeDriver: true,
-    }).start();
-    setFlipped(!flipped);
-  }
-
+﻿import { Ionicons } from "@expo/vector-icons";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+import { colors, serif, ui } from "../theme";
+export default function FlipCard({ question, answer, revealed, onReveal }) {
   return (
-    <Pressable onPress={flip} style={styles.container}>
-      {/* Front */}
-      <Animated.View
-        style={[
-          styles.card,
-          { backgroundColor: color, transform: [{ perspective: 1000 }, { rotateY: frontRotate }] },
-        ]}
-      >
-        <View style={styles.badge}>
-          <Text style={styles.badgeText}>FRÅGA</Text>
+    <View style={s.card}>
+      <View style={s.top}>
+        <View style={s.badge}>
+          <Ionicons
+            name={revealed ? "checkmark-circle-outline" : "help-circle-outline"}
+            size={15}
+            color={colors.primary}
+          />
+          <Text style={s.label}>
+            {revealed ? "SVARET" : "FUNDERA EN STUND"}
+          </Text>
         </View>
-        <Text style={styles.text}>{question}</Text>
-        <Text style={styles.hint}>Tryck för att se svaret  ↻</Text>
-      </Animated.View>
-
-      {/* Back */}
-      <Animated.View
-        style={[
-          styles.card,
-          styles.cardBack,
-          { transform: [{ perspective: 1000 }, { rotateY: backRotate }] },
-        ]}
-      >
-        <View style={[styles.badge, styles.badgeBack]}>
-          <Text style={styles.badgeText}>SVAR</Text>
+        <Ionicons name="wine-outline" size={25} color={colors.muted} />
+      </View>
+      <Text style={s.question}>{question}</Text>
+      {revealed ? (
+        <View style={s.answer}>
+          <Text style={s.answerText}>{answer}</Text>
         </View>
-        <Text style={[styles.text, styles.textBack]}>{answer}</Text>
-        <Text style={[styles.hint, { color: 'rgba(255,255,255,0.35)' }]}>Tryck för att se frågan  ↻</Text>
-        <View style={[styles.accentBar, { backgroundColor: color }]} />
-      </Animated.View>
-    </Pressable>
+      ) : (
+        <View style={s.prompt}>
+          <View style={s.rule} />
+          <Text style={ui.body}>Vad vet du om den här drycken?</Text>
+        </View>
+      )}
+      {!revealed && (
+        <Pressable
+          accessibilityRole="button"
+          onPress={onReveal}
+          style={[ui.button, { marginTop: 30 }]}
+        >
+          <Ionicons name="eye-outline" size={18} color="#fff" />
+          <Text style={ui.buttonText}>Visa svaret</Text>
+        </Pressable>
+      )}
+    </View>
   );
 }
-
-export default FlipCard
-
-const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    height: 300,
-  },
+const s = StyleSheet.create({
   card: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
     borderRadius: 24,
-    paddingHorizontal: 30,
-    paddingVertical: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backfaceVisibility: 'hidden',
-    elevation: 6,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.18,
-    shadowRadius: 10,
+    padding: 26,
+    minHeight: 330,
   },
-  cardBack: {
-    backgroundColor: '#1A252F',
+  top: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 38,
   },
   badge: {
-    position: 'absolute',
-    top: 18,
-    left: 20,
-    backgroundColor: 'rgba(255,255,255,0.25)',
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
+    flexDirection: "row",
+    gap: 7,
+    alignItems: "center",
+    backgroundColor: colors.soft,
+    borderRadius: 20,
+    padding: 10,
   },
-  badgeBack: {
-    backgroundColor: 'rgba(255,255,255,0.1)',
+  label: {
+    fontSize: 9,
+    letterSpacing: 1,
+    color: colors.primary,
+    fontWeight: "700",
   },
-  badgeText: {
-    color: '#fff',
-    fontSize: 10,
-    fontWeight: '800',
-    letterSpacing: 1.5,
+  question: {
+    fontFamily: serif,
+    fontSize: 29,
+    lineHeight: 39,
+    color: colors.ink,
   },
-  text: {
-    color: '#fff',
-    fontSize: 21,
-    fontWeight: '700',
-    textAlign: 'center',
-    lineHeight: 32,
+  prompt: { marginTop: 22 },
+  rule: {
+    backgroundColor: colors.gold,
+    width: 40,
+    height: 2,
+    marginBottom: 18,
   },
-  textBack: {
-    fontSize: 18,
-    fontWeight: '500',
-    lineHeight: 28,
-    color: '#ECF0F1',
+  answer: {
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+    paddingTop: 22,
+    marginTop: 24,
   },
-  hint: {
-    position: 'absolute',
-    bottom: 18,
-    color: 'rgba(255,255,255,0.45)',
-    fontSize: 12,
-  },
-  accentBar: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: 5,
-    borderBottomLeftRadius: 24,
-    borderBottomRightRadius: 24,
-  },
+  answerText: { color: colors.ink, fontSize: 16, lineHeight: 28 },
 });

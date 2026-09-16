@@ -1,210 +1,419 @@
-import React, { useEffect, useState } from 'react';
+import { Ionicons } from "@expo/vector-icons";
+import { useEffect, useState } from "react";
 import {
-  Alert,
-  FlatList,
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
   Pressable,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
   View,
-} from 'react-native';
-import { loadCards, loadCategories, saveCards } from '../utils/storage';
-
-export default function ManageScreen({ navigation }) {
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { loadCards, loadCategories, saveCards } from "../utils/storage";
+import { colors, serif, ui } from "../theme";
+export default function ManageScreen({ navigation, route }) {
   const [categories, setCategories] = useState([]);
   const [cards, setCards] = useState([]);
-  const [selectedCat, setSelectedCat] = useState(null);
-  const [showForm, setShowForm] = useState(false);
-  const [question, setQuestion] = useState('');
-  const [answer, setAnswer] = useState('');
-
+  const [selectedCat, setSelectedCat] = useState(
+    route.params?.categoryId || null,
+  );
+  const [search, setSearch] = useState("");
+  const [draft, setDraft] = useState(null);
+  const [deleting, setDeleting] = useState(null);
+  const [error, setError] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    async function load() {
-      const [cats, cds] = await Promise.all([loadCategories(), loadCards()]);
-      setCategories(cats);
-      setCards(cds);
-      if (cats.length) setSelectedCat(cats[0]);
-    }
-    load();
+    Promise.all([loadCategories(), loadCards()])
+      .then(([cats, cds]) => {
+        setCategories(cats);
+        setCards(cds);
+        setSelectedCat((id) =>
+          cats.some((c) => c.id === id) ? id : cats[0]?.id,
+        );
+      })
+      .catch(() =>
+        setError("Kunde inte läsa korten. Gå tillbaka och försök igen."),
+      )
+      .finally(() => setLoading(false));
   }, []);
-
-  async function addCard() {
-    if (!question.trim() || !answer.trim()) {
-      Alert.alert('Fyll i både fråga och svar');
+  async function save() {
+    if (!draft.question.trim() || !draft.answer.trim()) {
+      setError("Fyll i både namn och information.");
       return;
     }
-    const newCard = {
-      id: Date.now().toString(),
-      categoryId: selectedCat.id,
-      question: question.trim(),
-      answer: answer.trim(),
+    if (saving) return;
+    setSaving(true);
+    setError("");
+    const card = {
+      ...draft,
+      id: draft.id || `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+      question: draft.question.trim(),
+      answer: draft.answer.trim(),
     };
-    const updated = [...cards, newCard];
-    await saveCards(updated);
-    setCards(updated);
-    setQuestion('');
-    setAnswer('');
-    setShowForm(false);
+    const updated = draft.id
+      ? cards.map((c) => (c.id === card.id ? card : c))
+      : [...cards, card];
+    try {
+      await saveCards(updated);
+      setCards(updated);
+      setDraft(null);
+    } catch {
+      setError("Kunde inte spara. Försök igen.");
+    } finally {
+      setSaving(false);
+    }
   }
-
-  async function deleteCard(id) {
-    Alert.alert('Ta bort kort', 'Är du säker?', [
-      { text: 'Avbryt', style: 'cancel' },
-      {
-        text: 'Ta bort',
-        style: 'destructive',
-        onPress: async () => {
-          const updated = cards.filter((c) => c.id !== id);
-          await saveCards(updated);
-          setCards(updated);
-        },
-      },
-    ]);
+  async function remove() {
+    if (saving) return;
+    setSaving(true);
+    setError("");
+    try {
+      const updated = cards.filter((c) => c.id !== deleting.id);
+      await saveCards(updated);
+      setCards(updated);
+      setDeleting(null);
+    } catch {
+      setError("Kunde inte ta bort kortet. Försök igen.");
+    } finally {
+      setSaving(false);
+    }
   }
-
-  const filteredCards = cards.filter((c) => c.categoryId === selectedCat?.id);
-
+  const filtered = cards.filter(
+    (c) =>
+      c.categoryId === selectedCat &&
+      `${c.question} ${c.answer}`
+        .toLocaleLowerCase("sv")
+        .includes(search.trim().toLocaleLowerCase("sv")),
+  );
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.topBar}>
-        <Pressable onPress={() => navigation.goBack()}>
-          <Text style={styles.backText}>← Tillbaka</Text>
-        </Pressable>
-        <Text style={styles.title}>Hantera kort</Text>
-        <Pressable onPress={() => setShowForm(true)}>
-          <Text style={styles.addText}>+ Ny</Text>
-        </Pressable>
-      </View>
-
-      {/* Category tabs */}
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.tabs}>
-        {categories.map((cat) => (
+    <SafeAreaView style={ui.screen} edges={["top"]}>
+      <ScrollView
+        contentContainerStyle={ui.content}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={s.header}>
           <Pressable
-            key={cat.id}
-            style={[styles.tab, selectedCat?.id === cat.id && { borderBottomColor: cat.color, borderBottomWidth: 3 }]}
-            onPress={() => setSelectedCat(cat)}
+            accessibilityRole="button"
+            accessibilityLabel="Tillbaka"
+            style={ui.iconButton}
+            onPress={() => navigation.goBack()}
           >
-            <Text style={styles.tabText}>{cat.emoji} {cat.name}</Text>
+            <Ionicons name="arrow-back" size={20} color={colors.ink} />
           </Pressable>
-        ))}
-      </ScrollView>
-
-      {showForm && (
-        <View style={[styles.form, { borderLeftColor: selectedCat?.color }]}>
-          <TextInput
-            style={styles.input}
-            placeholder="Fråga..."
-            value={question}
-            onChangeText={setQuestion}
-            multiline
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Svar..."
-            value={answer}
-            onChangeText={setAnswer}
-            multiline
-          />
-          <View style={styles.formButtons}>
-            <Pressable style={styles.cancelBtn} onPress={() => setShowForm(false)}>
-              <Text style={styles.cancelBtnText}>Avbryt</Text>
-            </Pressable>
-            <Pressable style={[styles.saveBtn, { backgroundColor: selectedCat?.color }]} onPress={addCard}>
-              <Text style={styles.saveBtnText}>Spara</Text>
-            </Pressable>
-          </View>
+          <Text style={s.headerLabel}>DITT KORTBIBLIOTEK</Text>
+          <Pressable
+            disabled={!selectedCat}
+            accessibilityRole="button"
+            style={ui.button}
+            onPress={() => {
+              setError("");
+              setDraft({ categoryId: selectedCat, question: "", answer: "" });
+            }}
+          >
+            <Ionicons name="add" size={19} color="#fff" />
+            <Text style={ui.buttonText}>Nytt kort</Text>
+          </Pressable>
         </View>
-      )}
-
-      <FlatList
-        data={filteredCards}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.list}
-        ListEmptyComponent={<Text style={styles.empty}>Inga kort ännu. Tryck + Ny för att lägga till.</Text>}
-        renderItem={({ item }) => (
-          <View style={[styles.cardItem, { borderLeftColor: selectedCat?.color }]}>
-            <View style={styles.cardItemContent}>
-              <Text style={styles.cardQ}>{item.question}</Text>
-              <Text style={styles.cardA}>{item.answer}</Text>
-            </View>
-            <Pressable onPress={() => deleteCard(item.id)} style={styles.deleteBtn}>
-              <Text style={styles.deleteText}>🗑</Text>
+        <Text style={ui.title}>Plats för mer kunskap.</Text>
+        <Text style={[ui.body, { marginTop: 9, marginBottom: 24 }]}>
+          Dina lokala tillägg och anteckningar. Tävlingsquizet använder det
+          gemensamma dryckesregistret.
+        </Text>
+        <View style={ui.search}>
+          <Ionicons name="search-outline" size={20} color={colors.muted} />
+          <TextInput
+            style={ui.searchInput}
+            accessibilityLabel="Sök bland kort"
+            placeholder="Sök dryck eller information…"
+            placeholderTextColor={colors.muted}
+            value={search}
+            onChangeText={setSearch}
+          />
+        </View>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={{ marginVertical: 20 }}
+          contentContainerStyle={{ paddingRight: 24 }}
+        >
+          {categories.map((cat) => (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityState={{ selected: cat.id === selectedCat }}
+              key={cat.id}
+              onPress={() => setSelectedCat(cat.id)}
+              style={[ui.chip, cat.id === selectedCat && ui.chipActive]}
+            >
+              <Text
+                style={[
+                  ui.chipText,
+                  cat.id === selectedCat && { color: "#fff" },
+                ]}
+              >
+                {cat.name}
+              </Text>
             </Pressable>
-          </View>
+          ))}
+        </ScrollView>
+        {loading && <ActivityIndicator color={colors.primary} />}
+        {!draft && !deleting && !!error && (
+          <Text style={ui.error}>{error}</Text>
         )}
-      />
+        <Text style={[ui.eyebrow, { marginBottom: 14 }]}>
+          {filtered.length} KORT
+        </Text>
+        {filtered.map((card) => (
+          <View key={card.id} style={s.card}>
+            <View style={{ flex: 1 }}>
+              <Text style={s.question}>{card.question}</Text>
+              <Text numberOfLines={3} style={s.answer}>
+                {card.answer}
+              </Text>
+            </View>
+            <View style={{ gap: 8 }}>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={`Redigera ${card.question}`}
+                style={ui.iconButton}
+                onPress={() => {
+                  setError("");
+                  setDraft({ ...card });
+                }}
+              >
+                <Ionicons
+                  name="create-outline"
+                  size={19}
+                  color={colors.primary}
+                />
+              </Pressable>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={`Ta bort ${card.question}`}
+                style={ui.iconButton}
+                onPress={() => {
+                  setError("");
+                  setDeleting(card);
+                }}
+              >
+                <Ionicons
+                  name="trash-outline"
+                  size={18}
+                  color={colors.danger}
+                />
+              </Pressable>
+            </View>
+          </View>
+        ))}
+        {!loading && !filtered.length && (
+          <Text style={[ui.body, { textAlign: "center", paddingVertical: 32 }]}>
+            {search
+              ? "Inga kort matchar din sökning."
+              : "Inga kort här ännu. Lägg till ditt första kort."}
+          </Text>
+        )}
+      </ScrollView>
+      <Modal
+        visible={!!draft || !!deleting}
+        transparent
+        animationType="fade"
+        onRequestClose={() => {
+          if (!saving) {
+            setDraft(null);
+            setDeleting(null);
+            setError("");
+          }
+        }}
+      >
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : undefined}
+          style={s.backdrop}
+        >
+          <View style={s.modal}>
+            <ScrollView
+              keyboardShouldPersistTaps="handled"
+              contentContainerStyle={{ padding: 24 }}
+            >
+              <View
+                style={[
+                  ui.row,
+                  { justifyContent: "space-between", marginBottom: 20 },
+                ]}
+              >
+                <Text style={s.modalTitle}>
+                  {deleting
+                    ? "Ta bort kort?"
+                    : draft?.id
+                      ? "Redigera kort"
+                      : "Nytt kort"}
+                </Text>
+                <Pressable
+                  disabled={saving}
+                  accessibilityRole="button"
+                  accessibilityLabel="Stäng"
+                  style={ui.iconButton}
+                  onPress={() => {
+                    setDraft(null);
+                    setDeleting(null);
+                    setError("");
+                  }}
+                >
+                  <Ionicons name="close" size={20} color={colors.ink} />
+                </Pressable>
+              </View>
+              {draft && (
+                <>
+                  <Text style={s.label}>KATEGORI</Text>
+                  <ScrollView
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    style={{ marginBottom: 20 }}
+                  >
+                    {categories.map((cat) => (
+                      <Pressable
+                        key={cat.id}
+                        onPress={() =>
+                          setDraft((d) => ({ ...d, categoryId: cat.id }))
+                        }
+                        style={[
+                          ui.chip,
+                          draft.categoryId === cat.id && ui.chipActive,
+                        ]}
+                      >
+                        <Text
+                          style={[
+                            ui.chipText,
+                            draft.categoryId === cat.id && { color: "#fff" },
+                          ]}
+                        >
+                          {cat.name}
+                        </Text>
+                      </Pressable>
+                    ))}
+                  </ScrollView>
+                  <Text style={s.label}>DRYCKENS NAMN</Text>
+                  <TextInput
+                    accessibilityLabel="Dryckens namn"
+                    style={ui.input}
+                    value={draft.question}
+                    onChangeText={(question) =>
+                      setDraft((d) => ({ ...d, question }))
+                    }
+                    placeholder="Dryckens namn"
+                    multiline
+                  />
+                  <Text style={[s.label, { marginTop: 20 }]}>INFORMATION</Text>
+                  <TextInput
+                    accessibilityLabel="Dryckens information"
+                    style={[
+                      ui.input,
+                      { minHeight: 130, textAlignVertical: "top" },
+                    ]}
+                    value={draft.answer}
+                    onChangeText={(answer) =>
+                      setDraft((d) => ({ ...d, answer }))
+                    }
+                    placeholder="Ursprung, druvor, smak och servering…"
+                    multiline
+                  />
+                </>
+              )}
+              {deleting && (
+                <Text style={ui.body}>
+                  ”{deleting.question}” tas bort från ditt kortbibliotek.
+                </Text>
+              )}
+              {!!error && (
+                <Text accessibilityRole="alert" style={ui.error}>
+                  {error}
+                </Text>
+              )}
+              <View style={[ui.row, { marginTop: 24 }]}>
+                <Pressable
+                  disabled={saving}
+                  style={[ui.button, { flex: 1, backgroundColor: colors.soft }]}
+                  onPress={() => {
+                    setDraft(null);
+                    setDeleting(null);
+                    setError("");
+                  }}
+                >
+                  <Text style={[ui.buttonText, { color: colors.primary }]}>
+                    Avbryt
+                  </Text>
+                </Pressable>
+                <Pressable
+                  disabled={saving}
+                  style={[
+                    ui.button,
+                    { flex: 1 },
+                    deleting && { backgroundColor: colors.danger },
+                  ]}
+                  onPress={deleting ? remove : save}
+                >
+                  <Text style={ui.buttonText}>
+                    {saving ? "Sparar…" : deleting ? "Ta bort" : "Spara kort"}
+                  </Text>
+                </Pressable>
+              </View>
+            </ScrollView>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F5F6FA' },
-  topBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 20,
+const s = StyleSheet.create({
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    marginBottom: 24,
   },
-  backText: { fontSize: 16, color: '#2C3E50', fontWeight: '600' },
-  title: { fontSize: 18, fontWeight: '700', color: '#2C3E50' },
-  addText: { fontSize: 16, color: '#3498DB', fontWeight: '700' },
-  tabs: { paddingHorizontal: 12, maxHeight: 50, marginBottom: 8 },
-  tab: { paddingHorizontal: 14, paddingVertical: 10, marginRight: 4 },
-  tabText: { fontSize: 15, fontWeight: '600', color: '#2C3E50' },
-  form: {
-    margin: 16,
-    backgroundColor: '#fff',
-    borderRadius: 14,
-    padding: 16,
-    borderLeftWidth: 4,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  input: {
+  headerLabel: { flex: 1, color: colors.muted, fontSize: 10, letterSpacing: 1 },
+  card: {
+    backgroundColor: "#fff",
+    borderRadius: 18,
     borderWidth: 1,
-    borderColor: '#ECF0F1',
-    borderRadius: 10,
-    padding: 12,
-    marginBottom: 10,
-    fontSize: 15,
-    minHeight: 48,
-    backgroundColor: '#F9F9F9',
+    borderColor: colors.border,
+    padding: 20,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 14,
+    marginBottom: 12,
   },
-  formButtons: { flexDirection: 'row', gap: 10 },
-  cancelBtn: {
+  question: {
+    fontFamily: serif,
+    fontSize: 21,
+    color: colors.ink,
+    marginBottom: 9,
+  },
+  answer: { color: colors.muted, fontSize: 14, lineHeight: 22 },
+  backdrop: {
     flex: 1,
-    padding: 14,
-    borderRadius: 10,
-    backgroundColor: '#ECF0F1',
-    alignItems: 'center',
+    backgroundColor: "rgba(20,37,30,0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 18,
   },
-  cancelBtnText: { fontWeight: '600', color: '#7F8C8D' },
-  saveBtn: { flex: 1, padding: 14, borderRadius: 10, alignItems: 'center' },
-  saveBtnText: { fontWeight: '700', color: '#fff' },
-  list: { padding: 16 },
-  empty: { textAlign: 'center', color: '#95A5A6', marginTop: 40, fontSize: 15 },
-  cardItem: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 16,
+  modal: {
+    width: "100%",
+    maxWidth: 620,
+    maxHeight: "90%",
+    backgroundColor: "#fff",
+    borderRadius: 24,
+    overflow: "hidden",
+  },
+  modalTitle: { fontFamily: serif, fontSize: 27, color: colors.ink },
+  label: {
+    fontSize: 10,
+    letterSpacing: 1.5,
+    fontWeight: "700",
+    color: colors.muted,
     marginBottom: 10,
-    borderLeftWidth: 4,
-    flexDirection: 'row',
-    alignItems: 'center',
-    elevation: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.08,
-    shadowRadius: 3,
   },
-  cardItemContent: { flex: 1 },
-  cardQ: { fontWeight: '700', color: '#2C3E50', fontSize: 15, marginBottom: 4 },
-  cardA: { color: '#7F8C8D', fontSize: 14, lineHeight: 20 },
-  deleteBtn: { padding: 8 },
-  deleteText: { fontSize: 20 },
 });

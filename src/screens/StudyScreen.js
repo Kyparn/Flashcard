@@ -1,193 +1,311 @@
-import { useEffect, useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import FlipCard from '../components/FlipCard';
-import { loadCards } from '../utils/storage';
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { useEffect, useRef, useState } from "react";
+import {
+  ActivityIndicator,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { loadCards } from "../utils/storage";
+import { drinkName, drinkDetails } from "../utils/drinks";
+import { colors, serif, ui } from "../theme";
 
 export default function StudyScreen({ route, navigation }) {
   const { category } = route.params;
   const [cards, setCards] = useState([]);
   const [index, setIndex] = useState(0);
-  const [finished, setFinished] = useState(false);
-
+  const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const scroll = useRef(null);
   useEffect(() => {
-    loadCards().then((all) => {
-      const filtered = all.filter((c) => c.categoryId === category.id);
-      setCards(filtered.sort(() => Math.random() - 0.5));
-    });
+    let active = true;
+    loadCards()
+      .then((all) => {
+        if (active) setCards(all.filter((c) => c.categoryId === category.id));
+      })
+      .catch(() => {
+        if (active)
+          setError("Kunde inte läsa dryckerna. Gå tillbaka och försök igen.");
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
   }, [category.id]);
-
-  function nextCard() {
-    if (index + 1 >= cards.length) {
-      setFinished(true);
-    } else {
-      setIndex(index + 1);
-    }
+  const filtered = cards.filter((c) =>
+    `${drinkName(c)} ${c.answer}`
+      .toLocaleLowerCase("sv")
+      .includes(search.trim().toLocaleLowerCase("sv")),
+  );
+  const card = filtered[index];
+  const details = card ? drinkDetails(card) : null;
+  function go(next) {
+    setIndex(next);
+    scroll.current?.scrollTo({ y: 0, animated: false });
   }
-
-  function restart() {
-    setIndex(0);
-    setScore({ correct: 0, incorrect: 0 });
-    setFinished(false);
-    setCards((c) => [...c].sort(() => Math.random() - 0.5));
-  }
-
-  if (!cards.length) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.centerBox}>
-          <Text style={styles.emptyEmoji}>📭</Text>
-          <Text style={styles.emptyText}>Inga kort i den här kategorin ännu.</Text>
-          <Pressable onPress={() => navigation.navigate('Manage')} style={[styles.actionBtn, { backgroundColor: category.color }]}>
-            <Text style={styles.actionBtnText}>Lägg till kort</Text>
-          </Pressable>
-        </View>
-      </SafeAreaView>
-    );
-  }
-
-  if (finished) {
-    return (
-      <SafeAreaView style={[styles.container, { backgroundColor: category.color }]}>
-        <View style={styles.resultContainer}>
-          <Text style={styles.resultEmoji}>🎉</Text>
-          <Text style={styles.resultTitle}>Alla kort klara!</Text>
-          <Text style={styles.resultScore}>{cards.length} kort genomgångna</Text>
-
-          <Pressable style={styles.resultBtn} onPress={restart}>
-            <Text style={[styles.resultBtnText, { color: category.color }]}>↺  Kör igen</Text>
-          </Pressable>
-
-          <Pressable onPress={() => navigation.goBack()}>
-            <Text style={styles.resultBack}>← Tillbaka</Text>
-          </Pressable>
-        </View>
-      </SafeAreaView>
-    );
-  }
-
-  const card = cards[index];
-  const progressPct = ((index) / cards.length) * 100;
-
   return (
-    <SafeAreaView style={styles.container}>
-      {/* Top bar */}
-      <View style={styles.topBar}>
-        <Pressable onPress={() => navigation.goBack()}>
-          <Text style={styles.backText}>← {category.name}</Text>
-        </Pressable>
-        <Text style={styles.progressText}>{index + 1} / {cards.length}</Text>
-      </View>
-
-      {/* Progress bar */}
-      <View style={styles.progressTrack}>
-        <View style={[styles.progressFill, { width: `${progressPct}%`, backgroundColor: category.color }]} />
-      </View>
-
-      {/* Card */}
-      <View style={styles.cardWrapper}>
-        <FlipCard
-          key={card.id}
-          question={card.question}
-          answer={card.answer}
-          color={category.color}
-        />
-      </View>
-
-      {/* Next button */}
-      <View style={styles.buttons}>
-        <Pressable
-          style={({ pressed }) => [styles.btn, styles.nextBtn, pressed && styles.btnPressed]}
-          onPress={nextCard}
-        >
-          <Text style={styles.btnText}>Nästa  →</Text>
-        </Pressable>
-      </View>
+    <SafeAreaView style={ui.screen} edges={["top"]}>
+      <ScrollView
+        ref={scroll}
+        contentContainerStyle={[ui.content, { maxWidth: 760 }]}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={s.header}>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Tillbaka till kategorier"
+            style={ui.iconButton}
+            onPress={() => navigation.goBack()}
+          >
+            <Ionicons name="arrow-back" size={20} color={colors.ink} />
+          </Pressable>
+          <View style={{ flex: 1 }}>
+            <Text style={ui.eyebrow}>DRYCKESBIBLIOTEK</Text>
+            <Text style={s.category}>{category.name}</Text>
+          </View>
+          <Text style={ui.body}>
+            {filtered.length ? `${index + 1} / ${filtered.length}` : ""}
+          </Text>
+        </View>
+        <View style={[ui.search, { marginVertical: 22 }]}>
+          <Ionicons name="search-outline" size={19} color={colors.muted} />
+          <TextInput
+            accessibilityLabel="Sök dryck i kategorin"
+            style={ui.searchInput}
+            placeholder="Sök dryck eller information…"
+            placeholderTextColor={colors.muted}
+            value={search}
+            onChangeText={(value) => {
+              setSearch(value);
+              setIndex(0);
+            }}
+          />
+        </View>
+        {loading ? (
+          <ActivityIndicator color={colors.primary} />
+        ) : card ? (
+          <>
+            <View style={s.card}>
+              <View
+                style={[
+                  ui.row,
+                  { justifyContent: "space-between", marginBottom: 26 },
+                ]}
+              >
+                <Text style={ui.eyebrow}>
+                  {category.name.toLocaleUpperCase("sv")}
+                </Text>
+                <MaterialCommunityIcons
+                  name={category.icon || "glass-wine"}
+                  size={35}
+                  color={colors.primary}
+                />
+              </View>
+              <Text style={s.name}>{drinkName(card)}</Text>
+              <View style={s.rule} />
+              <Text style={s.info}>
+                {details ? details.description : card.answer}
+              </Text>
+              {details && (
+                <>
+                  {details.grapeLabels.length > 0 && (
+                    <>
+                      <Text
+                        style={[
+                          ui.eyebrow,
+                          { marginTop: 26, marginBottom: 12 },
+                        ]}
+                      >
+                        DRUVOR
+                      </Text>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          flexWrap: "wrap",
+                          gap: 8,
+                        }}
+                      >
+                        {details.grapeLabels.map((label) => (
+                          <View key={label} style={s.tag}>
+                            <Text style={s.tagText}>{label}</Text>
+                          </View>
+                        ))}
+                      </View>
+                    </>
+                  )}
+                  {details.flavorLabels.length > 0 && (
+                    <>
+                      <Text
+                        style={[
+                          ui.eyebrow,
+                          { marginTop: 26, marginBottom: 12 },
+                        ]}
+                      >
+                        SMAKPROFIL
+                      </Text>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          flexWrap: "wrap",
+                          gap: 8,
+                        }}
+                      >
+                        {details.flavorLabels.map((label) => (
+                          <View
+                            key={label}
+                            style={[s.tag, { backgroundColor: "#F5EFE2" }]}
+                          >
+                            <Text style={s.tagText}>{label}</Text>
+                          </View>
+                        ))}
+                      </View>
+                    </>
+                  )}
+                  {(details.prices.glass || details.prices.bottle) && (
+                    <View
+                      style={{
+                        borderTopWidth: 1,
+                        borderTopColor: colors.border,
+                        paddingTop: 20,
+                        marginTop: 26,
+                        flexDirection: "row",
+                        flexWrap: "wrap",
+                        gap: 20,
+                      }}
+                    >
+                      {details.prices.glass && (
+                        <Text style={ui.body}>
+                          Glas · {details.prices.glass} kr
+                        </Text>
+                      )}
+                      {details.prices.bottle && (
+                        <Text style={ui.body}>
+                          Flaska · {details.prices.bottle} kr
+                        </Text>
+                      )}
+                    </View>
+                  )}
+                </>
+              )}
+            </View>
+            <View style={s.pager}>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel="Föregående dryck"
+                disabled={index === 0}
+                onPress={() => go(index - 1)}
+                style={[ui.button, s.secondary, index === 0 && s.disabled]}
+              >
+                <Ionicons name="arrow-back" size={18} color={colors.primary} />
+                <Text style={[ui.buttonText, { color: colors.primary }]}>
+                  Föregående
+                </Text>
+              </Pressable>
+              <Pressable
+                accessibilityRole="button"
+                disabled={index === filtered.length - 1}
+                onPress={() => go(index + 1)}
+                style={[
+                  ui.button,
+                  { flex: 1 },
+                  index === filtered.length - 1 && s.disabled,
+                ]}
+              >
+                <Text style={ui.buttonText}>Nästa dryck</Text>
+                <Ionicons name="arrow-forward" size={18} color="#fff" />
+              </Pressable>
+            </View>
+            <Text style={[ui.eyebrow, { marginTop: 28, marginBottom: 14 }]}>
+              ALLA I {category.name.toLocaleUpperCase("sv")}
+            </Text>
+            {filtered.map((item, i) => (
+              <Pressable
+                accessibilityRole="button"
+                accessibilityState={{ selected: i === index }}
+                key={item.id}
+                onPress={() => go(i)}
+                style={[
+                  s.listItem,
+                  i === index && {
+                    backgroundColor: colors.soft,
+                    borderColor: colors.primary,
+                  },
+                ]}
+              >
+                <Text style={s.number}>{String(i + 1).padStart(2, "0")}</Text>
+                <Text style={s.listName}>{drinkName(item)}</Text>
+                <Ionicons
+                  name={i === index ? "checkmark-circle" : "chevron-forward"}
+                  size={18}
+                  color={colors.primary}
+                />
+              </Pressable>
+            ))}
+          </>
+        ) : (
+          <Text style={ui.body}>
+            {error ||
+              (search
+                ? "Ingen dryck matchar din sökning."
+                : "Inga drycker i den här kategorin ännu.")}
+          </Text>
+        )}
+      </ScrollView>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F5F6FA' },
-  topBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingTop: 16,
-    paddingBottom: 12,
-  },
-  backText: { fontSize: 16, color: '#2C3E50', fontWeight: '600' },
-  progressText: { fontSize: 15, color: '#95A5A6', fontWeight: '600' },
-  progressTrack: {
-    height: 5,
-    backgroundColor: '#ECF0F1',
-    marginHorizontal: 20,
-    borderRadius: 10,
-    overflow: 'hidden',
-  },
-  progressFill: { height: '100%', borderRadius: 10, minWidth: 4 },
-  scoreRow: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 12,
-    marginTop: 16,
-  },
-  scoreChip: {
-    paddingHorizontal: 18,
+const s = StyleSheet.create({
+  tag: {
+    paddingHorizontal: 12,
     paddingVertical: 8,
-    borderRadius: 20,
-  },
-  correctChip: { backgroundColor: '#EAFAF1' },
-  wrongChip: { backgroundColor: '#FDEDEC' },
-  scoreChipText: { fontWeight: '700', fontSize: 15 },
-  cardWrapper: { flex: 1, paddingHorizontal: 20, justifyContent: 'center' },
-  buttons: { flexDirection: 'row', padding: 20, gap: 14 },
-  btn: {
-    flex: 1,
-    paddingVertical: 18,
-    borderRadius: 18,
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 8,
-  },
-  btnPressed: { opacity: 0.8, transform: [{ scale: 0.97 }] },
-  nextBtn: { backgroundColor: '#27AE60' },
-  btnText: { color: '#fff', fontWeight: '700', fontSize: 17 },
-  centerBox: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 30 },
-  emptyEmoji: { fontSize: 52, marginBottom: 16 },
-  emptyText: { fontSize: 16, color: '#7F8C8D', textAlign: 'center', marginBottom: 24 },
-  actionBtn: { paddingHorizontal: 28, paddingVertical: 14, borderRadius: 14 },
-  actionBtnText: { color: '#fff', fontWeight: '700', fontSize: 16 },
-  resultContainer: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 30 },
-  resultEmoji: { fontSize: 64, marginBottom: 8 },
-  resultTitle: { fontSize: 28, fontWeight: '800', color: '#fff', marginBottom: 24 },
-  resultCard: {
-    backgroundColor: '#fff',
-    borderRadius: 24,
-    padding: 28,
-    width: '100%',
-    alignItems: 'center',
-    marginBottom: 24,
-  },
-  resultPct: { fontSize: 56, fontWeight: '800', color: '#2C3E50' },
-  resultScore: { fontSize: 16, color: '#95A5A6', marginBottom: 16 },
-  resultTrack: {
-    height: 8,
-    backgroundColor: '#ECF0F1',
     borderRadius: 10,
-    overflow: 'hidden',
-    width: '100%',
+    backgroundColor: colors.soft,
   },
-  resultFill: { height: '100%', borderRadius: 10 },
-  resultBtn: {
-    backgroundColor: '#fff',
-    borderRadius: 16,
-    paddingVertical: 16,
-    paddingHorizontal: 40,
-    marginBottom: 16,
+  tagText: { color: colors.ink, fontSize: 13 },
+  header: { flexDirection: "row", alignItems: "center", gap: 14 },
+  category: {
+    fontFamily: serif,
+    fontSize: 24,
+    color: colors.ink,
+    marginTop: 4,
   },
-  resultBtnText: { fontWeight: '800', fontSize: 17 },
-  resultBack: { color: 'rgba(255,255,255,0.7)', fontWeight: '600', fontSize: 15 },
+  card: {
+    padding: 26,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 24,
+    minHeight: 300,
+  },
+  name: { fontFamily: serif, fontSize: 30, lineHeight: 39, color: colors.ink },
+  rule: {
+    width: 44,
+    height: 3,
+    backgroundColor: colors.gold,
+    marginVertical: 22,
+  },
+  info: { fontSize: 17, lineHeight: 29, color: colors.ink },
+  pager: { flexDirection: "row", gap: 12, marginTop: 20 },
+  secondary: { flex: 1, backgroundColor: colors.soft, paddingHorizontal: 12 },
+  disabled: { opacity: 0.35 },
+  listItem: {
+    padding: 17,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 14,
+    backgroundColor: "#fff",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    marginBottom: 9,
+  },
+  number: { color: colors.muted, fontSize: 12 },
+  listName: { flex: 1, color: colors.ink, fontSize: 14, lineHeight: 21 },
 });

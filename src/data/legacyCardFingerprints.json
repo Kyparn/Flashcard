@@ -1,0 +1,386 @@
+{
+  "401": {
+    "question": "Vad innehåller en Negroni?",
+    "answerHash": "11bcafce"
+  },
+  "402": {
+    "question": "Vad är skillnaden mellan shaken och stirred?",
+    "answerHash": "567f228d"
+  },
+  "403": {
+    "question": "Vad innehåller en Spicy Margarita?",
+    "answerHash": "94436e0c"
+  },
+  "406": {
+    "question": "Vad innehåller en Nordic GT?",
+    "answerHash": "b761566c"
+  },
+  "407": {
+    "question": "Vad innehåller en Kaffe Klara?",
+    "answerHash": "c2b1733f"
+  },
+  "501": {
+    "question": "Vad är skillnaden mellan bourbon och whisky?",
+    "answerHash": "a7d2eaf8"
+  },
+  "502": {
+    "question": "Vad är gin destillerat på?",
+    "answerHash": "f2f9f636"
+  },
+  "503": {
+    "question": "Vad är Brugal?",
+    "answerHash": "5be9e0d6"
+  },
+  "504": {
+    "question": "Vad är Galliano?",
+    "answerHash": "fe3c7edb"
+  },
+  "505": {
+    "question": "Vad är Dry Curaçao?",
+    "answerHash": "14bdcaf"
+  },
+  "c1": {
+    "question": "French Bloom, French Sparkling Blanc",
+    "answerHash": "82543bd6"
+  },
+  "c2": {
+    "question": "Mont-Ferrant, Americano Brut Nature",
+    "answerHash": "bc016830"
+  },
+  "c3": {
+    "question": "Maison Pierre Chainier, Crémant Brut",
+    "answerHash": "7594974"
+  },
+  "c4": {
+    "question": "NV Moët & Chandon, Impérial Brut",
+    "answerHash": "d87aca70"
+  },
+  "c5": {
+    "question": "NV Moët & Chandon, Impérial Brut Magnum (1,5L)",
+    "answerHash": "eb57305c"
+  },
+  "c6": {
+    "question": "NV Moët & Chandon, Ice Impérial",
+    "answerHash": "4e66528e"
+  },
+  "c7": {
+    "question": "2015 Moët & Chandon, Grand Vintage Blanc",
+    "answerHash": "7c8ff89"
+  },
+  "c8": {
+    "question": "2016 Moët & Chandon, Grand Vintage Blanc",
+    "answerHash": "6fc00374"
+  },
+  "c9": {
+    "question": "NV Moët & Chandon, Impérial Rosé",
+    "answerHash": "f58363bd"
+  },
+  "c10": {
+    "question": "NV Moët & Chandon, Impérial Rosé Magnum (1,5L)",
+    "answerHash": "1cb3e770"
+  },
+  "c11": {
+    "question": "2013 Dom Pérignon, Blanc",
+    "answerHash": "a7a0c31d"
+  },
+  "c12": {
+    "question": "2015 Dom Pérignon, Blanc",
+    "answerHash": "46402dff"
+  },
+  "c13": {
+    "question": "2009 Dom Pérignon, Rosé",
+    "answerHash": "faca12a4"
+  },
+  "c14": {
+    "question": "NV Ruinart, R de Ruinart Brut",
+    "answerHash": "6cc9c96b"
+  },
+  "c15": {
+    "question": "NV Ruinart, Blanc de Blancs",
+    "answerHash": "c2a0e5f5"
+  },
+  "c16": {
+    "question": "2010 Ruinart, Dom Ruinart",
+    "answerHash": "37ae776c"
+  },
+  "c17": {
+    "question": "NV Veuve Clicquot, Yellow Label Brut",
+    "answerHash": "db406980"
+  },
+  "c18": {
+    "question": "NV Veuve Clicquot, Extra Old Brut",
+    "answerHash": "34e9c2b0"
+  },
+  "c19": {
+    "question": "2015 Veuve Clicquot, Vintage Blanc",
+    "answerHash": "2ad8e1c7"
+  },
+  "c20": {
+    "question": "NV Krug, Grand Cuvée 171ème Édition",
+    "answerHash": "79ae2487"
+  },
+  "c21": {
+    "question": "NV Armand de Brignac, Ace of Spades Gold",
+    "answerHash": "5e462096"
+  },
+  "r1": {
+    "question": "Santiago, Assinatura de Família",
+    "answerHash": "332ef71a"
+  },
+  "r2": {
+    "question": "Château d'Esclans, Whispering Angel",
+    "answerHash": "8bb9374f"
+  },
+  "r3": {
+    "question": "Château d'Esclans, Whispering Angel Magnum (1,5L)",
+    "answerHash": "deaa47ff"
+  },
+  "r4": {
+    "question": "Maison Galoupet, Provence",
+    "answerHash": "2c9f8674"
+  },
+  "r5": {
+    "question": "NV Château Galoupet, Cru Classé",
+    "answerHash": "992bc677"
+  },
+  "r6": {
+    "question": "2021 Château d'Esclans, Rock Angel",
+    "answerHash": "44f6119a"
+  },
+  "r7": {
+    "question": "2021 Château d'Esclans, Les Clans",
+    "answerHash": "440aff47"
+  },
+  "r8": {
+    "question": "2021 Château d'Esclans, Garrus",
+    "answerHash": "380537d2"
+  },
+  "v1": {
+    "question": "Kuentz-Bas, Pinot Gris & Gewürztraminer",
+    "answerHash": "18583949"
+  },
+  "v2": {
+    "question": "2024 TGC, Ménage à Loire Saumur",
+    "answerHash": "5a4d6acd"
+  },
+  "v3": {
+    "question": "Domaine La Croix St-Laurent, Sancerre",
+    "answerHash": "aff25c39"
+  },
+  "v4": {
+    "question": "2022 Charly Nicolle, 1er Cru Mont de Milieu",
+    "answerHash": "c23a8fb7"
+  },
+  "v5": {
+    "question": "2022 Charly Nicolle, 1er Cru Fourneaux Ante MCMLXXX",
+    "answerHash": "21ce66b5"
+  },
+  "v6": {
+    "question": "Domaine Louis Moreau, Bieville",
+    "answerHash": "f32b77f4"
+  },
+  "v7": {
+    "question": "2022 Domaine Louis Moreau, 1er Cru Les Fourneaux",
+    "answerHash": "20e9c75c"
+  },
+  "v8": {
+    "question": "2021 Domaine Louis Moreau, Grand Cru Valmur",
+    "answerHash": "429d3071"
+  },
+  "v9": {
+    "question": "2022 Maison Champy, Cuvée Edme",
+    "answerHash": "d30de1cb"
+  },
+  "v10": {
+    "question": "2021 Maison Champy, Pernand-Vergelesses",
+    "answerHash": "bdfbde35"
+  },
+  "v11": {
+    "question": "2023 Henri de Villamont, Mâcon-Village",
+    "answerHash": "cd33f977"
+  },
+  "v12": {
+    "question": "2022 Henri de Villamont, Chassagne-Montrachet 1er Cru Les Embazées",
+    "answerHash": "84dafe0f"
+  },
+  "v13": {
+    "question": "S.A Prüm, Solitär Trocken, Riesling",
+    "answerHash": "4e70e9be"
+  },
+  "v14": {
+    "question": "2017 S.A Prüm, Bernkasteler Lay GG",
+    "answerHash": "742fa71"
+  },
+  "v15": {
+    "question": "2023 Soellner, Von Gösing, Riesling",
+    "answerHash": "8106488a"
+  },
+  "v16": {
+    "question": "2024 Soellner, Ried Hengstberg, Grüner Veltliner",
+    "answerHash": "3b28ecdf"
+  },
+  "v17": {
+    "question": "Piccini, Patriale Bianco Eko",
+    "answerHash": "5143a4b0"
+  },
+  "v18": {
+    "question": "Burgáns, Albariño",
+    "answerHash": "d2973c1e"
+  },
+  "v19": {
+    "question": "2023 José Pariente, Fermentado en Barrica, Verdejo",
+    "answerHash": "19f25ec0"
+  },
+  "v20": {
+    "question": "2023 Terrazas de los Andes, Chardonnay",
+    "answerHash": "19b43e1a"
+  },
+  "v21": {
+    "question": "2022 Clos du Bois, Chardonnay",
+    "answerHash": "edc0e09d"
+  },
+  "v22": {
+    "question": "2023 Talbott, Kali Hart, Chardonnay",
+    "answerHash": "147acff3"
+  },
+  "v23": {
+    "question": "2023 Rombauer, Carneros, Chardonnay",
+    "answerHash": "351cca8b"
+  },
+  "ro1": {
+    "question": "2018 Château Patache d'Aux",
+    "answerHash": "f8975fda"
+  },
+  "ro2": {
+    "question": "2019 Château Capet-Guillier, Saint Emilion Grand Cru",
+    "answerHash": "27e3cbd6"
+  },
+  "ro3": {
+    "question": "2022 Maison Champy, Chorey Les Beaune, Pinot Noir",
+    "answerHash": "a6eebb17"
+  },
+  "ro4": {
+    "question": "2022 Maison Champy, Pommard, Pinot Noir",
+    "answerHash": "ec83db1f"
+  },
+  "ro5": {
+    "question": "Henri de Villamont, Prestige, Pinot Noir",
+    "answerHash": "d210185b"
+  },
+  "ro6": {
+    "question": "2019 Henri de Villamont, Santenay La Plice, Pinot Noir",
+    "answerHash": "68058fcd"
+  },
+  "ro7": {
+    "question": "2019 Henri de Villamont, Savigny-Lès-Beaune, Pinot Noir",
+    "answerHash": "6f64df01"
+  },
+  "ro8": {
+    "question": "Ogier, Côtes du Rhône",
+    "answerHash": "ef1fa702"
+  },
+  "ro9": {
+    "question": "2023 Ogier, Gigondas Les Dentelles",
+    "answerHash": "77a811ae"
+  },
+  "ro10": {
+    "question": "2023 Ogier, L'ame Chateauneuf-du-Pape",
+    "answerHash": "252ae89f"
+  },
+  "ro11": {
+    "question": "Piccini, Patriale, Primitivo & Montepulciano",
+    "answerHash": "3c978757"
+  },
+  "ro12": {
+    "question": "Roberto Sarotto, Langhe Nebbiolo",
+    "answerHash": "1aca998d"
+  },
+  "ro13": {
+    "question": "2024 Mauro Sebaste, Barbera d'Alba Contessa Rosalia",
+    "answerHash": "e46b1d92"
+  },
+  "ro14": {
+    "question": "2022 Castello di Neive, Barbaresco",
+    "answerHash": "53e546a8"
+  },
+  "ro15": {
+    "question": "2019 Casa E di Mirafiore, Barolo Classico",
+    "answerHash": "2674e46a"
+  },
+  "ro16": {
+    "question": "2019 Pasqua, Famiglia Valpolicella Ripasso",
+    "answerHash": "7f498c51"
+  },
+  "ro17": {
+    "question": "2022 Torre Mora, Scalunera Etna Rosso",
+    "answerHash": "e19b2554"
+  },
+  "ro18": {
+    "question": "2022 Bousquet, Gaia, Cabernet Sauvignon",
+    "answerHash": "6974701e"
+  },
+  "ro19": {
+    "question": "2022 Terrazas de los Andes, Malbec",
+    "answerHash": "ef318aee"
+  },
+  "ro20": {
+    "question": "2022 J Vineyards, Pinot Noir",
+    "answerHash": "ff4c2a94"
+  },
+  "ro21": {
+    "question": "2021 Macmurray, Russian River, Pinot Noir",
+    "answerHash": "b2cb6f3c"
+  },
+  "ro22": {
+    "question": "2021 Louis M Martini, Sonoma County, Cabernet Sauvignon",
+    "answerHash": "7684c52"
+  },
+  "ro23": {
+    "question": "2021 Rombauer, Merlot",
+    "answerHash": "c54fba9e"
+  },
+  "s1": {
+    "question": "2018 Château Rieussec, Carmes de Rieussec Sauternes",
+    "answerHash": "d7eaab92"
+  },
+  "s2": {
+    "question": "2021 Roberto Sarotto, Pajass Passito, Moscato Bianco",
+    "answerHash": "cb42aae2"
+  },
+  "s3": {
+    "question": "2024 Mauro Sebaste, Moscato d'Asti",
+    "answerHash": "a63e847d"
+  },
+  "s4": {
+    "question": "10y Quinta do Vallado, Tawny Port",
+    "answerHash": "214a4031"
+  },
+  "b1": {
+    "question": "Heineken",
+    "answerHash": "2d4ae5ed"
+  },
+  "b2": {
+    "question": "Mariestads Ljusa Brygd",
+    "answerHash": "39aa9301"
+  },
+  "b3": {
+    "question": "Omaka Suntrip Session IPA",
+    "answerHash": "81855e0e"
+  },
+  "b4": {
+    "question": "Sleepy Bulldog Pale Ale",
+    "answerHash": "12ad2396"
+  },
+  "b5": {
+    "question": "Melleruds Utmärkta Pilsner Eko",
+    "answerHash": "a7e312ed"
+  },
+  "b6": {
+    "question": "Daura Damm Glutenfri Lager",
+    "answerHash": "7c395713"
+  },
+  "b7": {
+    "question": "Omaka Ofarlig IPA",
+    "answerHash": "21c08452"
+  }
+}

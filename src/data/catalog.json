@@ -1,0 +1,3253 @@
+{
+  "schemaVersion": 1,
+  "categories": [
+    {
+      "id": "6",
+      "name": "Champagne",
+      "icon": "glass-flute",
+      "color": "#C0932A"
+    },
+    {
+      "id": "7",
+      "name": "Rosé",
+      "icon": "glass-wine",
+      "color": "#E05C8A"
+    },
+    {
+      "id": "8",
+      "name": "Vitt",
+      "icon": "glass-wine",
+      "color": "#8E9B2F"
+    },
+    {
+      "id": "9",
+      "name": "Rött",
+      "icon": "glass-wine",
+      "color": "#922B21"
+    },
+    {
+      "id": "10",
+      "name": "Sött",
+      "icon": "bottle-wine",
+      "color": "#A569BD"
+    },
+    {
+      "id": "3",
+      "name": "Öl",
+      "icon": "glass-mug-variant",
+      "color": "#F39C12"
+    },
+    {
+      "id": "4",
+      "name": "Cocktails",
+      "icon": "glass-cocktail",
+      "color": "#1ABC9C"
+    },
+    {
+      "id": "5",
+      "name": "Sprit",
+      "icon": "glass-stange",
+      "color": "#E74C3C"
+    }
+  ],
+  "grapes": [
+    {
+      "id": "grape-chardonnay",
+      "name": "Chardonnay"
+    },
+    {
+      "id": "grape-macabeo",
+      "name": "Macabeo"
+    },
+    {
+      "id": "grape-parellada",
+      "name": "Parellada"
+    },
+    {
+      "id": "grape-xarel-lo",
+      "name": "Xarel-lo"
+    },
+    {
+      "id": "grape-chenin-blanc",
+      "name": "Chenin Blanc"
+    },
+    {
+      "id": "grape-pinot-noir",
+      "name": "Pinot Noir"
+    },
+    {
+      "id": "grape-pinot-meunier",
+      "name": "Pinot Meunier"
+    },
+    {
+      "id": "grape-vinhao",
+      "name": "Vinhão"
+    },
+    {
+      "id": "grape-espadeiro",
+      "name": "Espadeiro"
+    },
+    {
+      "id": "grape-grenache",
+      "name": "Grenache"
+    },
+    {
+      "id": "grape-cinsault",
+      "name": "Cinsault"
+    },
+    {
+      "id": "grape-vermentino",
+      "name": "Vermentino"
+    },
+    {
+      "id": "grape-syrah",
+      "name": "Syrah"
+    },
+    {
+      "id": "grape-semillon",
+      "name": "Sémillon"
+    },
+    {
+      "id": "grape-silvaner",
+      "name": "Silvaner"
+    },
+    {
+      "id": "grape-pinot-blanc",
+      "name": "Pinot Blanc"
+    },
+    {
+      "id": "grape-riesling",
+      "name": "Riesling"
+    },
+    {
+      "id": "grape-muscat",
+      "name": "Muscat"
+    },
+    {
+      "id": "grape-pinot-gris",
+      "name": "Pinot Gris"
+    },
+    {
+      "id": "grape-gewurztraminer",
+      "name": "Gewürztraminer"
+    },
+    {
+      "id": "grape-sauvignon-blanc",
+      "name": "Sauvignon Blanc"
+    },
+    {
+      "id": "grape-gruner-veltliner",
+      "name": "Grüner Veltliner"
+    },
+    {
+      "id": "grape-albarino",
+      "name": "Albariño"
+    },
+    {
+      "id": "grape-verdejo",
+      "name": "Verdejo"
+    },
+    {
+      "id": "grape-cabernet-sauvignon",
+      "name": "Cabernet Sauvignon"
+    },
+    {
+      "id": "grape-merlot",
+      "name": "Merlot"
+    },
+    {
+      "id": "grape-cabernet-franc",
+      "name": "Cabernet Franc"
+    },
+    {
+      "id": "grape-petit-verdot",
+      "name": "Petit Verdot"
+    },
+    {
+      "id": "grape-mourvedre",
+      "name": "Mourvèdre"
+    },
+    {
+      "id": "grape-primitivo",
+      "name": "Primitivo"
+    },
+    {
+      "id": "grape-montepulciano",
+      "name": "Montepulciano"
+    },
+    {
+      "id": "grape-nero-d-avola",
+      "name": "Nero d'Avola"
+    },
+    {
+      "id": "grape-nebbiolo",
+      "name": "Nebbiolo"
+    },
+    {
+      "id": "grape-barbera",
+      "name": "Barbera"
+    },
+    {
+      "id": "grape-corvina",
+      "name": "Corvina"
+    },
+    {
+      "id": "grape-corvinone",
+      "name": "Corvinone"
+    },
+    {
+      "id": "grape-rondinella",
+      "name": "Rondinella"
+    },
+    {
+      "id": "grape-nerello-mascalese",
+      "name": "Nerello Mascalese"
+    },
+    {
+      "id": "grape-nerello-cappuccio",
+      "name": "Nerello Cappuccio"
+    },
+    {
+      "id": "grape-malbec",
+      "name": "Malbec"
+    },
+    {
+      "id": "grape-moscato-bianco",
+      "name": "Moscato Bianco"
+    },
+    {
+      "id": "grape-touriga-nacional",
+      "name": "Touriga Nacional"
+    },
+    {
+      "id": "grape-tinta-roriz",
+      "name": "Tinta Roriz"
+    },
+    {
+      "id": "grape-tinta-barroca",
+      "name": "Tinta Barroca"
+    },
+    {
+      "id": "grape-touriga-franca",
+      "name": "Touriga Franca"
+    }
+  ],
+  "flavors": [
+    {
+      "id": "flavor-apple",
+      "name": "äpple"
+    },
+    {
+      "id": "flavor-paron",
+      "name": "päron"
+    },
+    {
+      "id": "flavor-citrus",
+      "name": "citrus"
+    },
+    {
+      "id": "flavor-blommig",
+      "name": "blommig"
+    },
+    {
+      "id": "flavor-gront-apple",
+      "name": "grönt äpple"
+    },
+    {
+      "id": "flavor-mineral",
+      "name": "mineral"
+    },
+    {
+      "id": "flavor-brod",
+      "name": "bröd"
+    },
+    {
+      "id": "flavor-latt-krydda",
+      "name": "lätt krydda"
+    },
+    {
+      "id": "flavor-gult-apple",
+      "name": "gult äpple"
+    },
+    {
+      "id": "flavor-briosch",
+      "name": "briosch"
+    },
+    {
+      "id": "flavor-guava",
+      "name": "guava"
+    },
+    {
+      "id": "flavor-mango",
+      "name": "mango"
+    },
+    {
+      "id": "flavor-nektarin",
+      "name": "nektarin"
+    },
+    {
+      "id": "flavor-sot-finish",
+      "name": "söt finish"
+    },
+    {
+      "id": "flavor-gula-plommon",
+      "name": "gula plommon"
+    },
+    {
+      "id": "flavor-rostat-brod",
+      "name": "rostat bröd"
+    },
+    {
+      "id": "flavor-honung",
+      "name": "honung"
+    },
+    {
+      "id": "flavor-lang-finish",
+      "name": "lång finish"
+    },
+    {
+      "id": "flavor-vita-blommor",
+      "name": "vita blommor"
+    },
+    {
+      "id": "flavor-brioche",
+      "name": "brioche"
+    },
+    {
+      "id": "flavor-vild-jordgubbe",
+      "name": "vild jordgubbe"
+    },
+    {
+      "id": "flavor-hallon",
+      "name": "hallon"
+    },
+    {
+      "id": "flavor-korsbar",
+      "name": "körsbär"
+    },
+    {
+      "id": "flavor-nyanser-av-ros",
+      "name": "nyanser av ros"
+    },
+    {
+      "id": "flavor-latt-antydan-till-peppar",
+      "name": "lätt antydan till peppar"
+    },
+    {
+      "id": "flavor-gula-applen",
+      "name": "gula äpplen"
+    },
+    {
+      "id": "flavor-vit-choklad",
+      "name": "vit choklad"
+    },
+    {
+      "id": "flavor-grapefrukt",
+      "name": "grapefrukt"
+    },
+    {
+      "id": "flavor-notter",
+      "name": "nötter"
+    },
+    {
+      "id": "flavor-jordgubbe",
+      "name": "jordgubbe"
+    },
+    {
+      "id": "flavor-svarta-vinbar",
+      "name": "svarta vinbär"
+    },
+    {
+      "id": "flavor-fikon",
+      "name": "fikon"
+    },
+    {
+      "id": "flavor-mineralitet",
+      "name": "mineralitet"
+    },
+    {
+      "id": "flavor-salta",
+      "name": "sälta"
+    },
+    {
+      "id": "flavor-kex",
+      "name": "kex"
+    },
+    {
+      "id": "flavor-vit-blomma",
+      "name": "vit blomma"
+    },
+    {
+      "id": "flavor-krita",
+      "name": "krita"
+    },
+    {
+      "id": "flavor-torkad-frukt",
+      "name": "torkad frukt"
+    },
+    {
+      "id": "flavor-vanilj",
+      "name": "vanilj"
+    },
+    {
+      "id": "flavor-karamell",
+      "name": "karamell"
+    },
+    {
+      "id": "flavor-aprikos",
+      "name": "aprikos"
+    },
+    {
+      "id": "flavor-kaffe",
+      "name": "kaffe"
+    },
+    {
+      "id": "flavor-kryddor",
+      "name": "kryddor"
+    },
+    {
+      "id": "flavor-roda-bar",
+      "name": "röda bär"
+    },
+    {
+      "id": "flavor-lang-lyxig-finish",
+      "name": "lång lyxig finish"
+    },
+    {
+      "id": "flavor-jordgubbar",
+      "name": "jordgubbar"
+    },
+    {
+      "id": "flavor-roda-vinbar",
+      "name": "röda vinbär"
+    },
+    {
+      "id": "flavor-persika",
+      "name": "persika"
+    },
+    {
+      "id": "flavor-smultron",
+      "name": "smultron"
+    },
+    {
+      "id": "flavor-orter",
+      "name": "örter"
+    },
+    {
+      "id": "flavor-komplex",
+      "name": "komplex"
+    },
+    {
+      "id": "flavor-rostad-ek",
+      "name": "rostad ek"
+    },
+    {
+      "id": "flavor-rosenblad",
+      "name": "rosenblad"
+    },
+    {
+      "id": "flavor-ingefara",
+      "name": "ingefära"
+    },
+    {
+      "id": "flavor-tropisk-frukt",
+      "name": "tropisk frukt"
+    },
+    {
+      "id": "flavor-kvitten",
+      "name": "kvitten"
+    },
+    {
+      "id": "flavor-krusbar",
+      "name": "krusbär"
+    },
+    {
+      "id": "flavor-mogna-citrusfrukter",
+      "name": "mogna citrusfrukter"
+    },
+    {
+      "id": "flavor-ren-och-frisk",
+      "name": "ren och frisk"
+    },
+    {
+      "id": "flavor-frisk",
+      "name": "frisk"
+    },
+    {
+      "id": "flavor-flinta",
+      "name": "flinta"
+    },
+    {
+      "id": "flavor-smor",
+      "name": "smör"
+    },
+    {
+      "id": "flavor-latt-ek",
+      "name": "lätt ek"
+    },
+    {
+      "id": "flavor-hasselnot",
+      "name": "hasselnöt"
+    },
+    {
+      "id": "flavor-lime",
+      "name": "lime"
+    },
+    {
+      "id": "flavor-petroleum",
+      "name": "petroleum"
+    },
+    {
+      "id": "flavor-peppar",
+      "name": "peppar"
+    },
+    {
+      "id": "flavor-citronzest",
+      "name": "citronzest"
+    },
+    {
+      "id": "flavor-tropisk",
+      "name": "tropisk"
+    },
+    {
+      "id": "flavor-grona-applen",
+      "name": "gröna äpplen"
+    },
+    {
+      "id": "flavor-vit-persika",
+      "name": "vit persika"
+    },
+    {
+      "id": "flavor-ek",
+      "name": "ek"
+    },
+    {
+      "id": "flavor-elegant",
+      "name": "elegant"
+    },
+    {
+      "id": "flavor-ananas",
+      "name": "ananas"
+    },
+    {
+      "id": "flavor-fyllig",
+      "name": "fyllig"
+    },
+    {
+      "id": "flavor-lakrits",
+      "name": "lakrits"
+    },
+    {
+      "id": "flavor-bjornbar",
+      "name": "björnbär"
+    },
+    {
+      "id": "flavor-tanninrik",
+      "name": "tanninrik"
+    },
+    {
+      "id": "flavor-mogna-bar",
+      "name": "mogna bär"
+    },
+    {
+      "id": "flavor-lader",
+      "name": "läder"
+    },
+    {
+      "id": "flavor-rostade-ekfat",
+      "name": "rostade ekfat"
+    },
+    {
+      "id": "flavor-jord",
+      "name": "jord"
+    },
+    {
+      "id": "flavor-ladrig",
+      "name": "lädrig"
+    },
+    {
+      "id": "flavor-ek-fat",
+      "name": "ek fat"
+    },
+    {
+      "id": "flavor-vinbar",
+      "name": "vinbär"
+    },
+    {
+      "id": "flavor-viol",
+      "name": "viol"
+    },
+    {
+      "id": "flavor-katrinplommon",
+      "name": "katrinplommon"
+    },
+    {
+      "id": "flavor-rund",
+      "name": "rund"
+    },
+    {
+      "id": "flavor-blabar",
+      "name": "blåbär"
+    },
+    {
+      "id": "flavor-morka-korsbar",
+      "name": "mörka körsbär"
+    },
+    {
+      "id": "flavor-plommon",
+      "name": "plommon"
+    },
+    {
+      "id": "flavor-mjuk-tannin",
+      "name": "mjuk tannin"
+    },
+    {
+      "id": "flavor-fruktig",
+      "name": "fruktig"
+    },
+    {
+      "id": "flavor-tjara",
+      "name": "tjära"
+    },
+    {
+      "id": "flavor-tobak",
+      "name": "tobak"
+    },
+    {
+      "id": "flavor-subtil-ekfatston",
+      "name": "subtil ekfatston"
+    },
+    {
+      "id": "flavor-nypon",
+      "name": "nypon"
+    },
+    {
+      "id": "flavor-nougat",
+      "name": "nougat"
+    },
+    {
+      "id": "flavor-roda",
+      "name": "röda"
+    },
+    {
+      "id": "flavor-morka-bar",
+      "name": "mörka bär"
+    },
+    {
+      "id": "flavor-rosor",
+      "name": "rosor"
+    },
+    {
+      "id": "flavor-mogna-korsbar",
+      "name": "mogna körsbär"
+    },
+    {
+      "id": "flavor-kraftig-tannin",
+      "name": "kraftig tannin"
+    },
+    {
+      "id": "flavor-vaniljton",
+      "name": "vaniljton"
+    },
+    {
+      "id": "flavor-lakritsrot",
+      "name": "lakritsrot"
+    },
+    {
+      "id": "flavor-ekfat",
+      "name": "ekfat"
+    },
+    {
+      "id": "flavor-vulkanisk",
+      "name": "vulkanisk"
+    },
+    {
+      "id": "flavor-grillad-rod-paprika",
+      "name": "grillad röd paprika"
+    },
+    {
+      "id": "flavor-choklad",
+      "name": "choklad"
+    },
+    {
+      "id": "flavor-violer",
+      "name": "violer"
+    },
+    {
+      "id": "flavor-torkade-tranbar",
+      "name": "torkade tranbär"
+    },
+    {
+      "id": "flavor-nejlika",
+      "name": "nejlika"
+    },
+    {
+      "id": "flavor-viss-ekkaraktar",
+      "name": "viss ekkaraktär"
+    },
+    {
+      "id": "flavor-ceder",
+      "name": "ceder"
+    },
+    {
+      "id": "flavor-cassis",
+      "name": "cassis"
+    },
+    {
+      "id": "flavor-svarta-korsbar",
+      "name": "svarta körsbär"
+    },
+    {
+      "id": "flavor-ceder-och-tobaksblad",
+      "name": "ceder och tobaksblad"
+    },
+    {
+      "id": "flavor-saffran",
+      "name": "saffran"
+    },
+    {
+      "id": "flavor-torkad-aprikos",
+      "name": "torkad aprikos"
+    },
+    {
+      "id": "flavor-mandel",
+      "name": "mandel"
+    },
+    {
+      "id": "flavor-apelsinblom",
+      "name": "apelsinblom"
+    },
+    {
+      "id": "flavor-latt-mousse",
+      "name": "lätt mousse"
+    },
+    {
+      "id": "flavor-apelsinskal",
+      "name": "apelsinskal"
+    },
+    {
+      "id": "flavor-malt",
+      "name": "malt"
+    },
+    {
+      "id": "flavor-humle",
+      "name": "humle"
+    },
+    {
+      "id": "flavor-latt-bitter",
+      "name": "lätt bitter"
+    },
+    {
+      "id": "flavor-tropisk-humle",
+      "name": "tropisk humle"
+    },
+    {
+      "id": "flavor-frisk-bitter",
+      "name": "frisk bitter"
+    },
+    {
+      "id": "flavor-latt",
+      "name": "lätt"
+    },
+    {
+      "id": "flavor-neutral",
+      "name": "neutral"
+    },
+    {
+      "id": "flavor-bitter",
+      "name": "bitter"
+    },
+    {
+      "id": "flavor-aromatisk",
+      "name": "aromatisk"
+    }
+  ],
+  "drinks": [
+    {
+      "id": "c1",
+      "categoryId": "6",
+      "name": "French Bloom, French Sparkling Blanc",
+      "description": "Frankrike. Alkoholfri mousserande.",
+      "country": "Frankrike",
+      "region": null,
+      "grapes": [],
+      "flavorIds": [
+        "flavor-apple",
+        "flavor-paron",
+        "flavor-citrus",
+        "flavor-blommig"
+      ],
+      "prices": {
+        "glass": 99,
+        "bottle": 550
+      }
+    },
+    {
+      "id": "c2",
+      "categoryId": "6",
+      "name": "Mont-Ferrant, Americano Brut Nature",
+      "description": "Spanien, Välbalanserad och frisk med inslag av grapefrukt och röda äpplen, med torrt avslut.",
+      "country": "Spanien",
+      "region": null,
+      "grapes": [
+        {
+          "grapeId": "grape-chardonnay",
+          "note": "25%"
+        },
+        {
+          "grapeId": "grape-macabeo",
+          "note": "25%"
+        },
+        {
+          "grapeId": "grape-parellada",
+          "note": "25"
+        },
+        {
+          "grapeId": "grape-xarel-lo",
+          "note": "25%"
+        }
+      ],
+      "flavorIds": [
+        "flavor-citrus",
+        "flavor-gront-apple",
+        "flavor-mineral",
+        "flavor-brod"
+      ],
+      "prices": {
+        "glass": 135,
+        "bottle": 810
+      }
+    },
+    {
+      "id": "c3",
+      "categoryId": "6",
+      "name": "Maison Pierre Chainier, Crémant Brut",
+      "description": "Frankrike, Loire. Crémant. Torr med tilltalande, rena fruktsyror, fräsch smak med inslag av gula äpplen, persika, päron. Passar Till Perfekt all-roundvin! Till skaldjur, kallskuret, ostbrickan och till olika fruktdesserter. Och som aperitif eller drink!",
+      "country": "Frankrike",
+      "region": "Loire",
+      "grapes": [
+        {
+          "grapeId": "grape-chardonnay",
+          "note": "80%"
+        },
+        {
+          "grapeId": "grape-chenin-blanc",
+          "note": "20%"
+        }
+      ],
+      "flavorIds": [
+        "flavor-apple",
+        "flavor-paron",
+        "flavor-blommig",
+        "flavor-latt-krydda"
+      ],
+      "prices": {
+        "glass": 160,
+        "bottle": 950
+      }
+    },
+    {
+      "id": "c4",
+      "categoryId": "6",
+      "name": "NV Moët & Chandon, Impérial Brut",
+      "description": "Frankrike, Champagne. Klassisk NV. Frisk och fruktig. Champagnen har lagrats i minst tre år, vilket ger den dess typiska smak av aprikos, mandelblom, brioche, småkakor och vanilj.",
+      "country": "Frankrike",
+      "region": "Champagne",
+      "grapes": [
+        {
+          "grapeId": "grape-pinot-noir",
+          "note": "30-40%"
+        },
+        {
+          "grapeId": "grape-chardonnay",
+          "note": "20-30%"
+        },
+        {
+          "grapeId": "grape-pinot-meunier",
+          "note": "40%"
+        }
+      ],
+      "flavorIds": [
+        "flavor-gult-apple",
+        "flavor-citrus",
+        "flavor-briosch",
+        "flavor-blommig"
+      ],
+      "prices": {
+        "glass": 210,
+        "bottle": 1270
+      }
+    },
+    {
+      "id": "c5",
+      "categoryId": "6",
+      "name": "NV Moët & Chandon, Impérial Brut Magnum (1,5L)",
+      "description": "Frankrike, Champagne. Magnum 1,5L. Champagnen har lagrats i minst tre år, vilket ger den dess typiska smak av aprikos, mandelblom, brioche, småkakor och vanilj.",
+      "country": "Frankrike",
+      "region": "Champagne",
+      "grapes": [
+        {
+          "grapeId": "grape-pinot-noir",
+          "note": "30-40%"
+        },
+        {
+          "grapeId": "grape-chardonnay",
+          "note": "20-30%"
+        },
+        {
+          "grapeId": "grape-pinot-meunier",
+          "note": "40%"
+        }
+      ],
+      "flavorIds": [
+        "flavor-gult-apple",
+        "flavor-citrus",
+        "flavor-briosch",
+        "flavor-blommig"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 2500
+      }
+    },
+    {
+      "id": "c6",
+      "categoryId": "6",
+      "name": "NV Moët & Chandon, Ice Impérial",
+      "description": "Frankrike, Champagne. Ice Impérial skapades specifikt för att serveras med isbitar.",
+      "country": "Frankrike",
+      "region": "Champagne",
+      "grapes": [
+        {
+          "grapeId": "grape-pinot-noir",
+          "note": "40-50%"
+        },
+        {
+          "grapeId": "grape-chardonnay",
+          "note": "10-20%"
+        },
+        {
+          "grapeId": "grape-pinot-meunier",
+          "note": "30-40%"
+        }
+      ],
+      "flavorIds": [
+        "flavor-guava",
+        "flavor-mango",
+        "flavor-nektarin",
+        "flavor-sot-finish"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 1250
+      }
+    },
+    {
+      "id": "c7",
+      "categoryId": "6",
+      "name": "2015 Moët & Chandon, Grand Vintage Blanc",
+      "description": "Frankrike, Champagne. Grand Vintage 2015 återspeglar en skörd av exceptionellt högkvalitativa svarta druvor. De uppvisade anmärkningsvärd mognad, med en kraftfull och fruktig doft och en fyllig avslutning.",
+      "country": "Frankrike",
+      "region": "Champagne",
+      "grapes": [
+        {
+          "grapeId": "grape-pinot-noir",
+          "note": "44%"
+        },
+        {
+          "grapeId": "grape-chardonnay",
+          "note": "32%"
+        },
+        {
+          "grapeId": "grape-pinot-meunier",
+          "note": "24%"
+        }
+      ],
+      "flavorIds": [
+        "flavor-gula-plommon",
+        "flavor-rostat-brod",
+        "flavor-honung",
+        "flavor-lang-finish"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 1425
+      }
+    },
+    {
+      "id": "c8",
+      "categoryId": "6",
+      "name": "2016 Moët & Chandon, Grand Vintage Blanc",
+      "description": "Frankrike, Champagne. Lugnet efter stormen, Moët & Chandon Grand Vintage 2016 uttrycker nåd och frid, harmoni född ur mästerlig vinframställning och sex års lagring i källare.",
+      "country": "Frankrike",
+      "region": "Champagne",
+      "grapes": [
+        {
+          "grapeId": "grape-pinot-noir",
+          "note": "34%"
+        },
+        {
+          "grapeId": "grape-chardonnay",
+          "note": "48%"
+        },
+        {
+          "grapeId": "grape-pinot-meunier",
+          "note": "18%"
+        }
+      ],
+      "flavorIds": [
+        "flavor-citrus",
+        "flavor-vita-blommor",
+        "flavor-brioche",
+        "flavor-mineral"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 1425
+      }
+    },
+    {
+      "id": "c9",
+      "categoryId": "6",
+      "name": "NV Moët & Chandon, Impérial Rosé",
+      "description": "Frankrike, Champagne. Roséchampagne, elegant och fruktig, Varje flaska Champagne Brut Impérial Rosé förkroppsligar vår expertis, där tre ädla druvsorter förenas i perfekt harmoni.",
+      "country": "Frankrike",
+      "region": "Champagne",
+      "grapes": [
+        {
+          "grapeId": "grape-pinot-noir",
+          "note": "40-50%"
+        },
+        {
+          "grapeId": "grape-chardonnay",
+          "note": "10-20%"
+        },
+        {
+          "grapeId": "grape-pinot-meunier",
+          "note": "30-40%"
+        }
+      ],
+      "flavorIds": [
+        "flavor-vild-jordgubbe",
+        "flavor-hallon",
+        "flavor-korsbar",
+        "flavor-nyanser-av-ros",
+        "flavor-latt-antydan-till-peppar"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 1310
+      }
+    },
+    {
+      "id": "c10",
+      "categoryId": "6",
+      "name": "NV Moët & Chandon, Impérial Rosé Magnum (1,5L)",
+      "description": "Frankrike, Champagne. Rosé Magnum. Elegant och fruktig, Varje flaska Champagne Brut Impérial Rosé förkroppsligar vår expertis, där tre ädla druvsorter förenas i perfekt harmoni.",
+      "country": "Frankrike",
+      "region": "Champagne",
+      "grapes": [
+        {
+          "grapeId": "grape-pinot-noir",
+          "note": "40-50%"
+        },
+        {
+          "grapeId": "grape-chardonnay",
+          "note": "10-20%"
+        },
+        {
+          "grapeId": "grape-pinot-meunier",
+          "note": "30-40%"
+        }
+      ],
+      "flavorIds": [
+        "flavor-vild-jordgubbe",
+        "flavor-hallon",
+        "flavor-korsbar",
+        "flavor-nyanser-av-ros",
+        "flavor-latt-antydan-till-peppar"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 2580
+      }
+    },
+    {
+      "id": "c11",
+      "categoryId": "6",
+      "name": "2013 Dom Pérignon, Blanc",
+      "description": "Frankrike, Champagne. Prestige cuvée. Komplex och mineralisk.",
+      "country": "Frankrike",
+      "region": "Champagne",
+      "grapes": [
+        {
+          "grapeId": "grape-chardonnay",
+          "note": "60%"
+        },
+        {
+          "grapeId": "grape-pinot-noir",
+          "note": "40%"
+        }
+      ],
+      "flavorIds": [
+        "flavor-gula-applen",
+        "flavor-brioche",
+        "flavor-mineral",
+        "flavor-vit-choklad",
+        "flavor-grapefrukt",
+        "flavor-notter"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 5500
+      }
+    },
+    {
+      "id": "c12",
+      "categoryId": "6",
+      "name": "2015 Dom Pérignon, Blanc",
+      "description": "Frankrike, Champagne. Prestige cuvée från varm årgång. Generös och rund.",
+      "country": "Frankrike",
+      "region": "Champagne",
+      "grapes": [
+        {
+          "grapeId": "grape-chardonnay",
+          "note": "60%"
+        },
+        {
+          "grapeId": "grape-pinot-noir",
+          "note": "40%"
+        }
+      ],
+      "flavorIds": [
+        "flavor-gula-applen",
+        "flavor-brioche",
+        "flavor-mineral",
+        "flavor-vit-choklad",
+        "flavor-grapefrukt",
+        "flavor-notter"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 4900
+      }
+    },
+    {
+      "id": "c13",
+      "categoryId": "6",
+      "name": "2009 Dom Pérignon, Rosé",
+      "description": "Frankrike, Champagne. Sällsynt rosé prestige cuvée. Kraftfull och elegant.",
+      "country": "Frankrike",
+      "region": "Champagne",
+      "grapes": [
+        {
+          "grapeId": "grape-pinot-noir",
+          "note": "56%"
+        },
+        {
+          "grapeId": "grape-chardonnay",
+          "note": "44%"
+        }
+      ],
+      "flavorIds": [
+        "flavor-jordgubbe",
+        "flavor-hallon",
+        "flavor-svarta-vinbar",
+        "flavor-fikon",
+        "flavor-mineralitet",
+        "flavor-salta"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 7595
+      }
+    },
+    {
+      "id": "c14",
+      "categoryId": "6",
+      "name": "NV Ruinart, R de Ruinart Brut",
+      "description": "Frankrike, Champagne. Frisk och elegant entréchampagne.",
+      "country": "Frankrike",
+      "region": "Champagne",
+      "grapes": [
+        {
+          "grapeId": "grape-chardonnay",
+          "note": "40%"
+        },
+        {
+          "grapeId": "grape-pinot-noir",
+          "note": "40%"
+        },
+        {
+          "grapeId": "grape-pinot-meunier",
+          "note": "20%"
+        }
+      ],
+      "flavorIds": [
+        "flavor-gront-apple",
+        "flavor-citrus",
+        "flavor-kex",
+        "flavor-mineral"
+      ],
+      "prices": {
+        "glass": 230,
+        "bottle": 1400
+      }
+    },
+    {
+      "id": "c15",
+      "categoryId": "6",
+      "name": "NV Ruinart, Blanc de Blancs",
+      "description": "Frankrike, Champagne. 100% Chardonnay. Frisk, mineralisk och citrusdriven.",
+      "country": "Frankrike",
+      "region": "Champagne",
+      "grapes": [
+        {
+          "grapeId": "grape-chardonnay",
+          "note": "100%"
+        }
+      ],
+      "flavorIds": [
+        "flavor-citrus",
+        "flavor-vit-blomma",
+        "flavor-krita",
+        "flavor-mineral"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 2100
+      }
+    },
+    {
+      "id": "c16",
+      "categoryId": "6",
+      "name": "2010 Ruinart, Dom Ruinart",
+      "description": "Frankrike, Champagne. Prestige cuvée från toppårgång. Djup och utvecklad.",
+      "country": "Frankrike",
+      "region": "Champagne",
+      "grapes": [
+        {
+          "grapeId": "grape-chardonnay",
+          "note": "100%"
+        }
+      ],
+      "flavorIds": [
+        "flavor-notter",
+        "flavor-honung",
+        "flavor-rostat-brod",
+        "flavor-torkad-frukt",
+        "flavor-lang-finish"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 5795
+      }
+    },
+    {
+      "id": "c17",
+      "categoryId": "6",
+      "name": "NV Veuve Clicquot, Yellow Label Brut",
+      "description": "Frankrike, Champagne. Ikonisk stil. Fyllig och fruktig.",
+      "country": "Frankrike",
+      "region": "Champagne",
+      "grapes": [
+        {
+          "grapeId": "grape-pinot-noir",
+          "note": "50%"
+        },
+        {
+          "grapeId": "grape-chardonnay",
+          "note": "30%"
+        },
+        {
+          "grapeId": "grape-pinot-meunier",
+          "note": "20%"
+        }
+      ],
+      "flavorIds": [
+        "flavor-gult-apple",
+        "flavor-vanilj",
+        "flavor-rostat-brod",
+        "flavor-honung"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 1270
+      }
+    },
+    {
+      "id": "c18",
+      "categoryId": "6",
+      "name": "NV Veuve Clicquot, Extra Old Brut",
+      "description": "Frankrike, Champagne. Längre lagring på reservviner. Mer komplex och nötig.",
+      "country": "Frankrike",
+      "region": "Champagne",
+      "grapes": [
+        {
+          "grapeId": "grape-pinot-noir",
+          "note": "45%"
+        },
+        {
+          "grapeId": "grape-chardonnay",
+          "note": "30%"
+        },
+        {
+          "grapeId": "grape-pinot-meunier",
+          "note": "25%"
+        }
+      ],
+      "flavorIds": [
+        "flavor-torkad-frukt",
+        "flavor-notter",
+        "flavor-karamell",
+        "flavor-brioche"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 1670
+      }
+    },
+    {
+      "id": "c19",
+      "categoryId": "6",
+      "name": "2015 Veuve Clicquot, Vintage Blanc",
+      "description": "Frankrike, Champagne. Årgångschampagne med struktur och längd.",
+      "country": "Frankrike",
+      "region": "Champagne",
+      "grapes": [
+        {
+          "grapeId": "grape-pinot-noir",
+          "note": "55%"
+        },
+        {
+          "grapeId": "grape-chardonnay",
+          "note": "30%"
+        },
+        {
+          "grapeId": "grape-pinot-meunier",
+          "note": "15%"
+        }
+      ],
+      "flavorIds": [
+        "flavor-apple",
+        "flavor-aprikos",
+        "flavor-rostat-brod",
+        "flavor-mineral",
+        "flavor-lang-finish"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 1720
+      }
+    },
+    {
+      "id": "c20",
+      "categoryId": "6",
+      "name": "NV Krug, Grand Cuvée 171ème Édition",
+      "description": "Frankrike, Champagne. Multi-årgång prestige cuvée. Extrem komplexitet och djup.",
+      "country": "Frankrike",
+      "region": "Champagne",
+      "grapes": [
+        {
+          "grapeId": "grape-pinot-noir",
+          "note": "44%"
+        },
+        {
+          "grapeId": "grape-chardonnay",
+          "note": "36%"
+        },
+        {
+          "grapeId": "grape-pinot-meunier",
+          "note": "20%"
+        }
+      ],
+      "flavorIds": [
+        "flavor-notter",
+        "flavor-torkad-frukt",
+        "flavor-kaffe",
+        "flavor-kryddor",
+        "flavor-honung"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 6400
+      }
+    },
+    {
+      "id": "c21",
+      "categoryId": "6",
+      "name": "NV Armand de Brignac, Ace of Spades Gold",
+      "description": "Frankrike, Champagne. Ikonisk lyxchampagne. Rik och krämig stil.",
+      "country": "Frankrike",
+      "region": "Champagne",
+      "grapes": [
+        {
+          "grapeId": "grape-pinot-noir",
+          "note": "40%"
+        },
+        {
+          "grapeId": "grape-chardonnay",
+          "note": "40%"
+        },
+        {
+          "grapeId": "grape-pinot-meunier",
+          "note": "20%"
+        }
+      ],
+      "flavorIds": [
+        "flavor-roda-bar",
+        "flavor-citrus",
+        "flavor-brioche",
+        "flavor-vanilj",
+        "flavor-lang-lyxig-finish"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 6695
+      }
+    },
+    {
+      "id": "r1",
+      "categoryId": "7",
+      "name": "Santiago, Assinatura de Família",
+      "description": "Portugal, Vinho Verde. Frisk och fruktig med en lätt sprits. Jordgubbar, hallon och röda vinbär med en behaglig sötma och läskande syra.",
+      "country": "Portugal",
+      "region": "Vinho Verde",
+      "grapes": [
+        {
+          "grapeId": "grape-vinhao",
+          "note": ""
+        },
+        {
+          "grapeId": "grape-espadeiro",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-jordgubbar",
+        "flavor-hallon",
+        "flavor-roda-vinbar"
+      ],
+      "prices": {
+        "glass": 155,
+        "bottle": 660
+      }
+    },
+    {
+      "id": "r2",
+      "categoryId": "7",
+      "name": "Château d'Esclans, Whispering Angel",
+      "description": "Frankrike, Provence. Ikonisk Provence rosé. Delikat och blommig.",
+      "country": "Frankrike",
+      "region": "Provence",
+      "grapes": [
+        {
+          "grapeId": "grape-grenache",
+          "note": ""
+        },
+        {
+          "grapeId": "grape-cinsault",
+          "note": ""
+        },
+        {
+          "grapeId": "grape-vermentino",
+          "note": ""
+        },
+        {
+          "grapeId": "grape-syrah",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-jordgubbe",
+        "flavor-persika",
+        "flavor-smultron"
+      ],
+      "prices": {
+        "glass": 185,
+        "bottle": 850
+      }
+    },
+    {
+      "id": "r3",
+      "categoryId": "7",
+      "name": "Château d'Esclans, Whispering Angel Magnum (1,5L)",
+      "description": "Frankrike, Provence. Whispering Angel i Magnum.",
+      "country": "Frankrike",
+      "region": "Provence",
+      "grapes": [
+        {
+          "grapeId": "grape-grenache",
+          "note": ""
+        },
+        {
+          "grapeId": "grape-cinsault",
+          "note": ""
+        },
+        {
+          "grapeId": "grape-vermentino",
+          "note": ""
+        },
+        {
+          "grapeId": "grape-syrah",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-jordgubbe",
+        "flavor-persika",
+        "flavor-smultron"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 1660
+      }
+    },
+    {
+      "id": "r4",
+      "categoryId": "7",
+      "name": "Maison Galoupet, Provence",
+      "description": "Frankrike, Provence. Elegant rosé med .",
+      "country": "Frankrike",
+      "region": "Provence",
+      "grapes": [
+        {
+          "grapeId": "grape-syrah",
+          "note": ""
+        },
+        {
+          "grapeId": "grape-grenache",
+          "note": ""
+        },
+        {
+          "grapeId": "grape-cinsault",
+          "note": ""
+        },
+        {
+          "grapeId": "grape-semillon",
+          "note": ""
+        },
+        {
+          "grapeId": "grape-vermentino",
+          "note": "cirka 2-4%"
+        }
+      ],
+      "flavorIds": [
+        "flavor-roda-bar",
+        "flavor-kryddor",
+        "flavor-orter",
+        "flavor-mineral"
+      ],
+      "prices": {
+        "glass": 175,
+        "bottle": 800
+      }
+    },
+    {
+      "id": "r5",
+      "categoryId": "7",
+      "name": "NV Château Galoupet, Cru Classé",
+      "description": "Frankrike, Provence. Cru Classé — toppen av Provence-klassificeringen.",
+      "country": "Frankrike",
+      "region": "Provence",
+      "grapes": [
+        {
+          "grapeId": "grape-syrah",
+          "note": ""
+        },
+        {
+          "grapeId": "grape-grenache",
+          "note": ""
+        },
+        {
+          "grapeId": "grape-cinsault",
+          "note": ""
+        },
+        {
+          "grapeId": "grape-semillon",
+          "note": ""
+        },
+        {
+          "grapeId": "grape-vermentino",
+          "note": "cirka 2-4%"
+        }
+      ],
+      "flavorIds": [
+        "flavor-roda-bar",
+        "flavor-citrus",
+        "flavor-mineral",
+        "flavor-lang-finish"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 1875
+      }
+    },
+    {
+      "id": "r6",
+      "categoryId": "7",
+      "name": "2021 Château d'Esclans, Rock Angel",
+      "description": "Frankrike, Provence. Mer komplex och strukturerad än Whispering Angel, görs på vin från äldre vinstockar.",
+      "country": "Frankrike",
+      "region": "Provence",
+      "grapes": [
+        {
+          "grapeId": "grape-grenache",
+          "note": "80-85%"
+        },
+        {
+          "grapeId": "grape-vermentino",
+          "note": ""
+        },
+        {
+          "grapeId": "grape-cinsault",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-persika",
+        "flavor-aprikos",
+        "flavor-roda-bar",
+        "flavor-mineral"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 1150
+      }
+    },
+    {
+      "id": "r7",
+      "categoryId": "7",
+      "name": "2021 Château d'Esclans, Les Clans",
+      "description": "Frankrike, Provence. Premium rosé, till skillnad från de enklare vinerna är Les Clans helt jäst och lagrat på 600-liters franska ekfat under 10 månader.",
+      "country": "Frankrike",
+      "region": "Provence",
+      "grapes": [
+        {
+          "grapeId": "grape-vermentino",
+          "note": ""
+        },
+        {
+          "grapeId": "grape-grenache",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-roda-bar",
+        "flavor-brioche",
+        "flavor-vanilj",
+        "flavor-komplex"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 2300
+      }
+    },
+    {
+      "id": "r8",
+      "categoryId": "7",
+      "name": "2021 Château d'Esclans, Garrus",
+      "description": "Frankrike, Provence. Flaggskeppsrosé. Ekfatslagrat, extremt komplex.",
+      "country": "Frankrike",
+      "region": "Provence",
+      "grapes": [
+        {
+          "grapeId": "grape-grenache",
+          "note": "större del"
+        },
+        {
+          "grapeId": "grape-vermentino",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-persika",
+        "flavor-mango",
+        "flavor-vanilj",
+        "flavor-rostad-ek",
+        "flavor-komplex"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 3950
+      }
+    },
+    {
+      "id": "v1",
+      "categoryId": "8",
+      "name": "Kuentz-Bas, Pinot Gris & Gewürztraminer",
+      "description": "Frankrike, Alsace. Aromatisk och lite blommig. Passar till asiatisk mat. Passar som aperitif eller till lättare rätter som sallad, fisk eller skaldjur.",
+      "country": "Frankrike",
+      "region": "Alsace",
+      "grapes": [
+        {
+          "grapeId": "grape-silvaner",
+          "note": "30%"
+        },
+        {
+          "grapeId": "grape-pinot-blanc",
+          "note": "30%"
+        },
+        {
+          "grapeId": "grape-riesling",
+          "note": "20%"
+        },
+        {
+          "grapeId": "grape-muscat",
+          "note": "10%"
+        },
+        {
+          "grapeId": "grape-pinot-gris",
+          "note": "5%"
+        },
+        {
+          "grapeId": "grape-gewurztraminer",
+          "note": "5%"
+        }
+      ],
+      "flavorIds": [
+        "flavor-rosenblad",
+        "flavor-ingefara",
+        "flavor-tropisk-frukt"
+      ],
+      "prices": {
+        "glass": 170,
+        "bottle": 850
+      }
+    },
+    {
+      "id": "v2",
+      "categoryId": "8",
+      "name": "2024 TGC, Ménage à Loire Saumur",
+      "description": "Frankrike, Loire. Frisk Chenin Blanc från Saumur. Som matchar en krämig sparrissoppa, klassisk räkmacka samt fisk och skaldjursrätter.",
+      "country": "Frankrike",
+      "region": "Loire",
+      "grapes": [
+        {
+          "grapeId": "grape-chenin-blanc",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-honung",
+        "flavor-kvitten",
+        "flavor-citrus",
+        "flavor-mineral"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 735
+      }
+    },
+    {
+      "id": "v3",
+      "categoryId": "8",
+      "name": "Domaine La Croix St-Laurent, Sancerre",
+      "description": "Frankrike, Loire/Sancerre. Klassisk Sancerre. Mineralisk, örtig och frisk. Passar ostron och alla fräscha skaldjur, sparris, kall hummer, vinbräserad kalv eller gräddkokt kalkon. Och så klart till en ostbricka",
+      "country": "Frankrike",
+      "region": "Loire/Sancerre",
+      "grapes": [
+        {
+          "grapeId": "grape-sauvignon-blanc",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-grapefrukt",
+        "flavor-orter",
+        "flavor-krusbar",
+        "flavor-mineral"
+      ],
+      "prices": {
+        "glass": 195,
+        "bottle": 890
+      }
+    },
+    {
+      "id": "v4",
+      "categoryId": "8",
+      "name": "2022 Charly Nicolle, 1er Cru Mont de Milieu",
+      "description": "Frankrike, Chablis Premier Cru. Ett torrt och friskt vin med en fyllig textur, med inslag av honung, gula äpplen och som avslutas med uppfriskande kalkstensmineralitet. Passar Till Perfekt kompanjon till fisk och skaldjursrätter",
+      "country": "Frankrike",
+      "region": "Chablis Premier Cru",
+      "grapes": [
+        {
+          "grapeId": "grape-chardonnay",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-mogna-citrusfrukter",
+        "flavor-mineral",
+        "flavor-gula-applen"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 1450
+      }
+    },
+    {
+      "id": "v5",
+      "categoryId": "8",
+      "name": "2022 Charly Nicolle, 1er Cru Fourneaux Ante MCMLXXX",
+      "description": "Frankrike, Chablis Premier Cru. Med karaktär. Gott som aperitif samt till alla rätter av fisk och skaldjur.",
+      "country": "Frankrike",
+      "region": "Chablis Premier Cru",
+      "grapes": [
+        {
+          "grapeId": "grape-chardonnay",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-mogna-citrusfrukter",
+        "flavor-mineral",
+        "flavor-ren-och-frisk"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 1400
+      }
+    },
+    {
+      "id": "v6",
+      "categoryId": "8",
+      "name": "Domaine Louis Moreau, Bieville",
+      "description": "Frankrike, Chablis. Frisk och mineralisk. Vinet är torrt och friskt med en elegant syra. Vinet har inslag av mineral, citrus och avslutas med en lång finish. Serveras gärna till skaldjur, lättare fiskrätter men gör sig även bra på egen hand.",
+      "country": "Frankrike",
+      "region": "Chablis",
+      "grapes": [
+        {
+          "grapeId": "grape-chardonnay",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-citrus",
+        "flavor-gront-apple",
+        "flavor-frisk"
+      ],
+      "prices": {
+        "glass": 205,
+        "bottle": 920
+      }
+    },
+    {
+      "id": "v7",
+      "categoryId": "8",
+      "name": "2022 Domaine Louis Moreau, 1er Cru Les Fourneaux",
+      "description": "Frankrike, Chablis Premier Cru. Rund och varm smak av gula äpplen, solmogna citroner och vit persika. Utmärkt med lättkryddade rätter och ljust kött i krämig sås såsom Bjärökyckling med moreller eller pilgrimsmusslor i saffransås.",
+      "country": "Frankrike",
+      "region": "Chablis Premier Cru",
+      "grapes": [
+        {
+          "grapeId": "grape-chardonnay",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-citrus",
+        "flavor-apple",
+        "flavor-mineral"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 1200
+      }
+    },
+    {
+      "id": "v8",
+      "categoryId": "8",
+      "name": "2021 Domaine Louis Moreau, Grand Cru Valmur",
+      "description": "Frankrike, Chablis Grand Cru. Toppen av Chablis-pyramiden. Ett kraftfullt vin full av energi bakom den eleganta och soliga fasaden. Utmärkt till fläsk, kalvracks eller fågel med smakrik svampsås, smörstekt piggvar med brynt smör samt till kraftiga fisk- och skaldjursrätter.",
+      "country": "Frankrike",
+      "region": "Chablis Grand Cru",
+      "grapes": [
+        {
+          "grapeId": "grape-chardonnay",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-citrus",
+        "flavor-flinta",
+        "flavor-vit-blomma",
+        "flavor-mineral"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 2600
+      }
+    },
+    {
+      "id": "v9",
+      "categoryId": "8",
+      "name": "2022 Maison Champy, Cuvée Edme",
+      "description": "Frankrike, Bourgogne Blanc. Medelfyllig och frisk, med rik, fyllig, fint avrundad smak. Mycket bra kombination med piggvar, grillade kalvkotletter eller pärlhöna i sällskap med skogssvamp, den sena sommarens grönsaker som röd paprika, majs, pumpa och butternutpumpa till lax.",
+      "country": "Frankrike",
+      "region": "Bourgogne Blanc",
+      "grapes": [
+        {
+          "grapeId": "grape-chardonnay",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-smor",
+        "flavor-apple",
+        "flavor-vanilj",
+        "flavor-latt-ek"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 1050
+      }
+    },
+    {
+      "id": "v10",
+      "categoryId": "8",
+      "name": "2021 Maison Champy, Pernand-Vergelesses",
+      "description": "Frankrike, Bourgogne. Village vin. Smaken är ren, frisk och torr med en fokuserad och samtidigt krämig struktur. Smakrika fisk- och skaldjursrätter, gärna med saffran och citron.",
+      "country": "Frankrike",
+      "region": "Bourgogne",
+      "grapes": [
+        {
+          "grapeId": "grape-chardonnay",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-notter",
+        "flavor-smor",
+        "flavor-rostat-brod",
+        "flavor-mineral"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 1710
+      }
+    },
+    {
+      "id": "v11",
+      "categoryId": "8",
+      "name": "2023 Henri de Villamont, Mâcon-Village",
+      "description": "Frankrike, Bourgogne/Mâcon. Medelfylligt och elegant med lager på lager av rika, krämiga och friska aromer av lemon curd Torskrygg med skirat smör och färskriven pepparrot, skaldjur, moules à la crème, halstrad röding i vitvinssås, gratinerad hummer",
+      "country": "Frankrike",
+      "region": "Bourgogne/Mâcon",
+      "grapes": [
+        {
+          "grapeId": "grape-chardonnay",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-apple",
+        "flavor-citrus",
+        "flavor-blommig",
+        "flavor-frisk"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 850
+      }
+    },
+    {
+      "id": "v12",
+      "categoryId": "8",
+      "name": "2022 Henri de Villamont, Chassagne-Montrachet 1er Cru Les Embazées",
+      "description": "Frankrike, Bourgogne Premier Cru. Torrt, fylligt vin. Elegant med vibrerande friskhet, vit persika och den avrundande smörigheten mot mineraltonen. Skaldjur som pilgrimsmusslor, hummer och langoustine, sole meunière, grillad havsabborre eller piggvar, kyckling eller fasan i gräddsås.",
+      "country": "Frankrike",
+      "region": "Bourgogne Premier Cru",
+      "grapes": [
+        {
+          "grapeId": "grape-chardonnay",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-smor",
+        "flavor-hasselnot",
+        "flavor-citrus",
+        "flavor-mineral",
+        "flavor-komplex"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 2950
+      }
+    },
+    {
+      "id": "v13",
+      "categoryId": "8",
+      "name": "S.A Prüm, Solitär Trocken, Riesling",
+      "description": "Tyskland, Mosel. Torr Riesling, frisk och saftig smak med inslag av lime, mineral, smultron och vita persikor med pigga syror. Läckert på egen hand som aperitif eller sällskapsdrink med lätt småplock, lätta skaldjurs- och fiskrätter, somriga sallader och till mildare kryddade rätter ur det asiatiska köket.",
+      "country": "Tyskland",
+      "region": "Mosel",
+      "grapes": [
+        {
+          "grapeId": "grape-riesling",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-lime",
+        "flavor-persika",
+        "flavor-mineral",
+        "flavor-citrus",
+        "flavor-aprikos"
+      ],
+      "prices": {
+        "glass": 180,
+        "bottle": 830
+      }
+    },
+    {
+      "id": "v14",
+      "categoryId": "8",
+      "name": "2017 S.A Prüm, Bernkasteler Lay GG",
+      "description": "Tyskland, Mosel. Grosses Gewächs — topp tysk klassificering. Medelfyllig, torr, komplex, varm smak med toner av aprikoser, melon och citrus. Grillad tonfisk eller grillad röding, rätter av ljust kött som kalvschnitzel, örtkryddad fläskstek och lättare vilt med trattkantareller.",
+      "country": "Tyskland",
+      "region": "Mosel",
+      "grapes": [
+        {
+          "grapeId": "grape-riesling",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-honung",
+        "flavor-persika",
+        "flavor-mineral",
+        "flavor-petroleum",
+        "flavor-komplex"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 1350
+      }
+    },
+    {
+      "id": "v15",
+      "categoryId": "8",
+      "name": "2023 Soellner, Von Gösing, Riesling",
+      "description": "Torrt vin med en elegant fruktton av citrus och tropisk frukt med bra balans. Sushi och till lättare fisk- och skaldjursrätter.",
+      "country": null,
+      "region": null,
+      "grapes": [
+        {
+          "grapeId": "grape-riesling",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-citrus",
+        "flavor-persika",
+        "flavor-peppar"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 950
+      }
+    },
+    {
+      "id": "v16",
+      "categoryId": "8",
+      "name": "2024 Soellner, Ried Hengstberg, Grüner Veltliner",
+      "description": "Österrike, Wagram. Torrt och aromatiskt med rik fruktton och underbar balans mellan frukt och syra. Lång eftersmak med typisk druvkaraktär. Passar till ceviche, löjromstoast, pocherad fisk, skaldjur naturell.",
+      "country": "Österrike",
+      "region": "Wagram",
+      "grapes": [
+        {
+          "grapeId": "grape-gruner-veltliner",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-citronzest",
+        "flavor-paron",
+        "flavor-grapefrukt"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 850
+      }
+    },
+    {
+      "id": "v17",
+      "categoryId": "8",
+      "name": "Piccini, Patriale Bianco Eko",
+      "description": "Italien, multi-region eko. 50% Viognier (Sicilien) · 20% Chardonnay (Trentino) · 20% Vermentino (Maremma, Toscana) · 10% Pecorino (Marche).Lättare fisk & skaldjur,räksallad, ugnsbakad lax, moules frites eller stekt vit fisk med citron",
+      "country": "Italien",
+      "region": "multi-region eko",
+      "grapes": [],
+      "flavorIds": [
+        "flavor-persika",
+        "flavor-aprikos",
+        "flavor-blommig",
+        "flavor-tropisk"
+      ],
+      "prices": {
+        "glass": 150,
+        "bottle": 660
+      }
+    },
+    {
+      "id": "v18",
+      "categoryId": "8",
+      "name": "Burgáns, Albariño",
+      "description": "Spanien, Rias Baixas. Frisk och mineralisk. Perfekt till fisk och skaldjur.",
+      "country": "Spanien",
+      "region": "Rias Baixas",
+      "grapes": [
+        {
+          "grapeId": "grape-albarino",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-citrus",
+        "flavor-persika",
+        "flavor-mineral",
+        "flavor-grona-applen"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 790
+      }
+    },
+    {
+      "id": "v19",
+      "categoryId": "8",
+      "name": "2023 José Pariente, Fermentado en Barrica, Verdejo",
+      "description": "Spanien, Rueda. Ekfatsfermenterad Verdejo. Mer kropp, läcker mjuk och intensiv smak! Perfekt till grillade fisk-och skaldjur. Perfekt till grillade fisk-och skaldjur.",
+      "country": "Spanien",
+      "region": "Rueda",
+      "grapes": [
+        {
+          "grapeId": "grape-verdejo",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-gront-apple",
+        "flavor-orter",
+        "flavor-citrus",
+        "flavor-latt-ek"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 930
+      }
+    },
+    {
+      "id": "v20",
+      "categoryId": "8",
+      "name": "2023 Terrazas de los Andes, Chardonnay",
+      "description": "Argentina, Mendoza. Fruktig och frisk från höghöjdsläge. Fisk och skaldjur eller till en krämig pasta. Ett perfekt val för den som vill upptäcka nya spännande viner från Sydamerika.",
+      "country": "Argentina",
+      "region": "Mendoza",
+      "grapes": [
+        {
+          "grapeId": "grape-chardonnay",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-tropisk-frukt",
+        "flavor-citrus",
+        "flavor-vanilj",
+        "flavor-frisk"
+      ],
+      "prices": {
+        "glass": 180,
+        "bottle": 865
+      }
+    },
+    {
+      "id": "v21",
+      "categoryId": "8",
+      "name": "2022 Clos du Bois, Chardonnay",
+      "description": "USA, Kalifornien. Californisk Chardonnay med tropisk frukt. Passar utmärkt till grillad kyckling, ugnsbakad lax eller skaldjursrätter som hummer och räkor i smörsås.",
+      "country": "USA",
+      "region": "Kalifornien",
+      "grapes": [
+        {
+          "grapeId": "grape-chardonnay",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-smor",
+        "flavor-tropisk-frukt",
+        "flavor-vit-persika",
+        "flavor-paron",
+        "flavor-ek"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 720
+      }
+    },
+    {
+      "id": "v22",
+      "categoryId": "8",
+      "name": "2023 Talbott, Kali Hart, Chardonnay",
+      "description": "USA, Kalifornien/Monterey. Elegant Chardonnay. Grillad fisk med gräddiga såser, majskyckling med tryffel eller skogssvamp",
+      "country": "USA",
+      "region": "Kalifornien/Monterey",
+      "grapes": [
+        {
+          "grapeId": "grape-chardonnay",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-apple",
+        "flavor-citrus",
+        "flavor-latt-ek",
+        "flavor-elegant"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 1050
+      }
+    },
+    {
+      "id": "v23",
+      "categoryId": "8",
+      "name": "2023 Rombauer, Carneros, Chardonnay",
+      "description": "USA, Kalifornien. Ikonisk Californisk Chardonnay. Smörig och fyllig. Detta är en kraftfull Chardonnay som skulle vara en utmärkt matchning till kyckling i en krämig sås, hårdost eller stekta pilgrimsmusslor och skaldjur.",
+      "country": "USA",
+      "region": "Kalifornien",
+      "grapes": [
+        {
+          "grapeId": "grape-chardonnay",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-smor",
+        "flavor-ananas",
+        "flavor-vanilj",
+        "flavor-ek",
+        "flavor-fyllig"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 1750
+      }
+    },
+    {
+      "id": "ro1",
+      "categoryId": "9",
+      "name": "2018 Château Patache d'Aux",
+      "description": "Frankrike, Bordeaux. Klassisk blandning. Strukturerat och lagringsbart. Tanninerna är mogna och väl integrerade. Fina fruktsyror i avslutningen. Passar bäst till entrecoté",
+      "country": "Frankrike",
+      "region": "Bordeaux",
+      "grapes": [
+        {
+          "grapeId": "grape-cabernet-sauvignon",
+          "note": "60%"
+        },
+        {
+          "grapeId": "grape-merlot",
+          "note": "30%"
+        },
+        {
+          "grapeId": "grape-cabernet-franc",
+          "note": "7%"
+        },
+        {
+          "grapeId": "grape-petit-verdot",
+          "note": "3%"
+        }
+      ],
+      "flavorIds": [
+        "flavor-svarta-vinbar",
+        "flavor-lakrits",
+        "flavor-bjornbar",
+        "flavor-tanninrik"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 950
+      }
+    },
+    {
+      "id": "ro2",
+      "categoryId": "9",
+      "name": "2019 Château Capet-Guillier, Saint Emilion Grand Cru",
+      "description": "Frankrike, Bordeaux/Saint Emilion Grand Cru. Fylligt, mjukt, elegant och komplext, ett lysande exempel på ett Saint-Emilion En klassiker till kalventrecôte med murklor eller Karl Johansvamp. Till kantarelltoast, T-bonesteak",
+      "country": "Frankrike",
+      "region": "Bordeaux/Saint Emilion Grand Cru",
+      "grapes": [
+        {
+          "grapeId": "grape-merlot",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-mogna-bar",
+        "flavor-lader",
+        "flavor-kaffe",
+        "flavor-kryddor"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 1820
+      }
+    },
+    {
+      "id": "ro3",
+      "categoryId": "9",
+      "name": "2022 Maison Champy, Chorey Les Beaune, Pinot Noir",
+      "description": "Frankrike, Bourgogne. Elegant. Körsbär och jordiga toner.",
+      "country": "Frankrike",
+      "region": "Bourgogne",
+      "grapes": [
+        {
+          "grapeId": "grape-pinot-noir",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-korsbar",
+        "flavor-hallon",
+        "flavor-rostade-ekfat"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 1950
+      }
+    },
+    {
+      "id": "ro4",
+      "categoryId": "9",
+      "name": "2022 Maison Champy, Pommard, Pinot Noir",
+      "description": "Frankrike, Bourgogne/Pommard. Kraftigare och mer tanninrik Bourgogne.",
+      "country": "Frankrike",
+      "region": "Bourgogne/Pommard",
+      "grapes": [
+        {
+          "grapeId": "grape-pinot-noir",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-korsbar",
+        "flavor-jord",
+        "flavor-ladrig",
+        "flavor-tanninrik"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 2800
+      }
+    },
+    {
+      "id": "ro5",
+      "categoryId": "9",
+      "name": "Henri de Villamont, Prestige, Pinot Noir",
+      "description": "Frankrike, Bourgogne. Tillgänglig och elegant, balanserad, bärig smak med inslag av jordgubbar, hallon, lingon, kanel samt en lätt känsla av fat.",
+      "country": "Frankrike",
+      "region": "Bourgogne",
+      "grapes": [
+        {
+          "grapeId": "grape-pinot-noir",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-jordgubbar",
+        "flavor-hallon",
+        "flavor-ek-fat",
+        "flavor-elegant"
+      ],
+      "prices": {
+        "glass": 190,
+        "bottle": 950
+      }
+    },
+    {
+      "id": "ro6",
+      "categoryId": "9",
+      "name": "2019 Henri de Villamont, Santenay La Plice, Pinot Noir",
+      "description": "Frankrike, Bourgogne/Santenay. Fruktigt, balanserad, smakrik, silkeslen, rund och frisk med inslag kryddor som peppar, kanel, mynta.",
+      "country": "Frankrike",
+      "region": "Bourgogne/Santenay",
+      "grapes": [
+        {
+          "grapeId": "grape-pinot-noir",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-hallon",
+        "flavor-jordgubbe",
+        "flavor-vinbar",
+        "flavor-viol",
+        "flavor-lakrits"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 1290
+      }
+    },
+    {
+      "id": "ro7",
+      "categoryId": "9",
+      "name": "2019 Henri de Villamont, Savigny-Lès-Beaune, Pinot Noir",
+      "description": "Frankrike, Bourgogne/Savigny. Körsbär och lite krydda, fruktig med en delikat animalisk ton och återkommande inslag av röda bär.",
+      "country": "Frankrike",
+      "region": "Bourgogne/Savigny",
+      "grapes": [
+        {
+          "grapeId": "grape-pinot-noir",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-korsbar",
+        "flavor-hallon",
+        "flavor-frisk"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 1220
+      }
+    },
+    {
+      "id": "ro8",
+      "categoryId": "9",
+      "name": "Ogier, Côtes du Rhône",
+      "description": "Frankrike, Rhône. GSM-blandning. Rund och kryddig. Bra all-roundvin för rätter från olika länder",
+      "country": "Frankrike",
+      "region": "Rhône",
+      "grapes": [
+        {
+          "grapeId": "grape-grenache",
+          "note": "60%"
+        },
+        {
+          "grapeId": "grape-syrah",
+          "note": "35%"
+        },
+        {
+          "grapeId": "grape-mourvedre",
+          "note": "5%"
+        }
+      ],
+      "flavorIds": [
+        "flavor-bjornbar",
+        "flavor-katrinplommon",
+        "flavor-orter",
+        "flavor-rund"
+      ],
+      "prices": {
+        "glass": 160,
+        "bottle": 750
+      }
+    },
+    {
+      "id": "ro9",
+      "categoryId": "9",
+      "name": "2023 Ogier, Gigondas Les Dentelles",
+      "description": "Frankrike, Rhône/Gigondas. Fylligt, smakrikt, saftigt men elegant, med bra balans i tanniner, fruktsyror",
+      "country": "Frankrike",
+      "region": "Rhône/Gigondas",
+      "grapes": [
+        {
+          "grapeId": "grape-grenache",
+          "note": "70%"
+        },
+        {
+          "grapeId": "grape-syrah",
+          "note": "20%"
+        },
+        {
+          "grapeId": "grape-mourvedre",
+          "note": "10%"
+        }
+      ],
+      "flavorIds": [
+        "flavor-fikon",
+        "flavor-blabar",
+        "flavor-bjornbar",
+        "flavor-vanilj"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 990
+      }
+    },
+    {
+      "id": "ro10",
+      "categoryId": "9",
+      "name": "2023 Ogier, L'ame Chateauneuf-du-Pape",
+      "description": "Frankrike, Rhône/Chateauneuf-du-Pape. En av Frankrikes mest ikoniska appellationer.",
+      "country": "Frankrike",
+      "region": "Rhône/Chateauneuf-du-Pape",
+      "grapes": [
+        {
+          "grapeId": "grape-grenache",
+          "note": "70%"
+        },
+        {
+          "grapeId": "grape-syrah",
+          "note": "25%"
+        },
+        {
+          "grapeId": "grape-mourvedre",
+          "note": "5%"
+        }
+      ],
+      "flavorIds": [
+        "flavor-morka-korsbar",
+        "flavor-svarta-vinbar",
+        "flavor-kryddor",
+        "flavor-lader",
+        "flavor-lang-finish"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 1300
+      }
+    },
+    {
+      "id": "ro11",
+      "categoryId": "9",
+      "name": "Piccini, Patriale, Primitivo & Montepulciano",
+      "description": "Italien, Toscana. Fruktig och mjuk. Bra glasvin, smakrik och fruktig smak med pigg frukt och finstämd fruktsyra.",
+      "country": "Italien",
+      "region": "Toscana",
+      "grapes": [
+        {
+          "grapeId": "grape-primitivo",
+          "note": "40%"
+        },
+        {
+          "grapeId": "grape-montepulciano",
+          "note": "30%"
+        },
+        {
+          "grapeId": "grape-nero-d-avola",
+          "note": "20%"
+        },
+        {
+          "grapeId": "grape-merlot",
+          "note": "10% från Veneto"
+        }
+      ],
+      "flavorIds": [
+        "flavor-plommon",
+        "flavor-korsbar",
+        "flavor-mjuk-tannin",
+        "flavor-fruktig"
+      ],
+      "prices": {
+        "glass": 150,
+        "bottle": 660
+      }
+    },
+    {
+      "id": "ro12",
+      "categoryId": "9",
+      "name": "Roberto Sarotto, Langhe Nebbiolo",
+      "description": "Italien, Piemonte. Fin försmak på Barolo-stilen i generös och direkt stil!",
+      "country": "Italien",
+      "region": "Piemonte",
+      "grapes": [
+        {
+          "grapeId": "grape-nebbiolo",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-korsbar",
+        "flavor-lakrits",
+        "flavor-tjara",
+        "flavor-tobak",
+        "flavor-subtil-ekfatston"
+      ],
+      "prices": {
+        "glass": 195,
+        "bottle": 860
+      }
+    },
+    {
+      "id": "ro13",
+      "categoryId": "9",
+      "name": "2024 Mauro Sebaste, Barbera d'Alba Contessa Rosalia",
+      "description": "Italien, Piemonte. Fruktig och saftig. Hög syra och mjuka tanniner.",
+      "country": "Italien",
+      "region": "Piemonte",
+      "grapes": [
+        {
+          "grapeId": "grape-barbera",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-korsbar",
+        "flavor-nypon",
+        "flavor-nougat",
+        "flavor-mjuk-tannin",
+        "flavor-jordgubbar"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 790
+      }
+    },
+    {
+      "id": "ro14",
+      "categoryId": "9",
+      "name": "2022 Castello di Neive, Barbaresco",
+      "description": "Italien, Piemonte/Barbaresco. Nebbiolos mjukare sida.",
+      "country": "Italien",
+      "region": "Piemonte/Barbaresco",
+      "grapes": [
+        {
+          "grapeId": "grape-nebbiolo",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-roda",
+        "flavor-tjara",
+        "flavor-morka-bar",
+        "flavor-nypon",
+        "flavor-elegant"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 2000
+      }
+    },
+    {
+      "id": "ro15",
+      "categoryId": "9",
+      "name": "2019 Casa E di Mirafiore, Barolo Classico",
+      "description": "Italien, Piemonte/Barolo. Vinernas kung. Kraftfullt, mycket komplex smak med integrerad tanninstruktur — dekanteras.",
+      "country": "Italien",
+      "region": "Piemonte/Barolo",
+      "grapes": [
+        {
+          "grapeId": "grape-nebbiolo",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-rosor",
+        "flavor-tjara",
+        "flavor-mogna-korsbar",
+        "flavor-lader",
+        "flavor-kraftig-tannin"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 2200
+      }
+    },
+    {
+      "id": "ro16",
+      "categoryId": "9",
+      "name": "2019 Pasqua, Famiglia Valpolicella Ripasso",
+      "description": "Italien, Veneto. Ripasso-metod ger extra kropp och frukt, bra fruktsyra som balanseras upp av mogna frukttoner av mogna jordgubbar och körsbär.Klassisk Ripasso som passar till charkuterier, grillat kött",
+      "country": "Italien",
+      "region": "Veneto",
+      "grapes": [
+        {
+          "grapeId": "grape-corvina",
+          "note": ""
+        },
+        {
+          "grapeId": "grape-corvinone",
+          "note": ""
+        },
+        {
+          "grapeId": "grape-rondinella",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-morka-bar",
+        "flavor-vaniljton",
+        "flavor-lakritsrot",
+        "flavor-fyllig"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 850
+      }
+    },
+    {
+      "id": "ro17",
+      "categoryId": "9",
+      "name": "2022 Torre Mora, Scalunera Etna Rosso",
+      "description": "Italien, Sicilien/Etna. Vulkanisk. Ung, elegant och saftig smak med mycket friska syra, pigga tanniner och fin balans mellan röd frukt och ekfat.",
+      "country": "Italien",
+      "region": "Sicilien/Etna",
+      "grapes": [
+        {
+          "grapeId": "grape-nerello-mascalese",
+          "note": "97%"
+        },
+        {
+          "grapeId": "grape-nerello-cappuccio",
+          "note": "3%"
+        }
+      ],
+      "flavorIds": [
+        "flavor-korsbar",
+        "flavor-mineral",
+        "flavor-orter",
+        "flavor-ekfat",
+        "flavor-vulkanisk"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 780
+      }
+    },
+    {
+      "id": "ro18",
+      "categoryId": "9",
+      "name": "2022 Bousquet, Gaia, Cabernet Sauvignon",
+      "description": "Argentina, Mendoza. Ekologisk Cabernet. Svarta vinbär och mörk choklad. Ett säkert kort till entrecôte med bearnaisesås",
+      "country": "Argentina",
+      "region": "Mendoza",
+      "grapes": [
+        {
+          "grapeId": "grape-cabernet-sauvignon",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-svarta-vinbar",
+        "flavor-morka-korsbar",
+        "flavor-grillad-rod-paprika",
+        "flavor-choklad"
+      ],
+      "prices": {
+        "glass": 170,
+        "bottle": 800
+      }
+    },
+    {
+      "id": "ro19",
+      "categoryId": "9",
+      "name": "2022 Terrazas de los Andes, Malbec",
+      "description": "Argentina, Mendoza. Klassisk Malbec. Mjuk och fyllig, odlas på 1100 meter höjd",
+      "country": "Argentina",
+      "region": "Mendoza",
+      "grapes": [
+        {
+          "grapeId": "grape-malbec",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-plommon",
+        "flavor-violer",
+        "flavor-choklad",
+        "flavor-mjuk-tannin"
+      ],
+      "prices": {
+        "glass": 170,
+        "bottle": 765
+      }
+    },
+    {
+      "id": "ro20",
+      "categoryId": "9",
+      "name": "2022 J Vineyards, Pinot Noir",
+      "description": "USA, Kalifornien. Fruktdrivet och silkigt, smaken är rödbärig och medelfyllig med silkesmjuka tanniner",
+      "country": "USA",
+      "region": "Kalifornien",
+      "grapes": [
+        {
+          "grapeId": "grape-pinot-noir",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-jordgubbe",
+        "flavor-korsbar",
+        "flavor-torkade-tranbar",
+        "flavor-nejlika",
+        "flavor-viss-ekkaraktar"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 900
+      }
+    },
+    {
+      "id": "ro21",
+      "categoryId": "9",
+      "name": "2021 Macmurray, Russian River, Pinot Noir",
+      "description": "USA, Kalifornien/Russian River Valley. Elegans och djup, fyllig, varm och elegant med tydlig druvkaraktär.",
+      "country": "USA",
+      "region": "Kalifornien/Russian River Valley",
+      "grapes": [
+        {
+          "grapeId": "grape-pinot-noir",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-mogna-korsbar",
+        "flavor-viss-ekkaraktar",
+        "flavor-hallon",
+        "flavor-elegant"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 1100
+      }
+    },
+    {
+      "id": "ro22",
+      "categoryId": "9",
+      "name": "2021 Louis M Martini, Sonoma County, Cabernet Sauvignon",
+      "description": "USA, Kalifornien/Sonoma. Kraftig och strukturerad, smakrikt och har en generös, varm fruktton av björnbär och mogna körsbär.",
+      "country": "USA",
+      "region": "Kalifornien/Sonoma",
+      "grapes": [
+        {
+          "grapeId": "grape-cabernet-sauvignon",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-svarta-vinbar",
+        "flavor-tobak",
+        "flavor-ceder",
+        "flavor-bjornbar",
+        "flavor-mogna-korsbar"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 1150
+      }
+    },
+    {
+      "id": "ro23",
+      "categoryId": "9",
+      "name": "2021 Rombauer, Merlot",
+      "description": "USA, Kalifornien. Mjuk och lyxig merlot från Napa Valley.",
+      "country": "USA",
+      "region": "Kalifornien",
+      "grapes": [
+        {
+          "grapeId": "grape-merlot",
+          "note": "89%"
+        },
+        {
+          "grapeId": "grape-cabernet-sauvignon",
+          "note": "9%"
+        },
+        {
+          "grapeId": "grape-petit-verdot",
+          "note": "2%"
+        }
+      ],
+      "flavorIds": [
+        "flavor-plommon",
+        "flavor-cassis",
+        "flavor-svarta-korsbar",
+        "flavor-ceder-och-tobaksblad"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": 2250
+      }
+    },
+    {
+      "id": "s1",
+      "categoryId": "10",
+      "name": "2018 Château Rieussec, Carmes de Rieussec Sauternes",
+      "description": "Frankrike, Bordeaux/Sauternes. Klassiskt sött vin.",
+      "country": "Frankrike",
+      "region": "Bordeaux/Sauternes",
+      "grapes": [
+        {
+          "grapeId": "grape-semillon",
+          "note": ""
+        },
+        {
+          "grapeId": "grape-sauvignon-blanc",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-honung",
+        "flavor-aprikos",
+        "flavor-ingefara",
+        "flavor-saffran"
+      ],
+      "prices": {
+        "glass": 125,
+        "bottle": null
+      }
+    },
+    {
+      "id": "s2",
+      "categoryId": "10",
+      "name": "2021 Roberto Sarotto, Pajass Passito, Moscato Bianco",
+      "description": "Italien, Piemonte. Passito-stil. Koncentrerat och blommigt med torkad frukt.",
+      "country": "Italien",
+      "region": "Piemonte",
+      "grapes": [
+        {
+          "grapeId": "grape-moscato-bianco",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-torkad-aprikos",
+        "flavor-honung",
+        "flavor-mandel",
+        "flavor-blommig"
+      ],
+      "prices": {
+        "glass": 135,
+        "bottle": null
+      }
+    },
+    {
+      "id": "s3",
+      "categoryId": "10",
+      "name": "2024 Mauro Sebaste, Moscato d'Asti",
+      "description": "Italien, Piemonte. Lätt mousserande och sött.",
+      "country": "Italien",
+      "region": "Piemonte",
+      "grapes": [
+        {
+          "grapeId": "grape-moscato-bianco",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-persika",
+        "flavor-apelsinblom",
+        "flavor-honung",
+        "flavor-latt-mousse"
+      ],
+      "prices": {
+        "glass": 105,
+        "bottle": null
+      }
+    },
+    {
+      "id": "s4",
+      "categoryId": "10",
+      "name": "10y Quinta do Vallado, Tawny Port",
+      "description": "Portugal, Douro. 10 år Tawny Port. Nötter, torkad frukt och karamell.",
+      "country": "Portugal",
+      "region": "Douro",
+      "grapes": [
+        {
+          "grapeId": "grape-touriga-nacional",
+          "note": ""
+        },
+        {
+          "grapeId": "grape-tinta-roriz",
+          "note": ""
+        },
+        {
+          "grapeId": "grape-tinta-barroca",
+          "note": ""
+        },
+        {
+          "grapeId": "grape-touriga-franca",
+          "note": ""
+        }
+      ],
+      "flavorIds": [
+        "flavor-notter",
+        "flavor-torkad-frukt",
+        "flavor-karamell",
+        "flavor-apelsinskal"
+      ],
+      "prices": {
+        "glass": 150,
+        "bottle": null
+      }
+    },
+    {
+      "id": "b1",
+      "categoryId": "3",
+      "name": "Heineken",
+      "description": "Holland. Klassisk lager, 5.0%.",
+      "country": "Holland",
+      "region": null,
+      "grapes": [],
+      "flavorIds": [
+        "flavor-malt",
+        "flavor-humle",
+        "flavor-frisk",
+        "flavor-latt-bitter"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": null
+      }
+    },
+    {
+      "id": "b2",
+      "categoryId": "3",
+      "name": "Mariestads Ljusa Brygd",
+      "description": "Sverige. Svensk premium lager, 4.7%.",
+      "country": "Sverige",
+      "region": null,
+      "grapes": [],
+      "flavorIds": [
+        "flavor-malt",
+        "flavor-humle",
+        "flavor-blommig",
+        "flavor-frisk"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": null
+      }
+    },
+    {
+      "id": "b3",
+      "categoryId": "3",
+      "name": "Omaka Suntrip Session IPA",
+      "description": "Sverige. Session IPA, fruktig och humlig, 4.5%.",
+      "country": "Sverige",
+      "region": null,
+      "grapes": [],
+      "flavorIds": [
+        "flavor-citrus",
+        "flavor-tropisk-humle",
+        "flavor-frisk",
+        "flavor-latt-bitter"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": null
+      }
+    },
+    {
+      "id": "b4",
+      "categoryId": "3",
+      "name": "Sleepy Bulldog Pale Ale",
+      "description": "Sverige. Pale Ale med fin bitterhet, 4.8%.",
+      "country": "Sverige",
+      "region": null,
+      "grapes": [],
+      "flavorIds": [
+        "flavor-citrus",
+        "flavor-humle",
+        "flavor-blommig",
+        "flavor-frisk-bitter"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": null
+      }
+    },
+    {
+      "id": "b5",
+      "categoryId": "3",
+      "name": "Melleruds Utmärkta Pilsner Eko",
+      "description": "Sverige. Ekologisk pilsner, 4.5%.",
+      "country": "Sverige",
+      "region": null,
+      "grapes": [],
+      "flavorIds": [
+        "flavor-malt",
+        "flavor-humle",
+        "flavor-frisk",
+        "flavor-latt"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": null
+      }
+    },
+    {
+      "id": "b6",
+      "categoryId": "3",
+      "name": "Daura Damm Glutenfri Lager",
+      "description": "Spanien. Glutenfri lager, 5.4%.",
+      "country": "Spanien",
+      "region": null,
+      "grapes": [],
+      "flavorIds": [
+        "flavor-malt",
+        "flavor-humle",
+        "flavor-frisk",
+        "flavor-neutral"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": null
+      }
+    },
+    {
+      "id": "b7",
+      "categoryId": "3",
+      "name": "Omaka Ofarlig IPA",
+      "description": "Sverige. IPA med karaktär, 5.4%.",
+      "country": "Sverige",
+      "region": null,
+      "grapes": [],
+      "flavorIds": [
+        "flavor-citrus",
+        "flavor-tropisk-humle",
+        "flavor-bitter",
+        "flavor-aromatisk"
+      ],
+      "prices": {
+        "glass": null,
+        "bottle": null
+      }
+    },
+    {
+      "id": "401",
+      "categoryId": "4",
+      "name": "Negroni",
+      "description": "Lika delar gin, Campari och söt vermouth. Garneras med apelsinskal.",
+      "country": null,
+      "region": null,
+      "grapes": [],
+      "flavorIds": [],
+      "prices": {
+        "glass": null,
+        "bottle": null
+      }
+    },
+    {
+      "id": "402",
+      "categoryId": "4",
+      "name": "Shaken & stirred",
+      "description": "Shaken: luftig, kallare, lätt grumlig. Stirred: silkig, klar. Regel: cocktails med juice/ägg shakas, rena spritdrinkar rörs.",
+      "country": null,
+      "region": null,
+      "grapes": [],
+      "flavorIds": [],
+      "prices": {
+        "glass": null,
+        "bottle": null
+      }
+    },
+    {
+      "id": "403",
+      "categoryId": "4",
+      "name": "Spicy Margarita",
+      "description": "Tequila i chili crisp oli, triple sec, lime, gurka, socker, tajin kant.",
+      "country": null,
+      "region": null,
+      "grapes": [],
+      "flavorIds": [],
+      "prices": {
+        "glass": null,
+        "bottle": null
+      }
+    },
+    {
+      "id": "406",
+      "categoryId": "4",
+      "name": "Nordic GT",
+      "description": "Havsbris gin, rårörda lingon, rosmarin & tonic perfect served.",
+      "country": null,
+      "region": null,
+      "grapes": [],
+      "flavorIds": [],
+      "prices": {
+        "glass": null,
+        "bottle": null
+      }
+    },
+    {
+      "id": "407",
+      "categoryId": "4",
+      "name": "Kaffe Klara",
+      "description": "Dubbel espresso, Baileys och triple sec.",
+      "country": null,
+      "region": null,
+      "grapes": [],
+      "flavorIds": [],
+      "prices": {
+        "glass": null,
+        "bottle": null
+      }
+    },
+    {
+      "id": "501",
+      "categoryId": "5",
+      "name": "Bourbon & whisky",
+      "description": "Bourbon är amerikansk whisky gjord på minst 51% majs, lagrad i nya utbrända ekfat. Scotch whisky är skotsk och lagrad minst 3 år.",
+      "country": null,
+      "region": null,
+      "grapes": [],
+      "flavorIds": [],
+      "prices": {
+        "glass": null,
+        "bottle": null
+      }
+    },
+    {
+      "id": "502",
+      "categoryId": "5",
+      "name": "Gin",
+      "description": "Neutral sprit smaksatt med enbär (juniper berries) och botanicals som koriander, angelikarot m.m.",
+      "country": null,
+      "region": null,
+      "grapes": [],
+      "flavorIds": [],
+      "prices": {
+        "glass": null,
+        "bottle": null
+      }
+    },
+    {
+      "id": "503",
+      "categoryId": "5",
+      "name": "Brugal",
+      "description": "Dominikansk rom från familjen Brugal, grundad 1888. Känd för sin mjuka, torrare stil jämfört med karibisk rom.",
+      "country": null,
+      "region": null,
+      "grapes": [],
+      "flavorIds": [],
+      "prices": {
+        "glass": null,
+        "bottle": null
+      }
+    },
+    {
+      "id": "504",
+      "categoryId": "5",
+      "name": "Galliano",
+      "description": "Italiensk örtslikör med smak av vanilj, anis och örter. Används bl.a. i Harvey Wallbanger.",
+      "country": null,
+      "region": null,
+      "grapes": [],
+      "flavorIds": [],
+      "prices": {
+        "glass": null,
+        "bottle": null
+      }
+    },
+    {
+      "id": "505",
+      "categoryId": "5",
+      "name": "Dry Curaçao",
+      "description": "Apelsinlikör från ön Curaçao, torrare variant utan tillsatt socker. Används i Margarita och Cosmopolitan.",
+      "country": null,
+      "region": null,
+      "grapes": [],
+      "flavorIds": [],
+      "prices": {
+        "glass": null,
+        "bottle": null
+      }
+    }
+  ]
+}
