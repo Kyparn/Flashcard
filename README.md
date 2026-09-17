@@ -2,6 +2,14 @@
 
 ## Kör lokalt på datorn
 
+Starta hela sidan med kort, inventering och quiz i ett steg:
+
+```sh
+npm run local
+```
+
+Öppna http://localhost:3001 och låt terminalen vara igång under testet. Netlify-adressen påverkas inte. Enbart `npm run web` startar gränssnittet, men inte serverdelen som hämtar kort och kör quiz.
+
 Kräver Node 22 eller senare och projektets npm-beroenden.
 
 ```sh

@@ -37,8 +37,8 @@ export default function HomeScreen({ navigation }) {
       setCategories(cats);
       setCards(cds);
       setError("");
-    } catch {
-      setError("Kunde inte läsa dina kort. Tryck för att försöka igen.");
+    } catch (failure) {
+      setError(failure.message || "Kunde inte läsa dina kort. Tryck för att försöka igen.");
     } finally {
       setLoading(false);
     }
@@ -85,7 +85,6 @@ export default function HomeScreen({ navigation }) {
         <Pressable
           accessibilityRole="button"
           accessibilityLabel="Öppna quizet 10 snabba"
-          disabled={loading || !cards.length}
           onPress={() => navigation.navigate("Quiz")}
           style={({ pressed }) => [s.hero, pressed && ui.pressed]}
         >
@@ -117,9 +116,9 @@ export default function HomeScreen({ navigation }) {
         </Pressable>
         <View style={s.stats}>
           {[
-            [cards.length, "informationskort", "layers-outline"],
+            [loading || (error && !cards.length) ? "–" : cards.length, "informationskort", "layers-outline"],
             [catalog.grapes.length, "druvor", "leaf-outline"],
-            [categories.length, "kategorier", "grid-outline"],
+            [loading || (error && !categories.length) ? "–" : categories.length, "kategorier", "grid-outline"],
           ].map(([value, label, icon]) => (
             <View key={label} style={s.stat}>
               <Ionicons name={icon} size={19} color={colors.muted} />
@@ -169,8 +168,9 @@ export default function HomeScreen({ navigation }) {
           <ActivityIndicator color={colors.primary} style={{ padding: 30 }} />
         )}
         {error !== "" && (
-          <Pressable onPress={loadData}>
+          <Pressable accessibilityRole="button" accessibilityLabel="Försök hämta korten igen" onPress={loadData}>
             <Text style={ui.error}>{error}</Text>
+            <Text style={ui.body}>Tryck här för att försöka igen.</Text>
           </Pressable>
         )}
         <View style={s.grid}>
@@ -212,7 +212,7 @@ export default function HomeScreen({ navigation }) {
             );
           })}
         </View>
-        {!loading && visible.length === 0 && (
+        {!loading && !error && visible.length === 0 && (
           <Text style={[ui.body, { paddingVertical: 28, textAlign: "center" }]}>
             Ingen kategori matchar din sökning.
           </Text>

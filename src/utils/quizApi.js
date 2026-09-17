@@ -55,7 +55,7 @@ export async function apiRequest(base, path, { method = "GET", body } = {}) {
       data = await response.json();
     } catch {
       throw new Error(
-        "Adressen svarade inte som appens server. Kontrollera serveradressen under kugghjulet på Quiz-fliken.",
+        "Sidan kan inte hämta innehållet eftersom serverdelen saknas eller inte svarar på den här adressen. Kontrollera anslutningen under kugghjulet på Quiz-fliken.",
       );
     }
     if (!response.ok) {
