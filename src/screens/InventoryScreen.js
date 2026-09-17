@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { loadItems, persistItems } from "../utils/sharedStorage";
+import { loadItems, persistItems } from "../utils/deviceStorage";
 import { useEffect, useRef, useState } from "react";
 import {
   Alert,
@@ -154,7 +154,7 @@ export default function InventoryScreen({ navigation }) {
       setError("");
       return true;
     } catch (failure) {
-      setError(`${failure.message} Ändringar som inte sparats finns kvar på skärmen. Hämta senaste för att återgå till serverns uppgifter.`);
+      setError(`${failure.message} Ändringar som inte sparats finns kvar på skärmen. Hämta senaste för att återgå till enhetens sparade uppgifter.`);
       return false;
     } finally {
       pending.current--;
@@ -167,7 +167,7 @@ export default function InventoryScreen({ navigation }) {
     );
   }
   function resetAll() {
-    confirmAction("Rensa räkning", "Nollställa alla antal för hela teamet?", () =>
+    confirmAction("Rensa räkning", "Nollställa alla antal på den här enheten?", () =>
       commit(itemsRef.current.map((i) => ({ ...i, qty: "" }))),
     );
   }
@@ -216,7 +216,7 @@ export default function InventoryScreen({ navigation }) {
   function deleteItem(id) {
     confirmAction(
       "Ta bort vara",
-      "Vill du ta bort varan från hela teamets inventering?",
+      "Vill du ta bort varan från inventeringen på den här enheten?",
       () => commit(itemsRef.current.filter((i) => i.id !== id)),
     );
   }
@@ -248,7 +248,7 @@ export default function InventoryScreen({ navigation }) {
             </Text>
             <Text style={styles.title}>Inventering</Text>
             <Text style={styles.subtitle}>
-              {syncing ? "Synkroniserar…" : "Gemensam inventering för hela teamet."}
+              {syncing ? "Sparar…" : "Inventeringen sparas bara på den här enheten."}
             </Text>
           </View>
           <View style={styles.headerActions}>
@@ -257,7 +257,7 @@ export default function InventoryScreen({ navigation }) {
               accessibilityLabel="Hämta senaste inventeringen"
               disabled={syncing || !!editingPrice}
               onPress={() => failed.current
-                ? confirmAction("Hämta senaste", "Ersätta osparade ändringar på skärmen med teamets sparade inventering?", refresh)
+                ? confirmAction("Hämta senaste", "Ersätta osparade ändringar på skärmen med enhetens sparade inventering?", refresh)
                 : refresh()}
               style={styles.summaryBtn}
             >

@@ -1,14 +1,26 @@
 # Restaurang J – dryckesbibliotek och personalquiz
 
+## Mobilversion: öva på egen hand
+
+Den aktiva appen hämtar korten från det medföljande dryckesregistret och kör quizet direkt på enheten. Ingen API-server, inloggning eller topplista behövs. Quizresultat visas efter rundan men sparas inte; omladdning börjar om. Kortredigering och inventering sparas lokalt på respektive enhet och delas inte med andra. Tidigare serverdata lämnas kvar.
+
+Kör `npm run mobile` och öppna adressen märkt `Mobile (same Wi-Fi)` på mobilen. Datorn och mobilen måste använda samma wifi och terminalen behöver vara igång. På datorn används http://localhost:3002. Adressen `localhost` på mobilen pekar på mobilen själv, inte datorn. Om Windows frågar behöver Node tillåtas på det privata nätverket.
+
+`npm run build:web` skapar även en fristående webbversion i `dist` som senare kan publiceras på statisk hosting, exempelvis Netlify. Då behövs inte datorn för att öppna sidan. Ingen publicering görs av dessa kommandon. Första laddningen kräver åtkomst till webbsidan; installation och offlinecache ingår inte.
+
+## Tidigare serverversion (referens)
+
+Beskrivningen nedan gäller den kvarvarande serverkoden för gemensam inventering och tävling. Den används inte av den aktiva mobilversionen. För dess lokala test körs `npm run build:web` följt av `npm run server`.
+
 ## Kör lokalt på datorn
 
-Starta hela sidan med kort, inventering och quiz i ett steg:
+Starta den fristående mobilversionen i ett steg:
 
 ```sh
 npm run local
 ```
 
-Öppna http://localhost:3001 och låt terminalen vara igång under testet. Netlify-adressen påverkas inte. Enbart `npm run web` startar gränssnittet, men inte serverdelen som hämtar kort och kör quiz.
+Öppna http://localhost:3002 och låt terminalen vara igång under testet. Netlify-adressen påverkas inte. Även `npm run web` kan nu köra kort och övningsquiz utan separat API-server.
 
 Kräver Node 22 eller senare och projektets npm-beroenden.
 

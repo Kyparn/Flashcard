@@ -1,227 +1,55 @@
-﻿import { Ionicons } from "@expo/vector-icons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useRef, useState } from "react";
-import {
-  ActivityIndicator,
-  AppState,
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { AppState, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import {
-  ACTIVE_ROUND_KEY,
-  NAME_KEY,
-  apiRequest,
-  formatTime,
-  getServerUrl,
-  setServerUrl,
-} from "../utils/quizApi";
+import { createRound, answerRound, nextQuestion } from "../../shared/practice-quiz.cjs";
+import { catalog } from "../data/initialData";
 import { colors, serif, ui } from "../theme";
 const topics = { grapes: "DRUVOR", flavors: "SMAKER", origin: "URSPRUNG" };
-export default function QuizScreen({ navigation }) {
-  const [server, setServer] = useState("");
-  const [serverDraft, setServerDraft] = useState("");
-  const [settings, setSettings] = useState(false);
+const formatTime = (ms) => `${(ms / 1000).toFixed(1).replace(".", ",")} s`;
+export default function QuizScreen() {
   const [round, setRound] = useState(null);
   const [selected, setSelected] = useState(null);
-  const [deadline, setDeadline] = useState(null);
   const [clock, setClock] = useState(Date.now());
-  const [name, setName] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
-  const lock = useRef(false),
-    autoSubmitted = useRef(false),
-    startKey = useRef(null),
-    scroll = useRef(null);
-  function applyRound(data) {
-    setRound(data);
+  const current = useRef(null), scroll = useRef(null);
+  const busy = false;
+  function applyRound(value) {
+    current.current = value;
+    setRound(value);
     setSelected(null);
-    setDeadline(
-      data.deadline ? Date.now() + data.deadline - data.serverNow : null,
-    );
     setClock(Date.now());
-    autoSubmitted.current = false;
     scroll.current?.scrollTo({ y: 0, animated: false });
   }
-  async function initialize() {
-    setLoading(true);
-    setError("");
-    try {
-      const [url, saved, savedName] = await Promise.all([
-        getServerUrl(),
-        AsyncStorage.getItem(ACTIVE_ROUND_KEY),
-        AsyncStorage.getItem(NAME_KEY),
-      ]);
-      setServer(url);
-      setServerDraft(url);
-      setName(savedName || "");
-      setSettings(!url);
-      if (saved) {
-        const active = JSON.parse(saved);
-        if (active.url === url) {
-          startKey.current = active.requestId;
-          let data;
-          try {
-            data = active.id
-              ? await apiRequest(url, `/rounds/${active.id}`)
-              : await apiRequest(url, "/rounds", {
-                  method: "POST",
-                  body: { requestId: active.requestId },
-                });
-          } catch (e) {
-            if (e.status === 404) {
-              await AsyncStorage.removeItem(ACTIVE_ROUND_KEY);
-              startKey.current = null;
-              setError(
-                "Din tidigare runda finns inte längre. Du kan starta en ny.",
-              );
-              return;
-            }
-            throw e;
-          }
-          await AsyncStorage.setItem(
-            ACTIVE_ROUND_KEY,
-            JSON.stringify({ ...active, id: data.id }),
-          );
-          applyRound(data);
-        }
-      }
-    } catch (e) {
-      setError(e.message);
-    } finally {
-      setLoading(false);
-    }
-  }
-  useEffect(() => {
-    initialize();
-  }, []);
   useEffect(() => {
     if (round?.status !== "question") return;
     const interval = setInterval(() => setClock(Date.now()), 200);
     const listener = AppState.addEventListener("change", (state) => {
       if (state === "active") setClock(Date.now());
     });
-    return () => {
-      clearInterval(interval);
-      listener.remove();
-    };
+    return () => { clearInterval(interval); listener.remove(); };
   }, [round?.status, round?.question.id]);
-  const seconds = deadline
-    ? Math.max(0, Math.ceil((deadline - clock) / 1000))
-    : 20;
-  async function action(kind, body) {
-    if (lock.current) return;
-    lock.current = true;
-    setBusy(true);
-    setError("");
-    try {
-      const data = await apiRequest(server, `/rounds/${round.id}/${kind}`, {
-        method: "POST",
-        body,
-      });
-      applyRound(data);
-      if (kind === "publish")
-        await AsyncStorage.setItem(NAME_KEY, data.result.name);
-    } catch (e) {
-      setError(e.message);
-    } finally {
-      lock.current = false;
-      setBusy(false);
-    }
+  const seconds = round?.deadline ? Math.max(0, Math.ceil((round.deadline - clock) / 1000)) : 20;
+  function action(kind, body) {
+    const active = current.current;
+    if (!active || active.question.id !== body.questionId) return;
+    applyRound(kind === "answer"
+      ? answerRound(active, body.optionId, Date.now())
+      : nextQuestion(active, Date.now()));
   }
   useEffect(() => {
-    if (
-      round?.status === "question" &&
-      seconds === 0 &&
-      !autoSubmitted.current &&
-      !busy &&
-      !error
-    ) {
-      autoSubmitted.current = true;
+    if (round?.status === "question" && seconds === 0)
       action("answer", { questionId: round.question.id, optionId: null });
-    }
-  }, [seconds, round?.status, busy, error]);
-  async function start() {
-    if (lock.current) return;
-    lock.current = true;
-    setBusy(true);
-    setError("");
-    try {
-      const key =
-        startKey.current ||
-        `${Date.now()}-${Math.random().toString(36).slice(2)}-${Math.random().toString(36).slice(2)}`;
-      startKey.current = key;
-      await AsyncStorage.setItem(
-        ACTIVE_ROUND_KEY,
-        JSON.stringify({ url: server, requestId: key }),
-      );
-      const data = await apiRequest(server, "/rounds", {
-        method: "POST",
-        body: { requestId: key },
-      });
-      await AsyncStorage.setItem(
-        ACTIVE_ROUND_KEY,
-        JSON.stringify({ url: server, requestId: key, id: data.id }),
-      );
-      applyRound(data);
-    } catch (e) {
-      setError(e.message);
-    } finally {
-      lock.current = false;
-      setBusy(false);
-    }
+  }, [seconds, round?.status, round?.question.id]);
+  function start() {
+    try { setError(""); applyRound(createRound(catalog)); }
+    catch (failure) { setError(failure.message); }
   }
-  async function connect() {
-    if (lock.current) return;
-    lock.current = true;
-    setBusy(true);
-    setError("");
-    try {
-      const health = await apiRequest(
-        serverDraft.trim().replace(/\/$/, ""),
-        "/health",
-      );
-      if (!health.ok) throw new Error("Servern är inte redo.");
-      const url = await setServerUrl(serverDraft);
-      if (url !== server) {
-        await AsyncStorage.removeItem(ACTIVE_ROUND_KEY);
-        startKey.current = null;
-        setRound(null);
-      }
-      setServer(url);
-      setSettings(false);
-    } catch (e) {
-      setError(e.message);
-    } finally {
-      lock.current = false;
-      setBusy(false);
-    }
-  }
-  async function newRound() {
-    try {
-      await AsyncStorage.removeItem(ACTIVE_ROUND_KEY);
-      startKey.current = null;
-      setRound(null);
-      setError("");
-    } catch {
-      setError("Kunde inte förbereda en ny runda. Försök igen.");
-    }
-  }
-  const feedback = round?.feedback,
-    completed = round?.status === "complete";
+  function newRound() { setError(""); applyRound(null); }
+  const feedback = round?.feedback, completed = round?.status === "complete";
   return (
     <SafeAreaView style={ui.screen} edges={["top"]}>
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-      >
+
         <ScrollView
           ref={scroll}
           contentContainerStyle={[ui.content, { maxWidth: 760, flexGrow: 1 }]}
@@ -232,20 +60,6 @@ export default function QuizScreen({ navigation }) {
               <Text style={ui.eyebrow}>TEAM J · QUIZ</Text>
               <Text style={s.headerTitle}>10 snabba</Text>
             </View>
-            {!round && (
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel="Anslutning till quizserver"
-                style={ui.iconButton}
-                onPress={() => setSettings((v) => !v)}
-              >
-                <Ionicons
-                  name="settings-outline"
-                  size={20}
-                  color={colors.primary}
-                />
-              </Pressable>
-            )}
             {round && !completed && (
               <View
                 style={[
@@ -267,40 +81,7 @@ export default function QuizScreen({ navigation }) {
               </View>
             )}
           </View>
-          {loading ? (
-            <ActivityIndicator
-              style={{ marginTop: 60 }}
-              color={colors.primary}
-            />
-          ) : settings ? (
-            <View style={s.panel}>
-              <Text style={s.title}>Anslut till quizet</Text>
-              <Text style={ui.body}>
-                Ange serveradressen som teamet använder. På lokalt nätverk
-                behöver mobilen och servern vara anslutna till samma wifi.
-              </Text>
-              <TextInput
-                accessibilityLabel="Quizserverns adress"
-                autoCapitalize="none"
-                autoCorrect={false}
-                keyboardType="url"
-                style={[ui.input, { marginVertical: 18 }]}
-                placeholder="http://192.168.1.20:3001"
-                value={serverDraft}
-                onChangeText={setServerDraft}
-              />
-              <Pressable
-                accessibilityRole="button"
-                disabled={busy}
-                style={ui.button}
-                onPress={connect}
-              >
-                <Text style={ui.buttonText}>
-                  {busy ? "Ansluter…" : "Anslut"}
-                </Text>
-              </Pressable>
-            </View>
-          ) : !round ? (
+          {!round ? (
             <>
               <View style={s.welcomeIcon}>
                 <Ionicons name="flash-outline" size={48} color={colors.gold} />
@@ -309,7 +90,7 @@ export default function QuizScreen({ navigation }) {
                 Vad kan du om{"\n"}vårt sortiment?
               </Text>
               <Text style={[ui.body, { marginTop: 12 }]}>
-                Utmana dig själv och kollegorna. Läs på i dryckesbiblioteket och
+                Öva på egen hand. Läs på i dryckesbiblioteket och
                 sätt sedan kunskapen på prov.
               </Text>
               <View style={s.panel}>
@@ -320,7 +101,7 @@ export default function QuizScreen({ navigation }) {
                     "checkbox-outline",
                     "Ett rätt alternativ – markera och bekräfta",
                   ],
-                  ["person-outline", "Skriv ditt namn när du är klar"],
+                  ["checkmark-circle-outline", "Se ditt resultat direkt – inget sparas"],
                 ].map(([icon, label]) => (
                   <View style={[ui.row, { marginVertical: 9 }]} key={label}>
                     <Ionicons name={icon} size={21} color={colors.primary} />
@@ -332,8 +113,8 @@ export default function QuizScreen({ navigation }) {
               </View>
               <Pressable
                 accessibilityRole="button"
-                disabled={busy || !server}
-                style={[ui.button, (busy || !server) && s.disabled]}
+                disabled={busy}
+                style={[ui.button, busy && s.disabled]}
                 onPress={start}
               >
                 <Ionicons name="play" size={17} color="#fff" />
@@ -342,7 +123,7 @@ export default function QuizScreen({ navigation }) {
                 </Text>
               </Pressable>
               <Text style={s.note}>
-                Flest rätt vinner. Vid lika resultat avgör svarstiden.{"\n"}Tid
+                Resultatet visas bara för dig och sparas inte.{"\n"}Tid
                 mellan frågorna räknas inte.
               </Text>
             </>
@@ -370,78 +151,12 @@ export default function QuizScreen({ navigation }) {
                   <Text style={ui.body}>sammanlagd svarstid</Text>
                 </View>
               </View>
-              {round.result.publishedAt ? (
-                <View style={s.panel}>
-                  <View style={ui.row}>
-                    <Ionicons
-                      name="checkmark-circle"
-                      size={24}
-                      color={colors.primary}
-                    />
-                    <Text style={[ui.body, { flex: 1, color: colors.ink }]}>
-                      Sparat för {round.result.name}!
-                    </Text>
-                  </View>
-                  <Pressable
-                    accessibilityRole="button"
-                    onPress={() => navigation.navigate("Topplista")}
-                    style={[ui.button, { marginTop: 20 }]}
-                  >
-                    <Text style={ui.buttonText}>Se teamets topplista</Text>
-                  </Pressable>
-                  <Pressable
-                    accessibilityRole="button"
-                    onPress={newRound}
-                    style={[
-                      ui.button,
-                      { marginTop: 12, backgroundColor: colors.soft },
-                    ]}
-                  >
-                    <Text style={[ui.buttonText, { color: colors.primary }]}>
-                      Spela igen
-                    </Text>
-                  </Pressable>
-                </View>
-              ) : (
-                <View style={s.panel}>
-                  <Text style={s.subheading}>Vem ska få äran?</Text>
-                  <Text style={ui.body}>
-                    Skriv ditt namn för att spara resultatet och tävla med
-                    teamet. Använd samma namn varje gång.
-                  </Text>
-                  <TextInput
-                    accessibilityLabel="Ditt namn"
-                    style={[ui.input, { marginVertical: 18 }]}
-                    placeholder="Ditt namn"
-                    value={name}
-                    onChangeText={setName}
-                    maxLength={40}
-                    autoCapitalize="words"
-                    autoCorrect={false}
-                  />
-                  <Pressable
-                    accessibilityRole="button"
-                    disabled={busy || name.trim().length < 2}
-                    style={[
-                      ui.button,
-                      (busy || name.trim().length < 2) && s.disabled,
-                    ]}
-                    onPress={() => action("publish", { name })}
-                  >
-                    <Text style={ui.buttonText}>
-                      {busy ? "Sparar…" : "Spara på topplistan"}
-                    </Text>
-                  </Pressable>
-                  <Pressable
-                    accessibilityRole="button"
-                    disabled={busy}
-                    onPress={newRound}
-                    style={{ padding: 16, alignItems: "center" }}
-                  >
-                    <Text style={ui.body}>Börja om utan att spara</Text>
-                  </Pressable>
-                </View>
-              )}
+              <View style={s.panel}>
+                <Text style={ui.body}>Resultatet sparas inte. Öva gärna en gång till!</Text>
+                <Pressable accessibilityRole="button" onPress={newRound} style={[ui.button, { marginTop: 18 }]}>
+                  <Text style={ui.buttonText}>Spela igen</Text>
+                </Pressable>
+              </View>
             </>
           ) : (
             <>
@@ -578,38 +293,9 @@ export default function QuizScreen({ navigation }) {
               </Text>
             </>
           )}
-          {!!error && (
-            <View style={s.error}>
-              <Text accessibilityRole="alert" style={ui.error}>
-                {error}
-              </Text>
-              {!settings && (
-                <Pressable
-                  accessibilityRole="button"
-                  onPress={() => setSettings(true)}
-                  style={[
-                    ui.button,
-                    { marginBottom: 12, backgroundColor: colors.soft },
-                  ]}
-                >
-                  <Text style={[ui.buttonText, { color: colors.primary }]}>
-                    Kontrollera anslutningen
-                  </Text>
-                </Pressable>
-              )}
-              {!round && !settings && (
-                <Pressable
-                  accessibilityRole="button"
-                  onPress={initialize}
-                  style={ui.button}
-                >
-                  <Text style={ui.buttonText}>Försök återansluta</Text>
-                </Pressable>
-              )}
-            </View>
-          )}
+          {!!error && <Text accessibilityRole="alert" style={ui.error}>{error}</Text>}
         </ScrollView>
-      </KeyboardAvoidingView>
+
     </SafeAreaView>
   );
 }

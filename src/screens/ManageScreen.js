@@ -13,7 +13,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { loadCards, loadCategories, saveCards } from "../utils/sharedStorage";
+import { loadCards, loadCategories, saveCards } from "../utils/deviceStorage";
 import { colors, serif, ui } from "../theme";
 export default function ManageScreen({ navigation, route }) {
   const [categories, setCategories] = useState([]);

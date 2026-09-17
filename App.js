@@ -12,7 +12,6 @@ import ManageScreen from "./src/screens/ManageScreen";
 import StudyScreen from "./src/screens/StudyScreen";
 import InventoryScreen from "./src/screens/InventoryScreen";
 import QuizScreen from "./src/screens/QuizScreen";
-import LeaderboardScreen from "./src/screens/LeaderboardScreen";
 import { colors } from "./src/theme";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -65,7 +64,6 @@ function MainTabs() {
               {
                 Flashcards: focused ? "wine" : "wine-outline",
                 Quiz: focused ? "flash" : "flash-outline",
-                Topplista: focused ? "trophy" : "trophy-outline",
                 Inventering: focused ? "clipboard" : "clipboard-outline",
               }[route.name]
             }
@@ -81,13 +79,12 @@ function MainTabs() {
         options={{ title: "Drycker" }}
       />
       <Tab.Screen name="Quiz" component={QuizScreen} />
-      <Tab.Screen name="Topplista" component={LeaderboardScreen} />
       <Tab.Screen name="Inventering" component={InventoryScreen} />
     </Tab.Navigator>
   );
 }
 export default function App() {
-  // Shared data loads in each screen. Leave legacy local data intact.
+  // Cards and practice quiz run directly on the device.
   return (
     <SafeAreaProvider>
       <StatusBar style="dark" />

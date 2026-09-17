@@ -11,7 +11,7 @@ import {
   useWindowDimensions,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { loadCards, loadCategories } from "../utils/sharedStorage";
+import { loadCards, loadCategories } from "../utils/deviceStorage";
 import { catalog } from "../data/initialData";
 import { colors, serif, ui } from "../theme";
 const accents = [
@@ -95,7 +95,7 @@ export default function HomeScreen({ navigation }) {
             </View>
             <Text style={s.heroTitle}>Redo för nästa servering?</Text>
             <Text style={s.heroBody}>
-              10 frågor. 20 sekunder per fråga. Utmana teamet.
+              10 frågor. 20 sekunder per fråga. Öva på egen hand.
             </Text>
             <View style={s.heroCta}>
               <Text style={s.heroCtaText}>Spela 10 snabba</Text>
