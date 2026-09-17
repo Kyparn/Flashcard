@@ -10,7 +10,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { loadCards } from "../utils/storage";
+import { loadCards } from "../utils/sharedStorage";
 import { drinkName, drinkDetails } from "../utils/drinks";
 import { colors, serif, ui } from "../theme";
 

@@ -11,6 +11,8 @@ WORKDIR /app
 COPY --from=build /app/dist ./dist
 COPY server ./server
 COPY src/data/catalog.json ./src/data/catalog.json
+COPY src/data/inventering-produkter.json ./src/data/inventering-produkter.json
+COPY shared ./shared
 ENV NODE_ENV=production
 ENV HOST=0.0.0.0
 ENV DATA_DIR=/data

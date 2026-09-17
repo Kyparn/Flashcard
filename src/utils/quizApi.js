@@ -40,7 +40,7 @@ export async function setServerUrl(value) {
   return input;
 }
 export async function apiRequest(base, path, { method = "GET", body } = {}) {
-  if (!base) throw new Error("Anslut till quizservern först.");
+  if (!base) throw new Error("Ange serveradressen under kugghjulet på Quiz-fliken först.");
   const controller = new AbortController(),
     timer = setTimeout(() => controller.abort(), 10000);
   try {
@@ -55,7 +55,7 @@ export async function apiRequest(base, path, { method = "GET", body } = {}) {
       data = await response.json();
     } catch {
       throw new Error(
-        "Adressen svarade inte som en quizserver. Kontrollera serveradressen.",
+        "Adressen svarade inte som appens server. Kontrollera serveradressen under kugghjulet på Quiz-fliken.",
       );
     }
     if (!response.ok) {
@@ -67,7 +67,7 @@ export async function apiRequest(base, path, { method = "GET", body } = {}) {
   } catch (error) {
     if (error.name === "AbortError" || error instanceof TypeError)
       throw new Error(
-        "Kan inte nå quizservern. Kontrollera att servern är igång och att mobilen är ansluten till samma nätverk.",
+        "Kan inte nå servern. Kontrollera anslutningen och serveradressen under kugghjulet på Quiz-fliken.",
       );
     throw error;
   } finally {

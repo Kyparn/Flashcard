@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { loadItems, persistItems } from "../utils/sharedStorage";
 import { useEffect, useRef, useState } from "react";
 import {
   Alert,
@@ -16,10 +16,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { colors, serif, ui } from "../theme";
-import inventoryProducts from "../data/inventering-produkter.json";
 
-const INVENTORY_KEY = "bar_inventory_v5";
-const DELETED_KEY = "bar_inventory_deleted";
 const number = (value) =>
   Math.max(0, parseFloat(String(value).replace(",", ".")) || 0);
 function confirmAction(title, message, action) {
@@ -42,9 +39,6 @@ const FORM_CATEGORIES = [
   "Vin",
   "Skumpa",
 ];
-
-// unit: 'cl' per cl, 'l' per liter, 'st' per flaska/styck.
-const DEFAULT_ITEMS = inventoryProducts;
 
 const CAT_COLORS = {
   Sprit: "#E74C3C",
@@ -77,69 +71,6 @@ function displayCategory(item) {
   return item.category;
 }
 
-function itemKey(item) {
-  return `${item.category}::${item.name.trim().toLocaleLowerCase("sv")}`;
-}
-
-const DEFAULT_ID_BY_KEY = new Map(
-  DEFAULT_ITEMS.map((item) => [itemKey(item), item.id]),
-);
-
-function normalizeItem(item) {
-  const glassItem = isGlassItem(item);
-  return {
-    ...item,
-    id: DEFAULT_ID_BY_KEY.get(itemKey(item)) || item.id,
-    ...(glassItem
-      ? {
-          unit: "st",
-          isBottle: true,
-          glassMode: true,
-          glassesPerBottle: getGlassesPerBottle(item),
-          inventoryUnit: "glas",
-        }
-      : {}),
-  };
-}
-
-async function loadItems() {
-  const json = await AsyncStorage.getItem(INVENTORY_KEY);
-  if (!json) return DEFAULT_ITEMS;
-  const saved = JSON.parse(json);
-  if (!Array.isArray(saved)) return DEFAULT_ITEMS;
-
-  // Reparera äldre dublett-id:n, tvinga vin/skumpa till glas och lägg till nya varor.
-  const normalizedSaved = saved.map(normalizeItem);
-  const savedKeys = new Set(normalizedSaved.map(itemKey));
-  const deleted = new Set(
-    JSON.parse((await AsyncStorage.getItem(DELETED_KEY)) || "[]"),
-  );
-  const merged = [
-    ...normalizedSaved,
-    ...DEFAULT_ITEMS.filter(
-      (item) => !savedKeys.has(itemKey(item)) && !deleted.has(item.id),
-    ),
-  ];
-
-  await persistItems(merged);
-  return merged;
-}
-
-async function persistItems(items) {
-  const ids = new Set(items.map((item) => item.id));
-  await AsyncStorage.multiSet([
-    [INVENTORY_KEY, JSON.stringify(items)],
-    [
-      DELETED_KEY,
-      JSON.stringify(
-        DEFAULT_ITEMS.filter((item) => !ids.has(item.id)).map(
-          (item) => item.id,
-        ),
-      ),
-    ],
-  ]);
-}
-
 function itemCost(item) {
   const qty = number(item.qty);
   if (isGlassItem(item)) {
@@ -148,7 +79,7 @@ function itemCost(item) {
   return qty * item.price;
 }
 
-export default function InventoryScreen() {
+export default function InventoryScreen({ navigation }) {
   const [items, setItems] = useState([]);
   const [selectedCat, setSelectedCat] = useState("Alla");
   const [search, setSearch] = useState("");
@@ -156,6 +87,10 @@ export default function InventoryScreen() {
   const [error, setError] = useState("");
   const itemsRef = useRef([]);
   const writes = useRef(Promise.resolve());
+  const pending = useRef(0);
+  const failed = useRef(false);
+  const fetching = useRef(false);
+  const [syncing, setSyncing] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [showSummary, setShowSummary] = useState(false);
   const [priceDraft, setPriceDraft] = useState("");
@@ -168,33 +103,62 @@ export default function InventoryScreen() {
     isBottle: true,
   });
 
+  async function refresh() {
+    if (pending.current || fetching.current) return;
+    fetching.current = true;
+    setSyncing(true);
+    try {
+      const loaded = await loadItems();
+      itemsRef.current = loaded;
+      setItems(loaded);
+      failed.current = false;
+      setError("");
+    } catch (failure) {
+      setError(failure.message);
+    } finally {
+      fetching.current = false;
+      setSyncing(false);
+    }
+  }
   useEffect(() => {
-    loadItems()
-      .then((loaded) => {
-        itemsRef.current = loaded;
-        setItems(loaded);
-      })
-      .catch(() =>
-        setError(
-          "Kunde inte läsa inventeringen. Öppna appen igen för att försöka på nytt.",
-        ),
-      );
-  }, []);
+    refresh();
+    return navigation.addListener("focus", () => {
+      if (!failed.current) refresh();
+    });
+  }, [navigation]);
 
   async function commit(updated) {
+    if (fetching.current || failed.current) return false;
+    const previous = itemsRef.current;
     itemsRef.current = updated;
     setItems(updated);
-    const task = writes.current
-      .catch(() => {})
-      .then(() => persistItems(updated));
+    pending.current++;
+    setSyncing(true);
+    const task = writes.current.catch(() => {}).then(async () => {
+      if (failed.current) throw new Error("Ändringarna är inte sparade. Hämta senaste versionen innan du fortsätter.");
+      try {
+        return await persistItems(updated, previous);
+      } catch (failure) {
+        failed.current = true;
+        throw failure;
+      }
+    });
     writes.current = task;
     try {
-      await task;
+      const saved = await task;
+      // Keep newer local keystrokes until the last queued save has completed.
+      if (pending.current === 1) {
+        itemsRef.current = saved;
+        setItems(saved);
+      }
       setError("");
       return true;
-    } catch {
-      setError("Ändringarna kunde inte sparas. Försök igen.");
+    } catch (failure) {
+      setError(`${failure.message} Ändringar som inte sparats finns kvar på skärmen. Hämta senaste för att återgå till serverns uppgifter.`);
       return false;
+    } finally {
+      pending.current--;
+      if (!pending.current) setSyncing(false);
     }
   }
   function update(id, patch) {
@@ -203,7 +167,7 @@ export default function InventoryScreen() {
     );
   }
   function resetAll() {
-    confirmAction("Rensa räkning", "Nollställa alla antal?", () =>
+    confirmAction("Rensa räkning", "Nollställa alla antal för hela teamet?", () =>
       commit(itemsRef.current.map((i) => ({ ...i, qty: "" }))),
     );
   }
@@ -219,7 +183,7 @@ export default function InventoryScreen() {
     }
     const glassItem = GLASS_CATEGORIES.has(form.category);
     const newItem = {
-      id: Date.now().toString(),
+      id: `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
       name: form.name.trim(),
       category: form.category,
       price: number(form.price),
@@ -252,7 +216,7 @@ export default function InventoryScreen() {
   function deleteItem(id) {
     confirmAction(
       "Ta bort vara",
-      "Vill du ta bort varan från inventeringen?",
+      "Vill du ta bort varan från hela teamets inventering?",
       () => commit(itemsRef.current.filter((i) => i.id !== id)),
     );
   }
@@ -283,9 +247,22 @@ export default function InventoryScreen() {
               ORDNING BAKOM BAREN
             </Text>
             <Text style={styles.title}>Inventering</Text>
-            <Text style={styles.subtitle}>Fyll i antal. Vi räknar resten.</Text>
+            <Text style={styles.subtitle}>
+              {syncing ? "Synkroniserar…" : "Gemensam inventering för hela teamet."}
+            </Text>
           </View>
           <View style={styles.headerActions}>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Hämta senaste inventeringen"
+              disabled={syncing || !!editingPrice}
+              onPress={() => failed.current
+                ? confirmAction("Hämta senaste", "Ersätta osparade ändringar på skärmen med teamets sparade inventering?", refresh)
+                : refresh()}
+              style={styles.summaryBtn}
+            >
+              <Ionicons name="refresh-outline" size={22} color={colors.primary} />
+            </Pressable>
             <Pressable
               accessibilityRole="button"
               accessibilityLabel="Visa svinnrapport"

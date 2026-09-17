@@ -13,7 +13,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { loadCards, loadCategories, saveCards } from "../utils/storage";
+import { loadCards, loadCategories, saveCards } from "../utils/sharedStorage";
 import { colors, serif, ui } from "../theme";
 export default function ManageScreen({ navigation, route }) {
   const [categories, setCategories] = useState([]);
@@ -27,8 +27,10 @@ export default function ManageScreen({ navigation, route }) {
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    Promise.all([loadCategories(), loadCards()])
+  async function reload() {
+    setLoading(true);
+    setError("");
+    return Promise.all([loadCategories(), loadCards()])
       .then(([cats, cds]) => {
         setCategories(cats);
         setCards(cds);
@@ -40,6 +42,9 @@ export default function ManageScreen({ navigation, route }) {
         setError("Kunde inte läsa korten. Gå tillbaka och försök igen."),
       )
       .finally(() => setLoading(false));
+  }
+  useEffect(() => {
+    reload();
   }, []);
   async function save() {
     if (!draft.question.trim() || !draft.answer.trim()) {
@@ -59,11 +64,10 @@ export default function ManageScreen({ navigation, route }) {
       ? cards.map((c) => (c.id === card.id ? card : c))
       : [...cards, card];
     try {
-      await saveCards(updated);
-      setCards(updated);
+      setCards(await saveCards(updated, cards));
       setDraft(null);
-    } catch {
-      setError("Kunde inte spara. Försök igen.");
+    } catch (failure) {
+      setError(failure.message);
     } finally {
       setSaving(false);
     }
@@ -74,11 +78,10 @@ export default function ManageScreen({ navigation, route }) {
     setError("");
     try {
       const updated = cards.filter((c) => c.id !== deleting.id);
-      await saveCards(updated);
-      setCards(updated);
+      setCards(await saveCards(updated, cards));
       setDeleting(null);
-    } catch {
-      setError("Kunde inte ta bort kortet. Försök igen.");
+    } catch (failure) {
+      setError(failure.message);
     } finally {
       setSaving(false);
     }
@@ -105,7 +108,16 @@ export default function ManageScreen({ navigation, route }) {
           >
             <Ionicons name="arrow-back" size={20} color={colors.ink} />
           </Pressable>
-          <Text style={s.headerLabel}>DITT KORTBIBLIOTEK</Text>
+          <Text style={s.headerLabel}>GEMENSAMMA KORT</Text>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Hämta senaste korten"
+            disabled={loading || saving}
+            style={ui.iconButton}
+            onPress={reload}
+          >
+            <Ionicons name="refresh-outline" size={20} color={colors.primary} />
+          </Pressable>
           <Pressable
             disabled={!selectedCat}
             accessibilityRole="button"
@@ -121,7 +133,7 @@ export default function ManageScreen({ navigation, route }) {
         </View>
         <Text style={ui.title}>Plats för mer kunskap.</Text>
         <Text style={[ui.body, { marginTop: 9, marginBottom: 24 }]}>
-          Dina lokala tillägg och anteckningar. Tävlingsquizet använder det
+          Ändringar sparas för hela teamet. Tävlingsquizet använder det
           gemensamma dryckesregistret.
         </Text>
         <View style={ui.search}>
@@ -324,7 +336,7 @@ export default function ManageScreen({ navigation, route }) {
               )}
               {deleting && (
                 <Text style={ui.body}>
-                  ”{deleting.question}” tas bort från ditt kortbibliotek.
+                  ”{deleting.question}” tas bort från hela teamets kortbibliotek.
                 </Text>
               )}
               {!!error && (

@@ -5,6 +5,7 @@ const { randomUUID } = require("node:crypto");
 const { setTimeout: delay } = require("node:timers/promises");
 const catalog = require("../src/data/catalog.json");
 const { makeQuestions } = require("./quiz-bank.cjs");
+const { initialLibrary, changeLibrary } = require("./library.cjs");
 const QUESTION_MS = 20000;
 class ApiError extends Error {
   constructor(status, message) {
@@ -123,16 +124,19 @@ function leaderboard(state) {
     )
     .map((r, index) => ({ ...r, rank: index + 1 }));
 }
-async function readBody(req) {
+async function readBody(req, limit = 8192) {
   let size = 0,
     parts = [];
   for await (const part of req) {
     size += part.length;
-    if (size > 8192) throw new ApiError(413, "För mycket data.");
+    if (size > limit) throw new ApiError(413, "För mycket data.");
     parts.push(part);
   }
   try {
-    return JSON.parse(Buffer.concat(parts).toString("utf8") || "{}");
+    const body = JSON.parse(Buffer.concat(parts).toString("utf8") || "{}");
+    if (!body || typeof body !== "object" || Array.isArray(body))
+      throw new Error("Expected object");
+    return body;
   } catch {
     throw new ApiError(400, "Ogiltig JSON.");
   }
@@ -182,6 +186,9 @@ async function createQuizServer({
   webRoot = path.resolve(__dirname, "../dist"),
 } = {}) {
   const store = await createStore(dataFile);
+  await store.transact((state) => {
+    if (!state.library) state.library = initialLibrary();
+  });
   const server = http.createServer(async (req, res) => {
     try {
       allowOrigin(req, res, allowedOrigins);
@@ -191,6 +198,24 @@ async function createQuizServer({
         return;
       }
       const url = new URL(req.url, "http://local");
+      if (url.pathname === "/api/categories") {
+        assert(req.method === "GET", "Metoden stöds inte.", 405);
+        json(res, 200, { items: catalog.categories });
+        return;
+      }
+      const collection = url.pathname.match(/^\/api\/(cards|inventory)$/);
+      if (collection) {
+        const kind = collection[1];
+        if (req.method === "GET") {
+          json(res, 200, { items: store.read().library[kind] });
+          return;
+        }
+        assert(req.method === "POST", "Metoden stöds inte.", 405);
+        const body = await readBody(req, 2 * 1024 * 1024);
+        const result = await store.transact((state) => changeLibrary(state, kind, body));
+        json(res, 200, result);
+        return;
+      }
       if (req.method === "GET" && url.pathname === "/api/health") {
         json(res, 200, { ok: true, questionSeconds: QUESTION_MS / 1000 });
         return;

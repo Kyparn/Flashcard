@@ -11,7 +11,7 @@ import {
   useWindowDimensions,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { loadCards, loadCategories } from "../utils/storage";
+import { loadCards, loadCategories } from "../utils/sharedStorage";
 import { catalog } from "../data/initialData";
 import { colors, serif, ui } from "../theme";
 const accents = [

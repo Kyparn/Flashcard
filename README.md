@@ -9,7 +9,21 @@ npm run build:web
 npm run server
 ```
 
-Öppna http://localhost:3001. Samma server levererar webbsidan, quizet och topplistan. Resultat lagras i `server/data/quiz.json`, som inte följer med Git. Ingen extern tjänst behövs.
+Öppna http://localhost:3001. Samma server levererar webbsidan, kortbiblioteket, inventeringen, quizet och topplistan. Gemensamma kort, inventering och quizresultat lagras i `server/data/quiz.json`, som inte följer med Git. Ingen extern tjänst behövs.
+
+## Gemensamma kort och inventering
+
+Alla enheter som ansluter till samma server använder samma kortbibliotek och inventering. Kort kan läggas till, redigeras och tas bort under Hantera kort. Inventeringens antal, priser, nya varor och borttagningar sparas för hela teamet. Rensa räkning nollställer teamets gemensamma antal.
+
+Hämta andra användares ändringar med uppdateringsknappen. Inventeringen och startsidans kortantal hämtas även när fliken öppnas igen. Detta är inte automatisk realtidssynkning. Vid konflikt på samma post stoppas ändringen med ett meddelande; hämta senaste och gör ändringen igen. I kortdialogen: stäng dialogen och tryck på uppdateringsknappen. Ändringar i olika poster kan sparas samtidigt utan att skriva över varandra.
+
+Servern måste vara tillgänglig för läsning och sparning. Inventeringen visar osparade uppgifter och ett felmeddelande om sparningen misslyckas. Hämta senaste återställer då skärmen till serverns sparade data efter bekräftelse.
+
+Första serverstarten lägger in projektets 96 kort och 109 inventeringsvaror, inklusive de tio spritsorterna i `src/data/inventering-produkter.json`. Spritpriserna anges i kr/cl och nya inventeringar börjar med tomma antal. Befintliga quizresultat bevaras. Senare omstarter återställer inte borttagna poster. Tidigare personliga ändringar i webbläsarens/telefonens lokala lagring lämnas kvar men importeras inte automatiskt till teamets bibliotek. `src/utils/storage.js` finns kvar för den äldre lokala lagringen; de aktiva kortvyerna använder `sharedStorage.js`.
+
+API: `GET /api/categories`, `GET /api/cards`, `GET /api/inventory`. De två sistnämnda tar också `POST` med `{ "changes": [{ "id": "…", "before": {…}, "after": {…} }] }`. `before: null` skapar, `after: null` tar bort. Klienten skickar sin tidigare version av varje ändrad post; servern svarar 409 om den inte längre stämmer. Hela anropet sparas atomiskt. Upprepning av redan genomförda ändringar är säker.
+
+Versionen är avsedd för ett betrott team: alla som når servern kan ändra kort och inventering. Inloggning och behörigheter ingår inte. Kör en serverprocess och säkerhetskopiera hela datafilen/volymen.
 
 Under gränssnittsutveckling kan Expo köras i en andra terminal med `npm run web`. Webbappen använder då samma värd på port 3001 för API:t. Vid behov anges adressen under kugghjulet på Quiz-fliken. För Expo Go på telefon kan adressen anges där eller via `EXPO_PUBLIC_API_URL`.
 
@@ -46,7 +60,7 @@ npm run server:lan
 
 Ändra inte ett befintligt ID när ett namn eller en beskrivning uppdateras. Ett vin kan ha många druvor och smaktoner. Quizets falska druvsvar utesluter alla druvor som faktiskt är kopplade till vinet. Smakfrågor hänvisar uttryckligen till beskrivningen i vårt register och undviker alternativ ur samma närliggande smakfamilj.
 
-`initialData.js` bygger kompatibla kort från registret. Ursprungliga kort-ID:n och kopplingar till inventeringen finns kvar. `legacyCardFingerprints.json` används för att konvertera gamla oförändrade informationskort utan att skriva över personliga ändringar. Hantera kort gäller lokala tillägg/anteckningar; tävlingsfrågorna hämtas enbart från det gemensamma registret. Registret ändras i projektet och distribueras med servern/webbbygget.
+`initialData.js` bygger kompatibla kort från registret för lokal referensdata. Servern använder samma kortgenerator när det gemensamma biblioteket skapas första gången. Hantera kort ändrar teamets gemensamma informationskort; tävlingsfrågorna hämtas fortsatt enbart från det strukturerade dryckesregistret. Registret ändras i projektet och distribueras med servern/webbbygget. En ändring av registrets standardkort skriver inte över redan sparade gemensamma kort.
 
 Dryckesuppgifterna är hämtade från appens befintliga innehåll; ingen ny faktagranskning av sortimentet har gjorts. Poster utan angivet ursprung får inga ursprungsfrågor.
 

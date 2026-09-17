@@ -3,8 +3,6 @@ import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useState } from "react";
-import { ActivityIndicator, Pressable, Text, View } from "react-native";
 import {
   SafeAreaProvider,
   useSafeAreaInsets,
@@ -15,8 +13,7 @@ import StudyScreen from "./src/screens/StudyScreen";
 import InventoryScreen from "./src/screens/InventoryScreen";
 import QuizScreen from "./src/screens/QuizScreen";
 import LeaderboardScreen from "./src/screens/LeaderboardScreen";
-import { migrateIfNeeded } from "./src/utils/storage";
-import { colors, ui } from "./src/theme";
+import { colors } from "./src/theme";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const theme = {
@@ -90,48 +87,13 @@ function MainTabs() {
   );
 }
 export default function App() {
-  const [ready, setReady] = useState(false);
-  const [error, setError] = useState(false);
-  async function initialize() {
-    setError(false);
-    try {
-      await migrateIfNeeded();
-      setReady(true);
-    } catch {
-      setError(true);
-    }
-  }
-  useEffect(() => {
-    initialize();
-  }, []);
+  // Shared data loads in each screen. Leave legacy local data intact.
   return (
     <SafeAreaProvider>
       <StatusBar style="dark" />
-      {ready ? (
-        <NavigationContainer theme={theme}>
-          <MainTabs />
-        </NavigationContainer>
-      ) : (
-        <View
-          style={[
-            ui.screen,
-            { justifyContent: "center", alignItems: "center", gap: 20 },
-          ]}
-        >
-          {error ? (
-            <>
-              <Text style={ui.body}>
-                Kunde inte öppna dina sparade uppgifter.
-              </Text>
-              <Pressable style={ui.button} onPress={initialize}>
-                <Text style={ui.buttonText}>Försök igen</Text>
-              </Pressable>
-            </>
-          ) : (
-            <ActivityIndicator color={colors.primary} />
-          )}
-        </View>
-      )}
+      <NavigationContainer theme={theme}>
+        <MainTabs />
+      </NavigationContainer>
     </SafeAreaProvider>
   );
 }
