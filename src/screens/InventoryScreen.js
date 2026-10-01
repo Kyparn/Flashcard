@@ -240,161 +240,6 @@ export default function InventoryScreen({ navigation }) {
         style={{ flex: 1, width: "100%", maxWidth: 1040, alignSelf: "center" }}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
-        {/* Header */}
-        <View style={styles.header}>
-          <View style={{ flex: 1 }}>
-            <Text style={[ui.eyebrow, { marginBottom: 7 }]}>
-              ORDNING BAKOM BAREN
-            </Text>
-            <Text style={styles.title}>Inventering</Text>
-            <Text style={styles.subtitle}>
-              {syncing ? "Sparar…" : "Inventeringen sparas bara på den här enheten."}
-            </Text>
-          </View>
-          <View style={styles.headerActions}>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="Hämta senaste inventeringen"
-              disabled={syncing || !!editingPrice}
-              onPress={() => failed.current
-                ? confirmAction("Hämta senaste", "Ersätta osparade ändringar på skärmen med enhetens sparade inventering?", refresh)
-                : refresh()}
-              style={styles.summaryBtn}
-            >
-              <Ionicons name="refresh-outline" size={22} color={colors.primary} />
-            </Pressable>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="Visa svinnrapport"
-              onPress={() => setShowSummary(true)}
-              style={styles.summaryBtn}
-            >
-              <Ionicons
-                name="bar-chart-outline"
-                size={22}
-                color={colors.primary}
-              />
-            </Pressable>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel={
-                showForm ? "Stäng formulär" : "Lägg till vara"
-              }
-              onPress={() => setShowForm(!showForm)}
-              style={styles.addBtn}
-            >
-              <Ionicons
-                name={showForm ? "close" : "add"}
-                size={22}
-                color="#fff"
-              />
-            </Pressable>
-          </View>
-        </View>
-
-        {/* Total banner */}
-        <View style={styles.totalBanner}>
-          <View>
-            <Text style={styles.totalLabel}>
-              {search || onlyCounted
-                ? "VISAT URVAL"
-                : selectedCat === "Alla"
-                  ? "TOTALT REGISTRERAT"
-                  : selectedCat.toUpperCase()}
-            </Text>
-            <Text style={styles.totalAmount}>
-              {filteredTotal.toFixed(2)} kr
-            </Text>
-          </View>
-          <View style={styles.totalSub}>
-            <Text style={styles.totalSubLabel}>Alla kategorier</Text>
-            <Text style={styles.totalSubAmount}>{total.toFixed(2)} kr</Text>
-          </View>
-        </View>
-
-        <View style={{ paddingHorizontal: 24, paddingTop: 18 }}>
-          <View style={ui.search}>
-            <Ionicons name="search-outline" size={20} color={colors.muted} />
-            <TextInput
-              accessibilityLabel="Sök vara"
-              placeholder="Sök en vara…"
-              placeholderTextColor={colors.muted}
-              style={ui.searchInput}
-              value={search}
-              onChangeText={setSearch}
-            />
-            {!!search && (
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel="Rensa sökning"
-                onPress={() => setSearch("")}
-                hitSlop={10}
-              >
-                <Ionicons name="close-circle" size={20} color={colors.muted} />
-              </Pressable>
-            )}
-          </View>
-        </View>
-        {/* Category tabs */}
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={styles.tabScroll}
-        >
-          {["Alla", ...categories].map((cat) => (
-            <Pressable
-              accessibilityRole="button"
-              key={cat}
-              style={[styles.tab, selectedCat === cat && styles.tabActive]}
-              onPress={() => setSelectedCat(cat)}
-            >
-              <Text
-                style={[
-                  styles.tabText,
-                  selectedCat === cat && styles.tabTextActive,
-                ]}
-              >
-                {cat}
-              </Text>
-            </Pressable>
-          ))}
-        </ScrollView>
-
-        <View style={styles.listTools}>
-          <Text style={ui.eyebrow}>{filtered.length} VAROR</Text>
-          <Pressable
-            accessibilityRole="checkbox"
-            accessibilityState={{ checked: onlyCounted }}
-            onPress={() => setOnlyCounted((v) => !v)}
-            style={ui.row}
-          >
-            <Ionicons
-              name={onlyCounted ? "checkbox" : "square-outline"}
-              size={19}
-              color={colors.primary}
-            />
-            <Text style={ui.body}>Bara räknade</Text>
-          </Pressable>
-          {hasAnyQty && (
-            <Pressable
-              accessibilityRole="button"
-              onPress={resetAll}
-              style={{ paddingVertical: 12 }}
-            >
-              <Text style={{ color: colors.danger, fontSize: 12 }}>
-                Nollställ
-              </Text>
-            </Pressable>
-          )}
-        </View>
-        {!!error && (
-          <Text
-            accessibilityRole="alert"
-            style={[ui.error, { paddingHorizontal: 24 }]}
-          >
-            {error}
-          </Text>
-        )}
         {/* Add form */}
         <Modal
           visible={showForm}
@@ -540,6 +385,166 @@ export default function InventoryScreen({ navigation }) {
 
         {/* Items list */}
         <FlatList
+          style={{ flex: 1 }}
+          ListHeaderComponent={
+            <View style={styles.listHeader}>
+              {/* Header */}
+              <View style={styles.header}>
+                <View style={{ flex: 1 }}>
+                  <Text style={[ui.eyebrow, { marginBottom: 7 }]}>
+                    ORDNING BAKOM BAREN
+                  </Text>
+                  <Text style={styles.title}>Inventering</Text>
+                  <Text style={styles.subtitle}>
+                    {syncing ? "Sparar…" : "Inventeringen sparas bara på den här enheten."}
+                  </Text>
+                </View>
+                <View style={styles.headerActions}>
+                  <Pressable
+                    accessibilityRole="button"
+                    accessibilityLabel="Hämta senaste inventeringen"
+                    disabled={syncing || !!editingPrice}
+                    onPress={() => failed.current
+                      ? confirmAction("Hämta senaste", "Ersätta osparade ändringar på skärmen med enhetens sparade inventering?", refresh)
+                      : refresh()}
+                    style={styles.summaryBtn}
+                  >
+                    <Ionicons name="refresh-outline" size={22} color={colors.primary} />
+                  </Pressable>
+                  <Pressable
+                    accessibilityRole="button"
+                    accessibilityLabel="Visa svinnrapport"
+                    onPress={() => setShowSummary(true)}
+                    style={styles.summaryBtn}
+                  >
+                    <Ionicons
+                      name="bar-chart-outline"
+                      size={22}
+                      color={colors.primary}
+                    />
+                  </Pressable>
+                  <Pressable
+                    accessibilityRole="button"
+                    accessibilityLabel={
+                      showForm ? "Stäng formulär" : "Lägg till vara"
+                    }
+                    onPress={() => setShowForm(!showForm)}
+                    style={styles.addBtn}
+                  >
+                    <Ionicons
+                      name={showForm ? "close" : "add"}
+                      size={22}
+                      color="#fff"
+                    />
+                  </Pressable>
+                </View>
+              </View>
+
+              {/* Total banner */}
+              <View style={styles.totalBanner}>
+                <View>
+                  <Text style={styles.totalLabel}>
+                    {search || onlyCounted
+                      ? "VISAT URVAL"
+                      : selectedCat === "Alla"
+                        ? "TOTALT REGISTRERAT"
+                        : selectedCat.toUpperCase()}
+                  </Text>
+                  <Text style={styles.totalAmount}>
+                    {filteredTotal.toFixed(2)} kr
+                  </Text>
+                </View>
+                <View style={styles.totalSub}>
+                  <Text style={styles.totalSubLabel}>Alla kategorier</Text>
+                  <Text style={styles.totalSubAmount}>{total.toFixed(2)} kr</Text>
+                </View>
+              </View>
+
+              <View style={{ paddingHorizontal: 24, paddingTop: 18 }}>
+                <View style={ui.search}>
+                  <Ionicons name="search-outline" size={20} color={colors.muted} />
+                  <TextInput
+                    accessibilityLabel="Sök vara"
+                    placeholder="Sök en vara…"
+                    placeholderTextColor={colors.muted}
+                    style={ui.searchInput}
+                    value={search}
+                    onChangeText={setSearch}
+                  />
+                  {!!search && (
+                    <Pressable
+                      accessibilityRole="button"
+                      accessibilityLabel="Rensa sökning"
+                      onPress={() => setSearch("")}
+                      hitSlop={10}
+                    >
+                      <Ionicons name="close-circle" size={20} color={colors.muted} />
+                    </Pressable>
+                  )}
+                </View>
+              </View>
+              {/* Category tabs */}
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                style={styles.tabScroll}
+              >
+                {["Alla", ...categories].map((cat) => (
+                  <Pressable
+                    accessibilityRole="button"
+                    key={cat}
+                    style={[styles.tab, selectedCat === cat && styles.tabActive]}
+                    onPress={() => setSelectedCat(cat)}
+                  >
+                    <Text
+                      style={[
+                        styles.tabText,
+                        selectedCat === cat && styles.tabTextActive,
+                      ]}
+                    >
+                      {cat}
+                    </Text>
+                  </Pressable>
+                ))}
+              </ScrollView>
+
+              <View style={styles.listTools}>
+                <Text style={ui.eyebrow}>{filtered.length} VAROR</Text>
+                <Pressable
+                  accessibilityRole="checkbox"
+                  accessibilityState={{ checked: onlyCounted }}
+                  onPress={() => setOnlyCounted((v) => !v)}
+                  style={ui.row}
+                >
+                  <Ionicons
+                    name={onlyCounted ? "checkbox" : "square-outline"}
+                    size={19}
+                    color={colors.primary}
+                  />
+                  <Text style={ui.body}>Bara räknade</Text>
+                </Pressable>
+                {hasAnyQty && (
+                  <Pressable
+                    accessibilityRole="button"
+                    onPress={resetAll}
+                    style={{ paddingVertical: 12 }}
+                  >
+                    <Text style={{ color: colors.danger, fontSize: 12 }}>
+                      Nollställ
+                    </Text>
+                  </Pressable>
+                )}
+              </View>
+              {!!error && (
+                <Text
+                  accessibilityRole="alert"
+                  style={[ui.error, { paddingHorizontal: 24 }]}
+                >
+                  {error}
+                </Text>
+              )}
+            </View>
+          }
           data={filtered}
           ListEmptyComponent={
             <Text
@@ -911,13 +916,15 @@ const styles = StyleSheet.create({
   },
   saveBtnText: { color: "#fff", fontWeight: "700", fontSize: 15 },
 
-  list: { paddingHorizontal: 24, paddingTop: 10, paddingBottom: 40 },
+  list: { paddingBottom: 40 },
+  listHeader: { paddingBottom: 10 },
   row: {
     flexDirection: "row",
     backgroundColor: "#fff",
     borderRadius: 16,
     borderWidth: 1,
     borderColor: colors.border,
+    marginHorizontal: 24,
     marginBottom: 10,
     overflow: "hidden",
     elevation: 0,
